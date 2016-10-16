@@ -9,15 +9,48 @@
 import UIKit
 
 struct Card {
-//    let name: String
+    let name: String
 //    let front: UIImage
 //    let back: UIImage
+}
+
+class CardCell: UICollectionViewCell {
+    private let nameLabel: UILabel
+    var name: String? {
+        set {
+            nameLabel.text = newValue
+            nameLabel.sizeToFit()
+        }
+        get {
+            return nameLabel.text
+        }
+    }
+    
+    override init(frame: CGRect) {
+        nameLabel = UILabel(frame: .zero)
+        super.init(frame: frame)
+        contentView.addSubview(nameLabel)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 
 class CardsViewController: UIViewController {
 
     fileprivate let worker: CoreDataWorkerProtocol
-    fileprivate var cards: [Card] = []
+    fileprivate var cards: [Card] = [Card(name: "Card 1"),
+                                     Card(name: "Card 2"),
+                                     Card(name: "Card 3"),
+                                     Card(name: "Card 4"),
+                                     Card(name: "Card 5"),
+                                     Card(name: "Card 6"),
+                                     Card(name: "Card 7"),
+                                     Card(name: "Card 8"),
+                                     ]
+    fileprivate var collectionView: UICollectionView!
+    fileprivate let reuseIdentifier: String = String(describing: CardCell.self)
     
     init(worker: CoreDataWorkerProtocol) {
         self.worker = worker
@@ -35,9 +68,25 @@ class CardsViewController: UIViewController {
         configureNavigationItem()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        collectionView.reloadData()
+    }
+    
     func configureView() {
         view.backgroundColor = .red
-        //TODO: CollectionView
+        let layout = UICollectionViewFlowLayout()
+        
+        layout.scrollDirection = .vertical
+        layout.itemSize = CGSize(width: view.bounds.size.width * 0.8, height: 200)
+        let offset: CGFloat = 10
+        layout.sectionInset = UIEdgeInsets(top: offset, left: offset, bottom: offset, right: offset)
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(CardCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        view.addSubview(collectionView)
     }
     
     func configureNavigationItem() {
@@ -54,3 +103,31 @@ class CardsViewController: UIViewController {
         present(navigationController, animated: true, completion: nil)
     }
 }
+
+extension CardsViewController: UICollectionViewDataSource {
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                                 numberOfItemsInSection section: Int) -> Int {
+        return cards.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                                 cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        //TODO: safe
+        
+        let card = cards[indexPath.row]
+
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
+                                                      for: indexPath) as! CardCell
+        cell.backgroundColor = .blue
+        cell.name = card.name
+        return cell
+    }
+}
+
+extension CardsViewController: UICollectionViewDelegate {}
