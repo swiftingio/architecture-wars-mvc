@@ -10,8 +10,8 @@ import UIKit
 
 struct Card {
     let name: String
-//    let front: UIImage
-//    let back: UIImage
+    let front: UIImage = #imageLiteral(resourceName: "card")
+    //    let back: UIImage
 }
 
 class CardCell: UICollectionViewCell {
@@ -25,20 +25,65 @@ class CardCell: UICollectionViewCell {
             return nameLabel.text
         }
     }
+    private let imageView: UIImageView
+    var image: UIImage? {
+        set {
+            imageView.image = newValue
+        }
+        get {
+            return imageView.image
+        }
+    }
+    private let effectView: UIVisualEffectView
     
     override init(frame: CGRect) {
         nameLabel = UILabel(frame: .zero)
+        nameLabel.textColor = .white
+        //        nameLabel.font = UIFont(
+        imageView = UIImageView(frame: .zero)
+        imageView.contentMode = .scaleAspectFill
+        let blurEffect = UIBlurEffect(style: .light)
+        //        let vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
+        effectView = UIVisualEffectView(effect: blurEffect)
         super.init(frame: frame)
+        contentView.addSubview(imageView)
+        contentView.addSubview(effectView)
         contentView.addSubview(nameLabel)
+        contentView.clipsToBounds = true
+        contentView.layer.cornerRadius = 10
+        layer.cornerRadius = 10
+        layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
+        layer.borderWidth = 1
+        configureConstraints()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func configureConstraints() {
+        let offset: CGFloat = 20
+        contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        var constraints: [NSLayoutConstraint] = []
+        
+        constraints.append(NSLayoutConstraint(item: nameLabel, attribute: .centerX, relatedBy: .equal, toItem: nameLabel.superview!, attribute: .centerX, multiplier: 1, constant: 0))
+        constraints.append(NSLayoutConstraint(item: nameLabel, attribute: .top, relatedBy: .equal, toItem: nameLabel.superview!, attribute: .top, multiplier: 1, constant: offset))
+        
+        let views: [String : Any] = [
+            "effectView" : effectView,
+            "imageView" : imageView
+        ]
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[effectView]|", options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[effectView]|", options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[imageView]|", options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView]|", options: [], metrics: nil, views: views)
+        
+        NSLayoutConstraint.activate(constraints)
+    }
 }
 
 class CardsViewController: UIViewController {
-
+    
     fileprivate let worker: CoreDataWorkerProtocol
     fileprivate var cards: [Card] = [Card(name: "Card 1"),
                                      Card(name: "Card 2"),
@@ -66,6 +111,7 @@ class CardsViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         configureNavigationItem()
+        configureConstraints()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -74,14 +120,13 @@ class CardsViewController: UIViewController {
     }
     
     func configureView() {
-        view.backgroundColor = .red
+        view.backgroundColor = . white
         let layout = UICollectionViewFlowLayout()
-        
         layout.scrollDirection = .vertical
         layout.itemSize = CGSize(width: view.bounds.size.width * 0.8, height: 200)
-        let offset: CGFloat = 10
+        let offset: CGFloat = 20
         layout.sectionInset = UIEdgeInsets(top: offset, left: offset, bottom: offset, right: offset)
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -93,6 +138,19 @@ class CardsViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
     }
     
+    func configureConstraints() {
+        view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        var constraints: [NSLayoutConstraint] = []
+        
+        let views: [String : Any] = [
+            "collectionView" : collectionView,
+            ]
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[collectionView]|", options: [], metrics: nil, views: views)
+        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[collectionView]|", options: [], metrics: nil, views: views)
+        
+        NSLayoutConstraint.activate(constraints)
+        
+    }
     func addTapped(sender: UIBarButtonItem) {
         showDetails(for: nil)
     }
@@ -105,27 +163,27 @@ class CardsViewController: UIViewController {
 }
 
 extension CardsViewController: UICollectionViewDataSource {
-
+    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
     func collectionView(_ collectionView: UICollectionView,
-                                 numberOfItemsInSection section: Int) -> Int {
+                        numberOfItemsInSection section: Int) -> Int {
         return cards.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
-                                 cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         //TODO: safe
         
         let card = cards[indexPath.row]
-
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
                                                       for: indexPath) as! CardCell
-        cell.backgroundColor = .blue
         cell.name = card.name
+        cell.image = card.front
         return cell
     }
 }
