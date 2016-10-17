@@ -15,7 +15,7 @@ class CardDetailsViewController: UIViewController {
     init(card: Card?) {
         self.card = card
         super.init(nibName: nil, bundle: nil)
-        self.title = card == nil ? "Add new card" : "Card"
+        self.title = card == nil ? "Add new card" : card!.name
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -29,7 +29,7 @@ class CardDetailsViewController: UIViewController {
     }
     
     func configureView() {
-        view.backgroundColor = .green
+        view.backgroundColor = .white
         //TODO: V: [name text field] - [front] - [back]
     }
     

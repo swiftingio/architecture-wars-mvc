@@ -16,6 +16,10 @@
 		69ABD0E11DB3955000CB925C /* CoreDataWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0E01DB3955000CB925C /* CoreDataWorker.swift */; };
 		69ABD0E31DB395F800CB925C /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0E21DB395F800CB925C /* Result.swift */; };
 		69ABD0E71DB3A1A300CB925C /* CardDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0E61DB3A1A300CB925C /* CardDetailsViewController.swift */; };
+		69DDFA731DB3E6AD00D856C5 /* CardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DDFA721DB3E6AD00D856C5 /* CardCell.swift */; };
+		69DDFA751DB3E6D500D856C5 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DDFA741DB3E6D500D856C5 /* Card.swift */; };
+		69DDFA771DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DDFA761DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift */; };
+		69DDFA791DB3E7B200D856C5 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DDFA781DB3E7B200D856C5 /* Array+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +34,10 @@
 		69ABD0E01DB3955000CB925C /* CoreDataWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataWorker.swift; sourceTree = "<group>"; };
 		69ABD0E21DB395F800CB925C /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		69ABD0E61DB3A1A300CB925C /* CardDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardDetailsViewController.swift; sourceTree = "<group>"; };
+		69DDFA721DB3E6AD00D856C5 /* CardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardCell.swift; sourceTree = "<group>"; };
+		69DDFA741DB3E6D500D856C5 /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		69DDFA761DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutFormatOptions+Extension.swift"; sourceTree = "<group>"; };
+		69DDFA781DB3E7B200D856C5 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,7 +90,8 @@
 			isa = PBXGroup;
 			children = (
 				69ABD0C51DB391E100CB925C /* AppDelegate.swift */,
-				69ABD0E81DB3A2F900CB925C /* View Controllers */,
+				69DDFA7A1DB3E7DE00D856C5 /* Model */,
+				69ABD0E81DB3A2F900CB925C /* View + Controller */,
 				69ABD0E41DB39B7100CB925C /* Persistence */,
 				69ABD0E51DB39B8400CB925C /* Other */,
 				69ABD0DC1DB3938500CB925C /* Resources */,
@@ -102,18 +111,45 @@
 		69ABD0E51DB39B8400CB925C /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				69ABD0E21DB395F800CB925C /* Result.swift */,
+				69DDFA781DB3E7B200D856C5 /* Array+Extension.swift */,
+				69DDFA761DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift */,
 			);
 			name = Other;
 			sourceTree = "<group>";
 		};
-		69ABD0E81DB3A2F900CB925C /* View Controllers */ = {
+		69ABD0E81DB3A2F900CB925C /* View + Controller */ = {
 			isa = PBXGroup;
 			children = (
+				69DDFA7C1DB3E81800D856C5 /* My Cards */,
+				69DDFA7D1DB3E81E00D856C5 /* Card details */,
+			);
+			name = "View + Controller";
+			sourceTree = "<group>";
+		};
+		69DDFA7A1DB3E7DE00D856C5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				69ABD0E21DB395F800CB925C /* Result.swift */,
+				69DDFA741DB3E6D500D856C5 /* Card.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		69DDFA7C1DB3E81800D856C5 /* My Cards */ = {
+			isa = PBXGroup;
+			children = (
+				69DDFA721DB3E6AD00D856C5 /* CardCell.swift */,
 				69ABD0DE1DB3953600CB925C /* CardsViewController.swift */,
+			);
+			name = "My Cards";
+			sourceTree = "<group>";
+		};
+		69DDFA7D1DB3E81E00D856C5 /* Card details */ = {
+			isa = PBXGroup;
+			children = (
 				69ABD0E61DB3A1A300CB925C /* CardDetailsViewController.swift */,
 			);
-			name = "View Controllers";
+			name = "Card details";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -188,11 +224,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				69ABD0E71DB3A1A300CB925C /* CardDetailsViewController.swift in Sources */,
+				69DDFA751DB3E6D500D856C5 /* Card.swift in Sources */,
 				69ABD0E31DB395F800CB925C /* Result.swift in Sources */,
+				69DDFA791DB3E7B200D856C5 /* Array+Extension.swift in Sources */,
 				69ABD0E11DB3955000CB925C /* CoreDataWorker.swift in Sources */,
+				69DDFA731DB3E6AD00D856C5 /* CardCell.swift in Sources */,
 				69ABD0DF1DB3953600CB925C /* CardsViewController.swift in Sources */,
 				69ABD0C61DB391E100CB925C /* AppDelegate.swift in Sources */,
 				69ABD0CE1DB391E100CB925C /* DataModel.xcdatamodeld in Sources */,
+				69DDFA771DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift in Sources */,
 				69ABD0DB1DB3932700CB925C /* CoreDataService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,6 +385,7 @@
 				69ABD0D91DB391E100CB925C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

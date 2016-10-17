@@ -8,81 +8,8 @@
 
 import UIKit
 
-struct Card {
-    let name: String
-    let front: UIImage = #imageLiteral(resourceName: "card")
-    //    let back: UIImage
-}
 
-class CardCell: UICollectionViewCell {
-    private let nameLabel: UILabel
-    var name: String? {
-        set {
-            nameLabel.text = newValue
-            nameLabel.sizeToFit()
-        }
-        get {
-            return nameLabel.text
-        }
-    }
-    private let imageView: UIImageView
-    var image: UIImage? {
-        set {
-            imageView.image = newValue
-        }
-        get {
-            return imageView.image
-        }
-    }
-    private let effectView: UIVisualEffectView
-    
-    override init(frame: CGRect) {
-        nameLabel = UILabel(frame: .zero)
-        nameLabel.textColor = .white
-        //        nameLabel.font = UIFont(
-        imageView = UIImageView(frame: .zero)
-        imageView.contentMode = .scaleAspectFill
-        let blurEffect = UIBlurEffect(style: .light)
-        //        let vibrancyEffect = UIVibrancyEffect(blurEffect: blurEffect)
-        effectView = UIVisualEffectView(effect: blurEffect)
-        super.init(frame: frame)
-        contentView.addSubview(imageView)
-        contentView.addSubview(effectView)
-        contentView.addSubview(nameLabel)
-        contentView.clipsToBounds = true
-        contentView.layer.cornerRadius = 10
-        layer.cornerRadius = 10
-        layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
-        layer.borderWidth = 1
-        configureConstraints()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func configureConstraints() {
-        let offset: CGFloat = 20
-        contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-        var constraints: [NSLayoutConstraint] = []
-        
-        constraints.append(NSLayoutConstraint(item: nameLabel, attribute: .centerX, relatedBy: .equal, toItem: nameLabel.superview!, attribute: .centerX, multiplier: 1, constant: 0))
-        constraints.append(NSLayoutConstraint(item: nameLabel, attribute: .top, relatedBy: .equal, toItem: nameLabel.superview!, attribute: .top, multiplier: 1, constant: offset))
-        
-        let views: [String : Any] = [
-            "effectView" : effectView,
-            "imageView" : imageView
-        ]
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[effectView]|", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[effectView]|", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "V:|[imageView]|", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat: "H:|[imageView]|", options: [], metrics: nil, views: views)
-        
-        NSLayoutConstraint.activate(constraints)
-    }
-}
-
-class CardsViewController: UIViewController {
+final class CardsViewController: UIViewController {
     
     fileprivate let worker: CoreDataWorkerProtocol
     fileprivate var cards: [Card] = [Card(name: "Card 1"),
@@ -100,7 +27,7 @@ class CardsViewController: UIViewController {
     init(worker: CoreDataWorkerProtocol) {
         self.worker = worker
         super.init(nibName: nil, bundle: nil)
-        self.title = "Cards"
+        self.title = "My Cards"
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -126,6 +53,7 @@ class CardsViewController: UIViewController {
         layout.itemSize = CGSize(width: view.bounds.size.width * 0.8, height: 200)
         let offset: CGFloat = 20
         layout.sectionInset = UIEdgeInsets(top: offset, left: offset, bottom: offset, right: offset)
+        layout.minimumInteritemSpacing = offset
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
@@ -151,14 +79,20 @@ class CardsViewController: UIViewController {
         NSLayoutConstraint.activate(constraints)
         
     }
+    
     func addTapped(sender: UIBarButtonItem) {
-        showDetails(for: nil)
+        showDetails(of: nil)
     }
     
-    func showDetails(for card: Card?) {
+    func showDetails(of card: Card?) {
         let viewController = CardDetailsViewController(card: card)
         let navigationController = UINavigationController(rootViewController: viewController)
         present(navigationController, animated: true, completion: nil)
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        //TODO: layout change when rotating
+        collectionView.collectionViewLayout.invalidateLayout()
     }
 }
 
@@ -183,9 +117,15 @@ extension CardsViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
                                                       for: indexPath) as! CardCell
         cell.name = card.name
-        cell.image = card.front
+        cell.front = card.front
+        cell.back = card.back
         return cell
     }
 }
 
-extension CardsViewController: UICollectionViewDelegate {}
+extension CardsViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let card = cards[safe: indexPath.row] else { return }
+        showDetails(of: card)
+    }
+}
