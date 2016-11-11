@@ -16,13 +16,16 @@ enum CoreDataWorkerError: Error {
 }
 
 protocol NotificationCenterProtocol {
-    func addObserver(forName name: NSNotification.Name?, object obj: Any?, queue: OperationQueue?, using block: @escaping (Notification) -> Void) -> NSObjectProtocol
-    func addObserver(_ observer: Any, selector aSelector: Selector, name aName: NSNotification.Name?, object anObject: Any?)
+    func addObserver(forName name: NSNotification.Name?, object obj:
+        Any?, queue: OperationQueue?, using block: @escaping (Notification) -> Void) -> NSObjectProtocol
+    func addObserver(_ observer: Any, selector aSelector: Selector, name
+        aName: NSNotification.Name?, object anObject: Any?)
     func removeObserver(_ observer: Any)
     func removeObserver(_ observer: Any, name aName: NSNotification.Name?, object anObject: Any?)
     func post(_ notification: Notification)
     func post(name aName: NSNotification.Name, object anObject: Any?)
-    func post(name aName: NSNotification.Name, object anObject: Any?, userInfo aUserInfo: [AnyHashable : Any]?)
+    func post(name aName: NSNotification.Name, object anObject: Any?, userInfo
+        aUserInfo: [AnyHashable : Any]?)
 }
 
 extension NotificationCenter: NotificationCenterProtocol {}
@@ -56,22 +59,22 @@ protocol CoreDataWorkerProtocol {
          sortDescriptors: [NSSortDescriptor]?,
          fetchLimit: Int?,
          completion: @escaping (Result<[Entity]>) -> Void)
-    
+
     func getManaged<ManagedEntity: NSManagedObject>
         (with predicate: NSPredicate?,
          sortDescriptors: [NSSortDescriptor]?,
          fetchLimit: Int?,
          completion:  @escaping (Result<[ManagedEntity]>) -> Void)
     where ManagedEntity: ManagedObjectProtocol
-    
+
     func update<Entity: ManagedObjectConvertible>
         (entities: [Entity],
          completion: @escaping (Error?) -> Void)
-    
+
     func upsert<Entity: ManagedObjectConvertible>
         (entities: [Entity],
          completion: @escaping (Error?) -> Void)
-    
+
     func remove<Entity: ManagedObjectConvertible>
         (entities: [Entity],
          completion: @escaping (Error?) -> Void)
@@ -91,16 +94,16 @@ extension CoreDataWorkerProtocol {
 }
 
 class CoreDataWorker: CoreDataWorkerProtocol {
-    
+
     let coreData: CoreDataServiceProtocol
     let notificationCenter: NotificationCenterProtocol
-    
+
     init(coreData: CoreDataServiceProtocol = CoreDataService.shared,
          notificationCenter: NotificationCenterProtocol = NotificationCenter.default) {
         self.coreData = coreData
         self.notificationCenter = notificationCenter
     }
-    
+
     func get<Entity: ManagedObjectConvertible>
         (with predicate: NSPredicate?,
          sortDescriptors: [NSSortDescriptor]?,
@@ -123,7 +126,7 @@ class CoreDataWorker: CoreDataWorkerProtocol {
             }
         }
     }
-    
+
     func getManaged<ManagedEntity: NSManagedObject>
         (with predicate: NSPredicate?,
          sortDescriptors: [NSSortDescriptor]?,
@@ -141,11 +144,12 @@ class CoreDataWorker: CoreDataWorkerProtocol {
                     let results = try context.fetch(fetchRequest) as? [ManagedEntity]
                     completion(.success(results ?? []))
                 } catch {
-                    completion(.failure(CoreDataWorkerError.cannotFetch("Cannot fetch error: \(error)")))
+                    completion(.failure(CoreDataWorkerError.cannotFetch(
+                        "Cannot fetch error: \(error)")))
                 }
             }
     }
-    
+
     func update<Entity: ManagedObjectConvertible>
         (entities: [Entity],
          completion: @escaping (Error?) -> Void) {
@@ -164,12 +168,12 @@ class CoreDataWorker: CoreDataWorkerProtocol {
     func upsert<Entity: ManagedObjectConvertible>
         (entities: [Entity],
          completion: @escaping (Error?) -> Void) {
-        
+
         if entities.isEmpty {
             completion(nil)
             return
         }
-        
+
         coreData.performBackgroundTask { context in
             _ = entities.flatMap({ (entity) -> Entity.ManagedObject? in
                 return entity.toManagedObject(in: context, create: true)
@@ -183,19 +187,20 @@ class CoreDataWorker: CoreDataWorkerProtocol {
                 ]
                 let notification = Notification(name: name, object: self, userInfo: userInfo)
                 self.notificationCenter.post(notification)
-                
+
                 completion(nil)
             } catch {
                 completion(CoreDataWorkerError.cannotSave(error))
             }
         }
     }
-    
+
     func remove<Entity: ManagedObjectConvertible>
         (entities: [Entity], completion: @escaping (Error?) -> Void) {
         coreData.performBackgroundTask { (context) in
             for entity in entities {
-                if let managedEntity = entity.toManagedObject(in: context, create: false) as? NSManagedObject {
+                if let managedEntity = entity.toManagedObject(in: context, create:
+                    false) as? NSManagedObject {
                     context.delete(managedEntity)
                 }
                 /*Attempting to use NSManagedObjectContext's delete(:) method may result in calling the UIKit-added

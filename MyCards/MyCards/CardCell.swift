@@ -9,11 +9,11 @@
 import UIKit
 
 class CardCell: UICollectionViewCell, IndexedCell {
-    
+
     fileprivate let nameLabel: UILabel
     fileprivate let effectView: UIVisualEffectView
     fileprivate let backgroundImageView: UIImageView
-    
+
     weak var delegate: IndexedCellDelegate?
     var indexPath: IndexPath?
     var name: String? {
@@ -25,7 +25,7 @@ class CardCell: UICollectionViewCell, IndexedCell {
             return nameLabel.text
         }
     }
-    
+
     var image: UIImage? {
         set {
             backgroundImageView.image = newValue
@@ -34,7 +34,7 @@ class CardCell: UICollectionViewCell, IndexedCell {
             return backgroundImageView.image
         }
     }
-    
+
     override init(frame: CGRect) {
         nameLabel = UILabel(frame: .zero)
         backgroundImageView = UIImageView(frame: .zero)
@@ -43,18 +43,18 @@ class CardCell: UICollectionViewCell, IndexedCell {
         configureViews()
         configureConstraints()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         name = nil
         image = nil
         indexPath = nil
     }
-    
+
     fileprivate var touchDownInside: Bool = false
     fileprivate var alreadyTapped: Bool = false
 }
@@ -71,17 +71,17 @@ extension CardCell {
         contentView.layer.cornerRadius = 10
         layer.cornerRadius = 10
     }
-    
+
     fileprivate func configureConstraints() {
-        
+
         contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-        
+
         let views: [String : Any] = [
             "nameLabel" : nameLabel,
             "effectView" : effectView,
             "imageView" : backgroundImageView,
             ]
-        
+
         let metrics: [String : Any] = [
             "top" : 20,
             "mid" : 20,
@@ -90,20 +90,21 @@ extension CardCell {
             "labelHeight" : 20,
             "bottom" : 40,
             ]
-        
+
         let configurtion: [(String, NSLayoutFormatOptions)] = [
             ("V:|[effectView]|", .none),
             ("H:|[effectView]|", .none),
             ("V:|[imageView]|", .none),
             ("H:|[imageView]|", .none),
             ]
-        
+
         var constraints: [NSLayoutConstraint] = []
-        
+
         configurtion.forEach { (format, options) in
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: format, options: options, metrics: metrics, views: views)
+            constraints += NSLayoutConstraint.constraints(withVisualFormat:
+                format, options: options, metrics: metrics, views: views)
         }
-        
+
         constraints += NSLayoutConstraint.centerInSuperview(nameLabel)
         NSLayoutConstraint.activate(constraints)
     }
@@ -114,17 +115,17 @@ extension CardCell {
         super.touchesBegan(touches, with: event)
         touchesDown(touches)
     }
-    
+
     override open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
         touchesDown(touches)
     }
-    
+
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         touchesUp()
     }
-    
+
     override open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         touchDownInside = false
@@ -141,7 +142,7 @@ extension CardCell {
             undoTapAnimation()
         }
     }
-    
+
     fileprivate func touchesUp(_ touches: Set<UITouch>? = nil) {
         undoTapAnimation()
         if touchDownInside {
@@ -149,7 +150,7 @@ extension CardCell {
             delegate?.cellWasTapped(self)
         }
     }
-    
+
     fileprivate func boundsContain(_ touches: Set<UITouch>) -> Bool {
         for touch in touches {
             let location: CGPoint = touch.location(in: self)
@@ -157,22 +158,22 @@ extension CardCell {
         }
         return false
     }
-    
+
     fileprivate func animateTap() {
         guard !alreadyTapped else { return }
         alreadyTapped = true
-        
+
         UIView.animate(withDuration: 0.2) {
-            let scale:CGFloat = 0.8
+            let scale: CGFloat = 0.8
             self.contentView.transform = CGAffineTransform(scaleX: scale, y: scale)
             self.effectView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
         }
     }
-    
+
     fileprivate func undoTapAnimation() {
         guard alreadyTapped else { return }
         alreadyTapped = false
-        
+
         UIView.animate(withDuration: 0.2) {
             self.contentView.transform = .identity
             self.effectView.backgroundColor = nil

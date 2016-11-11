@@ -16,11 +16,11 @@ enum ResultError: Error {
 enum Result<T> {
     case success(T)
     case failure(Error)
-    
+
     init(optional value: T?, error: @autoclosure() -> Error) {
         self = value.map(Result.success) ?? .failure(error())
     }
-    
+
     init(throwing value: @autoclosure() throws -> T) {
         do {
             self = .success(try value())
@@ -28,14 +28,14 @@ enum Result<T> {
             self = .failure(error)
         }
     }
-    
+
     var isSuccess: Bool {
         if case .success(_) = self {
             return true
         }
         return false
     }
-    
+
     var optional: T? {
         if case .success(let value) = self {
             return value
@@ -43,7 +43,7 @@ enum Result<T> {
             return nil
         }
     }
-    
+
     func forceValue() throws -> T {
         if case .success(let value) = self {
             return value
@@ -51,7 +51,7 @@ enum Result<T> {
             throw ResultError.noValue
         }
     }
-    
+
     var error: Error? {
         if case .failure(let error) = self {
             return error
@@ -66,10 +66,10 @@ func ==<T: Equatable> (lhs: Result<T>, rhs: Result<T>) -> Bool {
     switch (lhs, rhs) {
     case (.success(let lhss), .success(let rhss)):
         return lhss == rhss
-        
+
     case (.failure(_), .failure(_)):
         return true
-        
+
     default:
         return false
     }
@@ -85,7 +85,7 @@ extension Result {
             return .failure(error)
         }
     }
-    
+
     func flatMap<U>(_ transform: (T) -> Result<U>) -> Result<U> {
         switch self {
         case .success(let value):
