@@ -12,15 +12,14 @@ import UIKit
 final class CardsViewController: UIViewController {
     
     fileprivate let worker: CoreDataWorkerProtocol
-    fileprivate var cards: [Card] = [Card(name: "Card 1"),
-                                     Card(name: "Card 2"),
-                                     Card(name: "Card 3"),
-                                     Card(name: "Card 4"),
-                                     Card(name: "Card 5"),
-                                     Card(name: "Card 6"),
-                                     Card(name: "Card 7"),
-                                     Card(name: "Card 8"),
-                                     ]
+    fileprivate lazy var cards: [Card] = {
+        var c = [Card]()
+        for i in 0...100 {
+            c.append(Card(name: "My new card for \(i)"))
+        }
+        return c
+    }()
+    
     fileprivate var collectionView: UICollectionView!
     fileprivate let reuseIdentifier: String = String(describing: CardCell.self)
     
@@ -110,22 +109,24 @@ extension CardsViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        //TODO: safe
-        
-        let card = cards[indexPath.row]
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier,
                                                       for: indexPath) as! CardCell
+        
+        guard let card = cards[safe: indexPath.row] else { return cell }
         cell.name = card.name
-        cell.front = card.front
-        cell.back = card.back
+        cell.image = card.front
+        cell.indexPath = indexPath
+        cell.delegate = self
         return cell
     }
 }
 
-extension CardsViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let card = cards[safe: indexPath.row] else { return }
+extension CardsViewController: UICollectionViewDelegate {}
+
+extension CardsViewController: IndexedCellDelegate {
+    func cellWasTapped(_ cell: IndexedCell) {
+        guard let indexPath = cell.indexPath,
+            let card = cards[safe: indexPath.row] else { return }
         showDetails(of: card)
     }
 }

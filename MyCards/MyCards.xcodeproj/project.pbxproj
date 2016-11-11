@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		69AB4B2A1DD652270014B996 /* NSLayoutConstraint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AB4B291DD652270014B996 /* NSLayoutConstraint+Extension.swift */; };
+		69AB4B2C1DD66F190014B996 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AB4B2B1DD66F190014B996 /* Protocols.swift */; };
 		69ABD0C61DB391E100CB925C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0C51DB391E100CB925C /* AppDelegate.swift */; };
 		69ABD0CE1DB391E100CB925C /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0CC1DB391E100CB925C /* DataModel.xcdatamodeld */; };
 		69ABD0D01DB391E100CB925C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69ABD0CF1DB391E100CB925C /* Assets.xcassets */; };
@@ -23,6 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		69AB4B291DD652270014B996 /* NSLayoutConstraint+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint+Extension.swift"; sourceTree = "<group>"; };
+		69AB4B2B1DD66F190014B996 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		69ABD0C21DB391E100CB925C /* MyCards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyCards.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69ABD0C51DB391E100CB925C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69ABD0CD1DB391E100CB925C /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -113,6 +117,8 @@
 			children = (
 				69DDFA781DB3E7B200D856C5 /* Array+Extension.swift */,
 				69DDFA761DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift */,
+				69AB4B291DD652270014B996 /* NSLayoutConstraint+Extension.swift */,
+				69AB4B2B1DD66F190014B996 /* Protocols.swift */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -179,7 +185,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Maciej Piotrowski";
 				TargetAttributes = {
 					69ABD0C11DB391E100CB925C = {
@@ -232,6 +238,8 @@
 				69ABD0DF1DB3953600CB925C /* CardsViewController.swift in Sources */,
 				69ABD0C61DB391E100CB925C /* AppDelegate.swift in Sources */,
 				69ABD0CE1DB391E100CB925C /* DataModel.xcdatamodeld in Sources */,
+				69AB4B2C1DD66F190014B996 /* Protocols.swift in Sources */,
+				69AB4B2A1DD652270014B996 /* NSLayoutConstraint+Extension.swift in Sources */,
 				69DDFA771DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift in Sources */,
 				69ABD0DB1DB3932700CB925C /* CoreDataService.swift in Sources */,
 			);
@@ -269,6 +277,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -318,6 +327,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

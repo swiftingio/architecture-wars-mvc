@@ -10,4 +10,5 @@ import UIKit
 
 extension NSLayoutFormatOptions {
     static let none: NSLayoutFormatOptions = []
+    static let center: NSLayoutFormatOptions = [.alignAllCenterX, .alignAllCenterY]
 }
