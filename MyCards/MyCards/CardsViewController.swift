@@ -11,16 +11,9 @@ import UIKit
 
 final class CardsViewController: UIViewController {
 
-    //TODO: implement empty screen - swifting.io logo
     fileprivate let worker: CoreDataWorkerProtocol
-    fileprivate lazy var cards: [Card] = {
-        //TODO: remove when needed
-        var c = [Card]()
-        for i in 0...100 {
-            c.append(Card(name: "My new card for \(i)"))
-        }
-        return c
-    }()
+    fileprivate lazy var cards: [Card] = Card.testCards(100)
+    private let emptyScreen: UIImageView = UIImageView(image: #imageLiteral(resourceName: "logo"))
 
     fileprivate var collectionView: UICollectionView!
     fileprivate let reuseIdentifier: String = String(describing: CardCell.self)
@@ -37,8 +30,8 @@ final class CardsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureView()
         configureNavigationItem()
+        configureViews()
         configureConstraints()
     }
 
@@ -48,13 +41,14 @@ final class CardsViewController: UIViewController {
         collectionView.reloadData()
     }
 
-    func configureView() {
+    func configureViews() {
         view.backgroundColor = . white
+        view.addSubview(emptyScreen)
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.itemSize = CGSize(width: view.bounds.size.width * 0.8, height: 200)
         let offset: CGFloat = 20
-        layout.sectionInset = UIEdgeInsets(top: offset, left: offset, bottom: offset, right: offset)
+        layout.sectionInset = UIEdgeInsets(top: 4*offset, left: offset, bottom: offset, right: offset)
         layout.minimumInteritemSpacing = offset
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
@@ -72,17 +66,9 @@ final class CardsViewController: UIViewController {
     func configureConstraints() {
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         var constraints: [NSLayoutConstraint] = []
-
-        let views: [String : Any] = [
-            "collectionView" : collectionView,
-            ]
-        constraints += NSLayoutConstraint.constraints(withVisualFormat:
-            "V:|[collectionView]|", options: [], metrics: nil, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat:
-            "H:|[collectionView]|", options: [], metrics: nil, views: views)
-
+        constraints += NSLayoutConstraint.centerInSuperview(emptyScreen)
+        constraints += NSLayoutConstraint.fillInSuperview(collectionView)
         NSLayoutConstraint.activate(constraints)
-
     }
 
     func addTapped(sender: UIBarButtonItem) {

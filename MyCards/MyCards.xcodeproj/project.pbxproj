@@ -30,7 +30,7 @@
 		69AB4B291DD652270014B996 /* NSLayoutConstraint+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint+Extension.swift"; sourceTree = "<group>"; };
 		69AB4B2B1DD66F190014B996 /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		69AB4B2D1DD674C80014B996 /* NetworkWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkWorker.swift; sourceTree = "<group>"; };
-		69AB4B311DD676890014B996 /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .swiftlint.yml; sourceTree = "<group>"; };
+		69AB4B311DD676890014B996 /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .swiftlint.yml; path = ../.swiftlint.yml; sourceTree = "<group>"; };
 		69ABD0C21DB391E100CB925C /* MyCards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyCards.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69ABD0C51DB391E100CB925C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		69ABD0CD1DB391E100CB925C /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -70,7 +70,6 @@
 		69ABD0B91DB391E100CB925C = {
 			isa = PBXGroup;
 			children = (
-				69AB4B311DD676890014B996 /* .swiftlint.yml */,
 				69ABD0C41DB391E100CB925C /* MyCards */,
 				69ABD0C31DB391E100CB925C /* Products */,
 			);
@@ -95,6 +94,7 @@
 		69ABD0DC1DB3938500CB925C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				69AB4B311DD676890014B996 /* .swiftlint.yml */,
 				69ABD0CF1DB391E100CB925C /* Assets.xcassets */,
 				69ABD0D11DB391E100CB925C /* LaunchScreen.storyboard */,
 				69ABD0D41DB391E100CB925C /* Info.plist */,

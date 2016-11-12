@@ -10,12 +10,12 @@ import UIKit
 
 class CardDetailsViewController: UIViewController {
 
-    //TODO: implement empty screen - blue bird
-
     fileprivate var card: Card?
     fileprivate let worker: CoreDataWorkerProtocol
+    private let emptyScreen: UIImageView = UIImageView(image: #imageLiteral(resourceName: "bluebird"))
     //TODO: Edit Mode in initalizer
-    
+//    private let mode: Mode
+
     init(card: Card?, worker: CoreDataWorkerProtocol = CoreDataWorker()) {
         self.card = card
         self.worker = worker
@@ -29,13 +29,21 @@ class CardDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureView()
         configureNavigationItem()
+        configureViews()
+        configureConstraints()
     }
 
-    func configureView() {
+    func configureViews() {
         view.backgroundColor = .white
+        view.addSubview(emptyScreen)
+    }
+
+    func configureConstraints() {
+        view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        var constraints = NSLayoutConstraint.centerInSuperview(emptyScreen)
         //TODO: "V:|-[name]-(>=10)-[front]-[back]-|"
+        NSLayoutConstraint.activate(constraints)
     }
 
     func configureNavigationItem() {
@@ -55,7 +63,7 @@ class CardDetailsViewController: UIViewController {
     func cancelTapped(sender: UIBarButtonItem) {
         dismiss()
     }
-    
+
     func editTapped(sender: UIBarButtonItem) {
         //TODO: edit mode on: text field enabled, front/back have photo camera button
     }
@@ -69,12 +77,12 @@ class CardDetailsViewController: UIViewController {
 
     func backTapped() {
     }
-    
+
     //TODO: show camera picker when tapping on photo camera button
 
     //TODO: get picture back from camera and set to front/back
 
     //TODO: tap on front/back & open larger view
-    
+
     //TODO: handle rotation
 }
