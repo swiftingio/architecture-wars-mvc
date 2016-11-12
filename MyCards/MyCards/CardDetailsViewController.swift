@@ -20,8 +20,8 @@ class CardDetailsViewController: UIViewController {
     }
 
     fileprivate var name: UITextField!
-    fileprivate var front: UIImageView!
-    fileprivate var back: UIImageView!
+    fileprivate var front: CardView!
+    fileprivate var back: CardView!
 
     init(card: Card?, worker: CoreDataWorkerProtocol = CoreDataWorker()) {
         self.card = card
@@ -95,8 +95,10 @@ extension CardDetailsViewController {
     }
 
     fileprivate func configureModeForViews() {
-        name.isUserInteractionEnabled = mode == .edit
-        //TODO: front/back in edit mode
+        let editMode = mode == .edit
+        name.isUserInteractionEnabled = editMode
+        front.takePhotoButton.isHidden = !editMode
+        back.takePhotoButton.isHidden = !editMode
     }
 
     fileprivate func makeNameField() -> UITextField {
@@ -109,13 +111,8 @@ extension CardDetailsViewController {
         return name
     }
 
-    fileprivate func makeCardView(with image: UIImage?) -> UIImageView {
-        //TODO: make real card view; front/back have photo camera button
-        let view = UIImageView(image: image)
-        if image == nil {
-            view.image = #imageLiteral(resourceName: "logo") //TODO: image placeholder
-        }
-        view.contentMode = .scaleAspectFit
+    fileprivate func makeCardView(with image: UIImage?) -> CardView {
+        let view = CardView(image: image)
         return view
     }
 

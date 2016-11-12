@@ -13,14 +13,14 @@ protocol TappableViewDelegate: class {
 }
 
 class TappableView: UIView {
-    
+
     fileprivate var touchingDownInside: Bool = false
     fileprivate var alreadyTapped: Bool = false
     fileprivate var dimmedView: UIView!
-    
+
     var contentView: UIView!
     weak var delegate: TappableViewDelegate?
-    
+
     override init(frame: CGRect) {
         contentView = UILabel(frame: .zero)
         dimmedView = UIView(frame: .zero)
@@ -28,32 +28,33 @@ class TappableView: UIView {
         configureViews()
         configureConstraints()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
+        //TODO: hit test
         touchesDown(touches)
     }
-    
+
     override open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
         touchesDown(touches)
     }
-    
+
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         touchesUp()
     }
-    
+
     override open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         touchingDownInside = false
         touchesUp()
     }
-    
+
     fileprivate func configureViews() {
         dimmedView.backgroundColor = nil
         addSubview(contentView)
@@ -61,7 +62,7 @@ class TappableView: UIView {
         addSubview(dimmedView)
         clipsToBounds = true
     }
-    
+
     fileprivate func configureConstraints() {
         subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         var constraints: [NSLayoutConstraint] = []
@@ -80,7 +81,7 @@ extension TappableView {
             undoTapAnimation()
         }
     }
-    
+
     fileprivate func touchesUp(_ touches: Set<UITouch>? = nil) {
         undoTapAnimation()
         if touchingDownInside {
@@ -88,7 +89,7 @@ extension TappableView {
             delegate?.tappableViewWasTapped(self)
         }
     }
-    
+
     fileprivate func boundsContain(_ touches: Set<UITouch>) -> Bool {
         for touch in touches {
             let location: CGPoint = touch.location(in: self)
@@ -96,22 +97,22 @@ extension TappableView {
         }
         return false
     }
-    
+
     fileprivate func animateTap() {
         guard !alreadyTapped else { return }
         alreadyTapped = true
-        
+
         UIView.animate(withDuration: 0.2) {
             let scale: CGFloat = 0.8
             self.transform = CGAffineTransform(scaleX: scale, y: scale)
             self.dimmedView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
         }
     }
-    
+
     fileprivate func undoTapAnimation() {
         guard alreadyTapped else { return }
         alreadyTapped = false
-        
+
         UIView.animate(withDuration: 0.2) {
             self.transform = .identity
             self.dimmedView.backgroundColor = nil

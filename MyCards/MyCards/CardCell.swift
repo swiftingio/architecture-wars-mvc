@@ -12,7 +12,7 @@ class CardCell: UICollectionViewCell, IndexedCell {
 
     fileprivate let nameLabel: UILabel
     fileprivate let effectView: UIVisualEffectView
-    fileprivate let backgroundImageView: UIImageView
+    fileprivate let imageView: UIImageView
     fileprivate let tappableView: TappableView
 
     weak var delegate: IndexedCellDelegate?
@@ -29,16 +29,16 @@ class CardCell: UICollectionViewCell, IndexedCell {
 
     var image: UIImage? {
         set {
-            backgroundImageView.image = newValue
+            imageView.image = newValue
         }
         get {
-            return backgroundImageView.image
+            return imageView.image
         }
     }
 
     override init(frame: CGRect) {
         nameLabel = UILabel(frame: .zero)
-        backgroundImageView = UIImageView(frame: .zero)
+        imageView = UIImageView(frame: .zero)
         effectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
         tappableView = TappableView(frame: .zero)
         super.init(frame: frame)
@@ -60,12 +60,12 @@ class CardCell: UICollectionViewCell, IndexedCell {
 
 extension CardCell {
     fileprivate func configureViews() {
-        tappableView.contentView.addSubview(backgroundImageView)
+        tappableView.contentView.addSubview(imageView)
         tappableView.contentView.addSubview(effectView)
         tappableView.contentView.addSubview(nameLabel)
         contentView.addSubview(tappableView)
-        
-        backgroundImageView.contentMode = .scaleAspectFill
+
+        imageView.contentMode = .scaleAspectFill
         nameLabel.textColor = .white
         nameLabel.font = UIFont.preferredFont(forTextStyle: .title1)
         tappableView.layer.cornerRadius = 10
@@ -78,7 +78,7 @@ extension CardCell {
         var constraints: [NSLayoutConstraint] = []
         constraints += NSLayoutConstraint.centerInSuperview(nameLabel)
         constraints += NSLayoutConstraint.fillInSuperview(effectView)
-        constraints += NSLayoutConstraint.fillInSuperview(backgroundImageView)
+        constraints += NSLayoutConstraint.fillInSuperview(imageView)
         constraints += NSLayoutConstraint.fillInSuperview(tappableView)
         NSLayoutConstraint.activate(constraints)
     }
