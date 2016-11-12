@@ -8,13 +8,13 @@
 
 import UIKit
 
-
+//MARK: - Lifecycle
 final class CardsViewController: UIViewController {
 
     fileprivate let worker: CoreDataWorkerProtocol
     fileprivate lazy var cards: [Card] = Card.testCards(100)
-    private let emptyScreen: UIImageView = UIImageView(image: #imageLiteral(resourceName: "logo"))
 
+    fileprivate var emptyScreen: UIImageView!
     fileprivate var collectionView: UICollectionView!
     fileprivate let reuseIdentifier: String = String(describing: CardCell.self)
 
@@ -38,47 +38,12 @@ final class CardsViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         //TODO: implement fetch and reload worker.get {}
+        if !cards.isEmpty {
+            hideEmptyScreen()
+        } else {
+            showEmptyScreen()
+        }
         collectionView.reloadData()
-    }
-
-    func configureViews() {
-        view.backgroundColor = . white
-        view.addSubview(emptyScreen)
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.itemSize = CGSize(width: view.bounds.size.width * 0.8, height: 200)
-        let offset: CGFloat = 20
-        layout.sectionInset = UIEdgeInsets(top: 4*offset, left: offset, bottom: offset, right: offset)
-        layout.minimumInteritemSpacing = offset
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .clear
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(CardCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        view.addSubview(collectionView)
-    }
-
-    func configureNavigationItem() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
-            .add, target: self, action: #selector(addTapped))
-    }
-
-    func configureConstraints() {
-        view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-        var constraints: [NSLayoutConstraint] = []
-        constraints += NSLayoutConstraint.centerInSuperview(emptyScreen)
-        constraints += NSLayoutConstraint.fillInSuperview(collectionView)
-        NSLayoutConstraint.activate(constraints)
-    }
-
-    func addTapped(sender: UIBarButtonItem) {
-        showDetails(of: nil)
-    }
-
-    func showDetails(of card: Card?) {
-        let viewController = CardDetailsViewController(card: card)
-        let navigationController = UINavigationController(rootViewController: viewController)
-        present(navigationController, animated: true, completion: nil)
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -87,6 +52,90 @@ final class CardsViewController: UIViewController {
     }
 }
 
+//MARK: - Configuration
+extension CardsViewController {
+
+    fileprivate func configureNavigationItem() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
+            .add, target: self, action: #selector(addTapped))
+    }
+
+    fileprivate func configureViews() {
+        view.backgroundColor = . white
+
+        emptyScreen = makeEmptyScreen()
+        view.addSubview(emptyScreen)
+
+        collectionView = makeCollectionView()
+        view.addSubview(collectionView)
+    }
+
+    fileprivate func configureConstraints() {
+        view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        var constraints: [NSLayoutConstraint] = []
+        constraints += NSLayoutConstraint.centerInSuperview(emptyScreen)
+        constraints += NSLayoutConstraint.fillInSuperview(collectionView)
+        NSLayoutConstraint.activate(constraints)
+    }
+}
+
+//MARK: - Helpers
+extension CardsViewController {
+
+    fileprivate func makeFlowLayout() -> UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        //TODO: split from view.bounds.size.width
+        layout.itemSize = CGSize(width: view.bounds.size.width * 0.8, height: 200)
+        let offset: CGFloat = 20
+        layout.sectionInset = UIEdgeInsets(top: 4*offset, left: offset, bottom: offset, right: offset)
+        layout.minimumInteritemSpacing = offset
+        return layout
+    }
+
+    fileprivate func makeCollectionView() -> UICollectionView {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeFlowLayout())
+        collectionView.backgroundColor = .clear
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(CardCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView.alpha = 0.0
+        return collectionView
+    }
+
+    fileprivate func makeEmptyScreen() -> UIImageView {
+        let emptyScreen = UIImageView(image: #imageLiteral(resourceName: "bluebird"))
+        emptyScreen.alpha = cards.isEmpty ? 1.0 : 0.0
+        return emptyScreen
+    }
+
+    fileprivate func hideEmptyScreen() {
+        UIView.animate(withDuration: 0.2) {
+            self.emptyScreen.alpha = 0.0
+            self.collectionView.alpha = 1.0
+        }
+    }
+
+    fileprivate func showEmptyScreen() {
+        UIView.animate(withDuration: 0.2) {
+            self.emptyScreen.alpha = 1.0
+            self.collectionView.alpha = 0.0
+        }
+    }
+
+    @objc fileprivate func addTapped(sender: UIBarButtonItem) {
+        showDetails(of: nil)
+    }
+
+    fileprivate func showDetails(of card: Card?) {
+        let viewController = CardDetailsViewController(card: card)
+        let navigationController = UINavigationController(rootViewController: viewController)
+        present(navigationController, animated: true, completion: nil)
+    }
+
+}
+
+//MARK: - UICollectionViewDataSource
 extension CardsViewController: UICollectionViewDataSource {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -114,8 +163,10 @@ extension CardsViewController: UICollectionViewDataSource {
     }
 }
 
+//MARK: - UICollectionViewDelegate
 extension CardsViewController: UICollectionViewDelegate {}
 
+//MARK: - IndexedCellDelegate
 extension CardsViewController: IndexedCellDelegate {
     func cellWasTapped(_ cell: IndexedCell) {
         guard let indexPath = cell.indexPath,
