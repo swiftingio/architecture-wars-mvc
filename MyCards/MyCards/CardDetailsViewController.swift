@@ -12,13 +12,21 @@ class CardDetailsViewController: UIViewController {
 
     fileprivate var card: Card?
     fileprivate let worker: CoreDataWorkerProtocol
-    private let emptyScreen: UIImageView = UIImageView(image: #imageLiteral(resourceName: "bluebird"))
-    //TODO: Edit Mode in initalizer
-//    private let mode: Mode
+    fileprivate var mode: Mode {
+        didSet {
+            configureNavigationItem()
+            configureModeForViews()
+        }
+    }
+
+    fileprivate var name: UITextField!
+    fileprivate var front: UIImageView!
+    fileprivate var back: UIImageView!
 
     init(card: Card?, worker: CoreDataWorkerProtocol = CoreDataWorker()) {
         self.card = card
         self.worker = worker
+        self.mode = card != nil ? .normal : .edit
         super.init(nibName: nil, bundle: nil)
         self.title = card == nil ? "Add new card" : card!.name
     }
@@ -31,51 +39,107 @@ class CardDetailsViewController: UIViewController {
         super.viewDidLoad()
         configureNavigationItem()
         configureViews()
+        configureModeForViews()
         configureConstraints()
     }
+}
 
-    func configureViews() {
+extension CardDetailsViewController {
+    fileprivate func configureViews() {
         view.backgroundColor = .white
-        view.addSubview(emptyScreen)
+        name = makeNameField()
+        view.addSubview(name)
+        front = makeCardView(with: card?.front)
+        view.addSubview(front)
+        back = makeCardView(with: card?.back)
+        view.addSubview(back)
     }
 
-    func configureConstraints() {
+    fileprivate func configureConstraints() {
+
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-        var constraints = NSLayoutConstraint.centerInSuperview(emptyScreen)
-        //TODO: "V:|-[name]-(>=10)-[front]-[back]-|"
+
+        let views = [
+            "name":name,
+            "front":front,
+            "back": back
+        ]
+
+        let visual = [
+            "V:|-(==80)-[name(==40)]-[front]-(20)-[back(==front)]-(60)-|",
+            "H:|-[name]-|"
+        ]
+
+        var constraints: [NSLayoutConstraint] = []
+        visual.forEach {
+            constraints += NSLayoutConstraint.constraints(withVisualFormat: $0, options:
+                [.alignAllLeading, .alignAllTrailing], metrics: nil, views: views)
+        }
+
         NSLayoutConstraint.activate(constraints)
     }
 
-    func configureNavigationItem() {
-        //TODO: cancel edit in normal mode
-        //TODO: cancel done in edit mode
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
-            .done, target: self, action: #selector(doneTapped))
+    fileprivate func configureNavigationItem() {
+        switch mode {
+        case .normal:
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
+                .edit, target: self, action: #selector(editTapped))
+        case .edit:
+
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
+                .done, target: self, action: #selector(doneTapped))
+
+        }
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem:
             .cancel, target: self, action: #selector(cancelTapped))
     }
 
-    func doneTapped(sender: UIBarButtonItem) {
+    fileprivate func configureModeForViews() {
+        name.isUserInteractionEnabled = mode == .edit
+        //TODO: front/back in edit mode
+    }
+
+    fileprivate func makeNameField() -> UITextField {
+        let name = UITextField()
+        name.delegate = self
+        name.autocorrectionType = .no
+        name.autocapitalizationType = .none
+        name.placeholder = .EnterCardName
+        name.returnKeyType = .done
+        return name
+    }
+
+    fileprivate func makeCardView(with image: UIImage?) -> UIImageView {
+        //TODO: make real card view; front/back have photo camera button
+        let view = UIImageView(image: image)
+        if image == nil {
+            view.image = #imageLiteral(resourceName: "logo") //TODO: image placeholder
+        }
+        view.contentMode = .scaleAspectFit
+        return view
+    }
+
+    @objc fileprivate func doneTapped(sender: UIBarButtonItem) {
         //TODO: save & dismiss worker.save {}
+        mode = .normal
+    }
+
+    @objc fileprivate func cancelTapped(sender: UIBarButtonItem) {
         dismiss()
     }
 
-    func cancelTapped(sender: UIBarButtonItem) {
-        dismiss()
+    @objc fileprivate func editTapped(sender: UIBarButtonItem) {
+        mode = .edit
     }
 
-    func editTapped(sender: UIBarButtonItem) {
-        //TODO: edit mode on: text field enabled, front/back have photo camera button
-    }
-
-    func dismiss() {
+    fileprivate func dismiss() {
         dismiss(animated: true, completion: nil)
     }
 
-    func frontTapped() {
+    fileprivate func frontTapped() {
     }
 
-    func backTapped() {
+    fileprivate func backTapped() {
     }
 
     //TODO: show camera picker when tapping on photo camera button
@@ -85,4 +149,21 @@ class CardDetailsViewController: UIViewController {
     //TODO: tap on front/back & open larger view
 
     //TODO: handle rotation
+}
+extension CardDetailsViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        print(textField.text)
+        return true
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
+extension CardDetailsViewController {
+    enum Mode {
+        case normal
+        case edit
+    }
 }
