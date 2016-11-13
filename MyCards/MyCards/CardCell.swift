@@ -69,7 +69,7 @@ extension CardCell {
         nameLabel.textColor = .white
         nameLabel.font = UIFont.preferredFont(forTextStyle: .title1)
         tappableView.layer.cornerRadius = 10
-        tappableView.delegate = self
+        tappableView.tapped = tappableViewWasTapped
     }
 
     fileprivate func configureConstraints() {
@@ -82,10 +82,8 @@ extension CardCell {
         constraints += NSLayoutConstraint.fillInSuperview(tappableView)
         NSLayoutConstraint.activate(constraints)
     }
-}
 
-extension CardCell: TappableViewDelegate {
-    func tappableViewWasTapped(_ view: TappableView) {
+    func tappableViewWasTapped() {
         delegate?.cellWasTapped(self)
     }
 }

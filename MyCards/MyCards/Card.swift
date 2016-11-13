@@ -10,8 +10,8 @@ import UIKit
 
 struct Card {
     let name: String
-    let front: UIImage = #imageLiteral(resourceName: "card")
-    let back: UIImage = #imageLiteral(resourceName: "card")
+    let front: UIImage = #imageLiteral(resourceName: "swifting.io.card")
+    let back: UIImage = #imageLiteral(resourceName: "swifting.io.card")
 }
 
 extension Card {

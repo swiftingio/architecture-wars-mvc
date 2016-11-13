@@ -11,11 +11,11 @@ import UIKit
 class CardView: TappableView {
 
     fileprivate let imageView: UIImageView
-    let takePhotoButton: TappableView
+    let photoCamera: PhotoCamera
 
     init(image: UIImage?) {
         imageView = UIImageView(frame: .zero)
-        takePhotoButton = TappableView(frame: .zero)
+        photoCamera = PhotoCamera(frame: .zero)
         super.init(frame: .zero)
         self.image = image
         configureViews()
@@ -42,30 +42,28 @@ class CardView: TappableView {
 extension CardView {
     fileprivate func configureViews() {
         contentView.addSubview(imageView)
-        contentView.addSubview(takePhotoButton)
+        contentView.addSubview(photoCamera)
 
         imageView.contentMode = .scaleAspectFill
         let radius: CGFloat = 10
         layer.cornerRadius = radius
-        takePhotoButton.isHidden = false
-        takePhotoButton.backgroundColor = .red
-        takePhotoButton.layer.cornerRadius = radius
-//        takePhotoButton.delegate = self
+        photoCamera.isHidden = false
     }
 
     fileprivate func configureConstraints() {
         contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         var constraints: [NSLayoutConstraint] = [
-            NSLayoutConstraint(item: takePhotoButton, attribute: .height, relatedBy:
-                .equal, toItem: takePhotoButton.superview!, attribute: .height, multiplier: 0.2, constant: 0),
-            NSLayoutConstraint(item: takePhotoButton, attribute: .width, relatedBy:
-                .equal, toItem: takePhotoButton.superview!, attribute: .width, multiplier: 0.2, constant: 0),
-            NSLayoutConstraint(item: takePhotoButton, attribute: .top, relatedBy:
-                .equal, toItem: takePhotoButton.superview!, attribute: .top, multiplier: 1, constant: 0),
-            NSLayoutConstraint(item: takePhotoButton, attribute: .trailing, relatedBy:
-                .equal, toItem: takePhotoButton.superview!, attribute: .trailing, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: photoCamera, attribute: .height, relatedBy:
+                .equal, toItem: photoCamera.superview!, attribute: .height, multiplier: 0.2, constant: 0),
+            NSLayoutConstraint(item: photoCamera, attribute: .width, relatedBy:
+                .equal, toItem: photoCamera.superview!, attribute: .width, multiplier: 0.2, constant: 0),
+            NSLayoutConstraint(item: photoCamera, attribute: .top, relatedBy:
+                .equal, toItem: photoCamera.superview!, attribute: .top, multiplier: 1, constant: 10),
+            NSLayoutConstraint(item: photoCamera, attribute: .trailing, relatedBy:
+                .equal, toItem: photoCamera.superview!, attribute: .trailing, multiplier: 1, constant: -10),
             ]
         constraints += NSLayoutConstraint.fillInSuperview(imageView)
         NSLayoutConstraint.activate(constraints)
     }
+
 }

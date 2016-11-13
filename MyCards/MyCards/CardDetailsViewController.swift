@@ -66,8 +66,8 @@ extension CardDetailsViewController {
         ]
 
         let visual = [
-            "V:|-(==80)-[name(==40)]-[front]-(20)-[back(==front)]-(60)-|",
-            "H:|-[name]-|"
+            "V:|-(80)-[name(40)]-[front]-(20)-[back(==front)]-(60)-|",
+            "H:|-(20)-[name]-(20)-|"
         ]
 
         var constraints: [NSLayoutConstraint] = []
@@ -97,8 +97,8 @@ extension CardDetailsViewController {
     fileprivate func configureModeForViews() {
         let editMode = mode == .edit
         name.isUserInteractionEnabled = editMode
-        front.takePhotoButton.isHidden = !editMode
-        back.takePhotoButton.isHidden = !editMode
+        front.photoCamera.isHidden = !editMode
+        back.photoCamera.isHidden = !editMode
     }
 
     fileprivate func makeNameField() -> UITextField {
@@ -148,8 +148,9 @@ extension CardDetailsViewController {
     //TODO: handle rotation
 }
 extension CardDetailsViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        print(textField.text)
+    func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
         return true
     }
 

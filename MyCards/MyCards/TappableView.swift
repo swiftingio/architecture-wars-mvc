@@ -8,21 +8,34 @@
 
 import UIKit
 
-protocol TappableViewDelegate: class {
-    func tappableViewWasTapped(_ view: TappableView)
-}
-
 class TappableView: UIView {
 
     fileprivate var touchingDownInside: Bool = false
+    fileprivate var forceTouchDownInside: Bool = false
     fileprivate var alreadyTapped: Bool = false
     fileprivate var dimmedView: UIView!
+    fileprivate var label: UILabel!
+
+    var tapped: (() -> Void)?
+    var forceTapped: (() -> Void)?
 
     var contentView: UIView!
-    weak var delegate: TappableViewDelegate?
+
+    var text: String? {
+        set {
+            label.text = newValue
+        }
+        get {
+            return label.text
+        }
+    }
+    convenience init() {
+        self.init(frame: .zero)
+    }
 
     override init(frame: CGRect) {
-        contentView = UILabel(frame: .zero)
+        label = UILabel(frame: .zero)
+        contentView = UIView(frame: .zero)
         dimmedView = UIView(frame: .zero)
         super.init(frame: frame)
         configureViews()
@@ -35,7 +48,6 @@ class TappableView: UIView {
 
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        //TODO: hit test
         touchesDown(touches)
     }
 
@@ -60,6 +72,10 @@ class TappableView: UIView {
         addSubview(contentView)
         contentView.clipsToBounds = true
         addSubview(dimmedView)
+        addSubview(label)
+        label.textColor = .white
+        label.font = UIFont.preferredFont(forTextStyle: .caption2)
+        label.numberOfLines = 0
         clipsToBounds = true
     }
 
@@ -68,6 +84,7 @@ class TappableView: UIView {
         var constraints: [NSLayoutConstraint] = []
         constraints += NSLayoutConstraint.fillInSuperview(contentView)
         constraints += NSLayoutConstraint.fillInSuperview(dimmedView)
+        constraints += NSLayoutConstraint.centerInSuperview(label)
         NSLayoutConstraint.activate(constraints)
     }
 }
@@ -77,6 +94,9 @@ extension TappableView {
         touchingDownInside = boundsContain(touches)
         if touchingDownInside {
             animateTap()
+            if let touch = touches.first {
+                forceTouchDownInside = touch.force == touch.maximumPossibleForce
+            }
         } else {
             undoTapAnimation()
         }
@@ -84,10 +104,17 @@ extension TappableView {
 
     fileprivate func touchesUp(_ touches: Set<UITouch>? = nil) {
         undoTapAnimation()
-        if touchingDownInside {
-            touchingDownInside = false
-            delegate?.tappableViewWasTapped(self)
+        if forceTouchDownInside {
+            forceTapped?()
+        } else if touchingDownInside {
+            tapped?()
         }
+        clearTouchDownInside()
+    }
+
+    fileprivate func clearTouchDownInside() {
+        touchingDownInside = false
+        forceTouchDownInside = false
     }
 
     fileprivate func boundsContain(_ touches: Set<UITouch>) -> Bool {
