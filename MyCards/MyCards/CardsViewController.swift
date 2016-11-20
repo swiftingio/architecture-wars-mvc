@@ -50,6 +50,11 @@ final class CardsViewController: UIViewController {
         //TODO: layout change when rotating
         collectionView.collectionViewLayout.invalidateLayout()
     }
+
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+
+    }
 }
 
 //MARK: - Configuration
@@ -86,8 +91,8 @@ extension CardsViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         //TODO: split from view.bounds.size.width
-        layout.itemSize = CGSize(width: view.bounds.size.width * 0.8, height: 200)
         let offset: CGFloat = 20
+        layout.itemSize = CGSize(width: view.bounds.size.width - 2 * offset, height: 200)
         layout.sectionInset = UIEdgeInsets(top: 4*offset, left: offset, bottom: offset, right: offset)
         layout.minimumInteritemSpacing = offset
         return layout

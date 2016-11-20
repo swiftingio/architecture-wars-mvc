@@ -100,6 +100,7 @@ extension CardDetailsViewController {
 
     fileprivate func configureModeForViews() {
         let editMode = mode == .edit
+        name.resignFirstResponder()
         name.isUserInteractionEnabled = editMode
         front.photoCamera.isHidden = !editMode
         back.photoCamera.isHidden = !editMode
