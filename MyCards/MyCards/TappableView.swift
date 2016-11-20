@@ -90,11 +90,15 @@ class TappableView: UIView {
 }
 
 extension TappableView {
+    fileprivate func forceTouchAvailable() -> Bool {
+        return traitCollection.forceTouchCapability == .available
+    }
     fileprivate func touchesDown(_ touches: Set<UITouch>) {
         touchingDownInside = boundsContain(touches)
         if touchingDownInside {
             animateTap()
-            if let touch = touches.first {
+            if forceTouchAvailable(),
+                let touch = touches.first {
                 forceTouchDownInside = touch.force == touch.maximumPossibleForce
             }
         } else {
@@ -104,7 +108,7 @@ extension TappableView {
 
     fileprivate func touchesUp(_ touches: Set<UITouch>? = nil) {
         undoTapAnimation()
-        if forceTouchDownInside {
+        if forceTouchAvailable() && forceTouchDownInside {
             forceTapped?()
         } else if touchingDownInside {
             tapped?()

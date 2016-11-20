@@ -69,7 +69,7 @@ extension CardCell {
         nameLabel.textColor = .white
         nameLabel.font = UIFont.preferredFont(forTextStyle: .title1)
         tappableView.layer.cornerRadius = 10
-        tappableView.tapped = tappableViewWasTapped
+        tappableView.tapped = { [unowned self] in self.tappableViewWasTapped() }
     }
 
     fileprivate func configureConstraints() {
