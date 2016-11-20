@@ -68,5 +68,15 @@ class PhotoCamera: UIView {
         let lense = UIBezierPath(ovalIn: CGRect(x: lenseX, y: lenseY, width: lenseSide, height: lenseSide))
         UIColor.lightBlue.setFill()
         lense.fill()
+        alpha = 1.0
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        alpha = 0.0
+        setNeedsDisplay()
+    }
+
+    override var intrinsicContentSize: CGSize {
+        return CGSize(width: 40, height: 30)
     }
 }

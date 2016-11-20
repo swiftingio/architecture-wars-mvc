@@ -21,7 +21,7 @@ final class CardsViewController: UIViewController {
     init(worker: CoreDataWorkerProtocol = CoreDataWorker()) {
         self.worker = worker
         super.init(nibName: nil, bundle: nil)
-        self.title = "My Cards"
+        self.title = .MyCards
     }
 
     required init?(coder aDecoder: NSCoder) {

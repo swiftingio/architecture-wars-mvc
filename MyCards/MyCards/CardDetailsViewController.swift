@@ -22,13 +22,15 @@ class CardDetailsViewController: UIViewController {
     fileprivate var name: UITextField!
     fileprivate var front: CardView!
     fileprivate var back: CardView!
+    fileprivate var takingPhotoFor: Card.Side?
+let imagePicker = UIImagePickerController()
 
     init(card: Card?, worker: CoreDataWorkerProtocol = CoreDataWorker()) {
         self.card = card
         self.worker = worker
         self.mode = card != nil ? .normal : .edit
         super.init(nibName: nil, bundle: nil)
-        self.title = card == nil ? "Add new card" : card!.name
+        self.title = card == nil ? .AddNewCard : card!.name
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -50,8 +52,10 @@ extension CardDetailsViewController {
         name = makeNameField()
         view.addSubview(name)
         front = makeCardView(with: card?.front)
+        front.tapped = { [unowned self] in self.frontTapped() }
         view.addSubview(front)
         back = makeCardView(with: card?.back)
+        back.tapped = { [unowned self] in self.backTapped() }
         view.addSubview(back)
     }
 
@@ -59,9 +63,9 @@ extension CardDetailsViewController {
 
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
 
-        let views = [
-            "name":name,
-            "front":front,
+        let views: [String: Any] = [
+            "name": name,
+            "front": front,
             "back": back
         ]
 
@@ -134,19 +138,57 @@ extension CardDetailsViewController {
     }
 
     fileprivate func frontTapped() {
+        switch mode {
+        case .edit: showImagePickerSources(for: .front)
+        case .normal: break //TODO: open large image
+
+        }
     }
 
     fileprivate func backTapped() {
+        switch mode {
+        case .edit: showImagePickerSources(for: .back)
+        case .normal: break //TODO: open large image
+        }
     }
 
-    //TODO: show camera picker when tapping on photo camera button
+    fileprivate func showImagePickerSources(for side: Card.Side) {
+        let title: String = .Set + " " + side.description
+        let actionSheet = UIAlertController(title: title, message:
+            nil, preferredStyle: .actionSheet)
 
-    //TODO: get picture back from camera and set to front/back
+        let actions: [UIImagePickerControllerSourceType] = UIImagePickerController.availableImagePickerSources()
 
-    //TODO: tap on front/back & open larger view
+        actions.forEach { source in
+            let action = UIAlertAction(title: source.description, style:
+            .default) { [unowned self] _ in
+                self.showImagePicker(sourceType: source)
+                self.takingPhotoFor = side
+            }
+            actionSheet.addAction(action)
+        }
+
+        let cancel = UIAlertAction(title: .Cancel, style: .cancel, handler: nil)
+        actionSheet.addAction(cancel)
+        present(actionSheet, animated: true, completion: nil)
+    }
+
+    private func showImagePicker(sourceType: UIImagePickerControllerSourceType) {
+        imagePicker.sourceType = sourceType
+        imagePicker.allowsEditing = true
+        imagePicker.delegate = self
+        imagePicker.view.backgroundColor = .white
+        imagePicker.showsCameraControls = true
+        present(imagePicker, animated: true, completion: nil)
+    }
+
+    func takePhoto() {
+        imagePicker.takePicture()
+    }
 
     //TODO: handle rotation
 }
+
 extension CardDetailsViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
@@ -156,6 +198,7 @@ extension CardDetailsViewController: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
+        //TODO: update card name
         return true
     }
 }
@@ -163,5 +206,24 @@ extension CardDetailsViewController {
     enum Mode {
         case normal
         case edit
+    }
+}
+
+extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [String : Any]) {
+        guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage,
+        let side = takingPhotoFor else { return }
+        //TODO: open picture edit view
+        switch side {
+        case .front: front.image = image
+        case .back: back.image = image
+        }
+        takingPhotoFor = nil
+        dismiss()
+    }
+
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss()
     }
 }

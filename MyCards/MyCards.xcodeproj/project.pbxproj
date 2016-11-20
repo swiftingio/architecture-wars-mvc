@@ -12,6 +12,8 @@
 		693A44CB1DD7D9CE00EDCABA /* TappableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A44CA1DD7D9CE00EDCABA /* TappableView.swift */; };
 		69769AEC1DE2203700DF2747 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69769AEB1DE2203700DF2747 /* LaunchScreen.storyboard */; };
 		69769AEE1DE2324D00DF2747 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AED1DE2324D00DF2747 /* UIColor+Extension.swift */; };
+		69769AF01DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AEF1DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift */; };
+		69769AF21DE241D100DF2747 /* UIImagePickerController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */; };
 		698319861DD7E2EA0091ED64 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 698319841DD7E2EA0091ED64 /* iTunesArtwork */; };
 		698319871DD7E2EA0091ED64 /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = 698319851DD7E2EA0091ED64 /* iTunesArtwork@2x */; };
 		698319891DD9134F0091ED64 /* PhotoCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698319881DD9134F0091ED64 /* PhotoCamera.swift */; };
@@ -39,6 +41,8 @@
 		693A44CA1DD7D9CE00EDCABA /* TappableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TappableView.swift; sourceTree = "<group>"; };
 		69769AEB1DE2203700DF2747 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		69769AED1DE2324D00DF2747 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
+		69769AEF1DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerControllerSourceType+Extension.swift"; sourceTree = "<group>"; };
+		69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerController+Extension.swift"; sourceTree = "<group>"; };
 		698319841DD7E2EA0091ED64 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		698319851DD7E2EA0091ED64 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
 		698319881DD9134F0091ED64 /* PhotoCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCamera.swift; sourceTree = "<group>"; };
@@ -153,6 +157,8 @@
 				69AB4B291DD652270014B996 /* NSLayoutConstraint+Extension.swift */,
 				693A44C61DD7422700EDCABA /* String+Localized.swift */,
 				69769AED1DE2324D00DF2747 /* UIColor+Extension.swift */,
+				69769AEF1DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift */,
+				69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -226,6 +232,7 @@
 				TargetAttributes = {
 					69ABD0C11DB391E100CB925C = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 5VHW7X9NK4;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -295,11 +302,13 @@
 				69DDFA731DB3E6AD00D856C5 /* CardCell.swift in Sources */,
 				69ABD0DF1DB3953600CB925C /* CardsViewController.swift in Sources */,
 				69ABD0C61DB391E100CB925C /* AppDelegate.swift in Sources */,
+				69769AF01DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift in Sources */,
 				693A44CB1DD7D9CE00EDCABA /* TappableView.swift in Sources */,
 				698319891DD9134F0091ED64 /* PhotoCamera.swift in Sources */,
 				693A44C71DD7422700EDCABA /* String+Localized.swift in Sources */,
 				69ABD0CE1DB391E100CB925C /* DataModel.xcdatamodeld in Sources */,
 				69AB4B2C1DD66F190014B996 /* Protocols.swift in Sources */,
+				69769AF21DE241D100DF2747 /* UIImagePickerController+Extension.swift in Sources */,
 				69AB4B2A1DD652270014B996 /* NSLayoutConstraint+Extension.swift in Sources */,
 				69DDFA771DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift in Sources */,
 				693A44C91DD7944B00EDCABA /* CardView.swift in Sources */,
@@ -407,6 +416,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5VHW7X9NK4;
 				INFOPLIST_FILE = MyCards/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.swifting.MyCards;
@@ -419,6 +429,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 5VHW7X9NK4;
 				INFOPLIST_FILE = MyCards/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.swifting.MyCards;

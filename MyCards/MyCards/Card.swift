@@ -15,6 +15,22 @@ struct Card {
 }
 
 extension Card {
+    enum Side {
+        case front
+        case back
+    }
+}
+
+extension Card.Side: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .front: return .frontPhoto
+        case .back: return .backPhoto
+        }
+    }
+}
+
+extension Card {
     //TODO: remove when needed
     static func testCards(_ limit: Int) -> [Card] {
         var c = [Card]()
