@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		693A2F601DE4D19F00975FA1 /* PhotoCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A2F5F1DE4D19F00975FA1 /* PhotoCaptureViewController.swift */; };
 		693A44C71DD7422700EDCABA /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A44C61DD7422700EDCABA /* String+Localized.swift */; };
 		693A44C91DD7944B00EDCABA /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A44C81DD7944B00EDCABA /* CardView.swift */; };
 		693A44CB1DD7D9CE00EDCABA /* TappableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A44CA1DD7D9CE00EDCABA /* TappableView.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		693A2F5F1DE4D19F00975FA1 /* PhotoCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCaptureViewController.swift; sourceTree = "<group>"; };
 		693A44C61DD7422700EDCABA /* String+Localized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Localized.swift"; sourceTree = "<group>"; };
 		693A44C81DD7944B00EDCABA /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		693A44CA1DD7D9CE00EDCABA /* TappableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TappableView.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 			children = (
 				693A44C81DD7944B00EDCABA /* CardView.swift */,
 				69ABD0E61DB3A1A300CB925C /* CardDetailsViewController.swift */,
+				693A2F5F1DE4D19F00975FA1 /* PhotoCaptureViewController.swift */,
 			);
 			name = "Card Details";
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 			files = (
 				69ABD0E71DB3A1A300CB925C /* CardDetailsViewController.swift in Sources */,
 				69769AEE1DE2324D00DF2747 /* UIColor+Extension.swift in Sources */,
+				693A2F601DE4D19F00975FA1 /* PhotoCaptureViewController.swift in Sources */,
 				69DDFA751DB3E6D500D856C5 /* Card.swift in Sources */,
 				69ABD0E31DB395F800CB925C /* Result.swift in Sources */,
 				69DDFA791DB3E7B200D856C5 /* Array+Extension.swift in Sources */,

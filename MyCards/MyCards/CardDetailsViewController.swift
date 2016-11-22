@@ -175,11 +175,29 @@ extension CardDetailsViewController {
     }
 
     private func showImagePicker(sourceType: UIImagePickerControllerSourceType) {
-        imagePicker.sourceType = sourceType
-        imagePicker.allowsEditing = true
-        imagePicker.delegate = self
-        imagePicker.view.backgroundColor = .white
-        imagePicker.showsCameraControls = true
+        let imagePicker = PhotoCaptureViewController()
+imagePicker.delegate = self
+//        imagePicker.sourceType = sourceType
+//        imagePicker.allowsEditing = true
+//        imagePicker.delegate = self
+//        imagePicker.view.backgroundColor = .white
+////        imagePicker.showsCameraControls = false
+        //TODO: use AV Foundation https://www.raywenderlich.com/30200/avfoundation-tutorial-adding-overlays-and-animations-to-videos
+//        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height:
+//            0.7 * imagePicker.view.bounds.height))
+//        view.center = self.view.center
+//        view.layer.cornerRadius = 5
+//        view.layer.borderWidth = 2
+//        view.layer.borderColor = UIColor.white.cgColor
+//
+//        let button = PhotoCamera(frame: .zero)
+//        button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(takePhoto)))
+//        button.center = view.center
+//        button.sizeToFit()
+//        button.frame.origin.y = imagePicker.view.bounds.height - button.intrinsicContentSize.height - 20
+//        view.addSubview(button)
+
+//        imagePicker.cameraOverlayView = view
         present(imagePicker, animated: true, completion: nil)
     }
 
@@ -227,4 +245,18 @@ extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigati
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss()
     }
+}
+
+extension CardDetailsViewController: PhotoCaptureDelegate {
+    func photoTaken(_ data: Data) {
+        guard
+            let side = takingPhotoFor,
+            let image = UIImage(data: data) else { return }
+        //TODO: open picture edit view
+        switch side {
+        case .front: front.image = image
+        case .back: back.image = image
+        }
+        takingPhotoFor = nil
+        dismiss()    }
 }

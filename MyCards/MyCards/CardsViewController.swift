@@ -91,6 +91,7 @@ extension CardsViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         //TODO: split from view.bounds.size.width
+        //TODO: calculate size based on some ratio
         let offset: CGFloat = 20
         layout.itemSize = CGSize(width: view.bounds.size.width - 2 * offset, height: 200)
         layout.sectionInset = UIEdgeInsets(top: 4*offset, left: offset, bottom: offset, right: offset)
