@@ -23,7 +23,7 @@ class CardDetailsViewController: UIViewController {
     fileprivate var front: CardView!
     fileprivate var back: CardView!
     fileprivate var takingPhotoFor: Card.Side?
-let imagePicker = UIImagePickerController()
+    override var shouldAutorotate: Bool { return false }
 
     init(card: Card?, worker: CoreDataWorkerProtocol = CoreDataWorker()) {
         self.card = card
@@ -123,7 +123,11 @@ extension CardDetailsViewController {
 
     @objc fileprivate func doneTapped(sender: UIBarButtonItem) {
         //TODO: save & dismiss worker.save {}
-        mode = .normal
+        if card == nil {
+            dismiss()
+        } else {
+            mode = .normal
+        }
     }
 
     @objc fileprivate func cancelTapped(sender: UIBarButtonItem) {
@@ -175,37 +179,18 @@ extension CardDetailsViewController {
     }
 
     private func showImagePicker(sourceType: UIImagePickerControllerSourceType) {
-        let imagePicker = PhotoCaptureViewController()
-imagePicker.delegate = self
-//        imagePicker.sourceType = sourceType
-//        imagePicker.allowsEditing = true
-//        imagePicker.delegate = self
-//        imagePicker.view.backgroundColor = .white
-////        imagePicker.showsCameraControls = false
-        //TODO: use AV Foundation https://www.raywenderlich.com/30200/avfoundation-tutorial-adding-overlays-and-animations-to-videos
-//        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.size.width, height:
-//            0.7 * imagePicker.view.bounds.height))
-//        view.center = self.view.center
-//        view.layer.cornerRadius = 5
-//        view.layer.borderWidth = 2
-//        view.layer.borderColor = UIColor.white.cgColor
-//
-//        let button = PhotoCamera(frame: .zero)
-//        button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(takePhoto)))
-//        button.center = view.center
-//        button.sizeToFit()
-//        button.frame.origin.y = imagePicker.view.bounds.height - button.intrinsicContentSize.height - 20
-//        view.addSubview(button)
-
-//        imagePicker.cameraOverlayView = view
+        let imagePicker: UIViewController
+        if sourceType == .camera {
+            imagePicker = PhotoCaptureViewController().with {
+                $0.delegate = self
+            }
+        } else {
+            imagePicker = UIImagePickerController().with {
+                $0.delegate = self
+            }
+        }
         present(imagePicker, animated: true, completion: nil)
     }
-
-    func takePhoto() {
-        imagePicker.takePicture()
-    }
-
-    //TODO: handle rotation
 }
 
 extension CardDetailsViewController: UITextFieldDelegate {

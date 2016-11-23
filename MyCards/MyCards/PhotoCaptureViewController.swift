@@ -12,26 +12,7 @@ import AVFoundation
 protocol PhotoCaptureDelegate: class {
     func photoTaken(_ data: Data)
 }
-class PreviewView: UIView {
-    var videoPreviewLayer: AVCaptureVideoPreviewLayer {
-        return layer as! AVCaptureVideoPreviewLayer
-    }
 
-    var session: AVCaptureSession? {
-        get {
-            return videoPreviewLayer.session
-        }
-        set {
-            videoPreviewLayer.session = newValue
-        }
-    }
-
-    // MARK: UIView
-
-    override class var layerClass: AnyClass {
-        return AVCaptureVideoPreviewLayer.self
-    }
-}
 
 extension UIInterfaceOrientation {
     var videoOrientation: AVCaptureVideoOrientation? {
@@ -45,104 +26,96 @@ extension UIInterfaceOrientation {
     }
 }
 
+
 class PhotoCaptureViewController: UIViewController {
-    weak var delegate: PhotoCaptureDelegate?
-    let photoOutput = AVCapturePhotoOutput()
-    let session = AVCaptureSession()
-    private let sessionQueue = DispatchQueue(label: "session queue", attributes: [], target: nil)
-    let previewView = PreviewView()
-    private var setupResult: SessionSetupResult = .success
-    private enum SessionSetupResult {
+    fileprivate enum SessionSetupResult {
         case success
         case notAuthorized
         case configurationFailed
     }
-    var videoDeviceInput: AVCaptureDeviceInput!
 
-    func takePhoto() {
+    weak var delegate: PhotoCaptureDelegate?
+    fileprivate let output = AVCapturePhotoOutput()
+    fileprivate let session = AVCaptureSession()
+    fileprivate var input: AVCaptureDeviceInput!
+    fileprivate let queue = DispatchQueue(label: "AV Session Queue", attributes: [], target: nil)
+    fileprivate var setupResult: SessionSetupResult = .success //TODO: refactor
 
-        let videoPreviewLayerOrientation = previewView.videoPreviewLayer.connection.videoOrientation
-
-        sessionQueue.async {
-            // Update the photo output's connection to match the video orientation of the video preview layer.
-            if let photoOutputConnection = self.photoOutput.connection(withMediaType: AVMediaTypeVideo) {
-                photoOutputConnection.videoOrientation = videoPreviewLayerOrientation
-            }
-
-            // Capture a JPEG photo with flash set to auto and high resolution photo enabled.
-            let photoSettings = AVCapturePhotoSettings()
-            photoSettings.flashMode = .auto
-            photoSettings.isHighResolutionPhotoEnabled = true
-
-
-            self.photoOutput.capturePhoto(with: photoSettings, delegate: self)
+    override var shouldAutorotate: Bool { return false }
+    fileprivate var statusBarHidden: Bool = false {
+        didSet {
+            setNeedsStatusBarAppearanceUpdate()
         }
     }
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        previewView.frame = view.bounds
-    }
+    override var prefersStatusBarHidden: Bool { return statusBarHidden }
+    //swiftlint:disable variable_name
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation { return .fade }
+    //swiftlint:enable variable_name
 
-    func tapped() {
-        dismiss(animated: true, completion: nil)
-    }
+
+    fileprivate let previewView = PreviewView()
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.addSubview(previewView)
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapped)))
-        previewView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(takePhoto)))
 
         previewView.session = session
+        previewView.captureButton.tapped = { [unowned self] in self.takePhoto()}
+        previewView.closeButton.tapped = { [unowned self] in self.dismiss()}
+
+        configureConstraints()
+        checkAuthorizationStatus()
+
+        queue.async { self.configureSession() }
+    }
+
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        startSession()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        statusBarHidden = true
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        stopSession()
+        super.viewWillDisappear(animated)
+    }
+
+}
+
+extension PhotoCaptureViewController {
+
+    fileprivate func configureConstraints() {
+
+        view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+
+        var constraints: [NSLayoutConstraint] = NSLayoutConstraint.filledInSuperview(previewView)
+
+        NSLayoutConstraint.activate(constraints)
+    }
+
+    func checkAuthorizationStatus() {
         switch AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) {
         case .denied, .restricted:
             //TODO: alert
             print("disallowed")
-
             break
         case .notDetermined:
-            sessionQueue.suspend()
+            queue.suspend()
             AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { [unowned self] granted in
-                if !granted {
-                    self.setupResult = .notAuthorized
-                }
-                self.sessionQueue.resume()
+                self.queue.resume()
             })
         default:
             break
         }
-        sessionQueue.async { [unowned self] in
-            self.configureSession()
-        }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        sessionQueue.async {
-            switch self.setupResult {
-            case .success:
-                // Only setup observers and start the session running if setup succeeded.
-//                self.addObservers()
-                self.session.startRunning()
-//                self.isSessionRunning = self.session.isRunning
-
-            default: break
-            }}}
-
-    override func viewWillDisappear(_ animated: Bool) {
-        sessionQueue.async { [unowned self] in
-            if self.setupResult == .success {
-                self.session.stopRunning()
-//                self.isSessionRunning = self.session.isRunning
-//                self.removeObservers()
-            }
-        }
-
-        super.viewWillDisappear(animated)
-    }
-
-    private func configureSession() {
+    fileprivate func configureSession() {
         if setupResult != .success {
             return
         }
@@ -169,7 +142,7 @@ class PhotoCaptureViewController: UIViewController {
 
             if session.canAddInput(videoDeviceInput) {
                 session.addInput(videoDeviceInput)
-                self.videoDeviceInput = videoDeviceInput
+                self.input = videoDeviceInput
 
                 DispatchQueue.main.async {
                     /*
@@ -209,10 +182,10 @@ class PhotoCaptureViewController: UIViewController {
 
 
         // Add photo output.
-        if session.canAddOutput(photoOutput) {
-            session.addOutput(photoOutput)
-            photoOutput.isHighResolutionCaptureEnabled = true
-            photoOutput.isLivePhotoCaptureEnabled = false
+        if session.canAddOutput(output) {
+            session.addOutput(output)
+            output.isHighResolutionCaptureEnabled = true
+            output.isLivePhotoCaptureEnabled = false
         } else {
             print("Could not add photo output to the session")
             setupResult = .configurationFailed
@@ -222,6 +195,55 @@ class PhotoCaptureViewController: UIViewController {
 
         session.commitConfiguration()
     }
+
+    func takePhoto() {
+
+        let videoPreviewLayerOrientation = previewView.videoPreviewLayer.connection.videoOrientation
+
+        queue.async {
+            // Update the photo output's connection to match the video orientation of the video preview layer.
+            if let photoOutputConnection = self.output.connection(withMediaType: AVMediaTypeVideo) {
+                photoOutputConnection.videoOrientation = videoPreviewLayerOrientation
+            }
+
+            // Capture a JPEG photo with flash set to auto and high resolution photo enabled.
+            let photoSettings = AVCapturePhotoSettings()
+            photoSettings.flashMode = .auto
+            photoSettings.isHighResolutionPhotoEnabled = true
+
+
+            self.output.capturePhoto(with: photoSettings, delegate: self)
+        }
+    }
+
+    func dismiss() {
+        dismiss(animated: true, completion: nil)
+    }
+
+    func startSession() {
+        queue.async {
+            switch self.setupResult {
+            case .success:
+                // Only setup observers and start the session running if setup succeeded.
+                //                self.addObservers()
+                self.session.startRunning()
+                //                self.isSessionRunning = self.session.isRunning
+
+            default: break
+            }}
+    }
+
+    func stopSession() {
+        queue.async { [unowned self] in
+            if self.setupResult == .success {
+                self.session.stopRunning()
+                //                self.isSessionRunning = self.session.isRunning
+                //                self.removeObservers()
+            }
+        }
+
+    }
+
 }
 extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
 

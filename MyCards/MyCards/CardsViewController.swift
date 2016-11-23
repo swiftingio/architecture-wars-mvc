@@ -78,8 +78,8 @@ extension CardsViewController {
     fileprivate func configureConstraints() {
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         var constraints: [NSLayoutConstraint] = []
-        constraints += NSLayoutConstraint.centerInSuperview(emptyScreen)
-        constraints += NSLayoutConstraint.fillInSuperview(collectionView)
+        constraints += NSLayoutConstraint.centeredInSuperview(emptyScreen)
+        constraints += NSLayoutConstraint.filledInSuperview(collectionView)
         NSLayoutConstraint.activate(constraints)
     }
 }

@@ -82,9 +82,9 @@ class TappableView: UIView {
     fileprivate func configureConstraints() {
         subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         var constraints: [NSLayoutConstraint] = []
-        constraints += NSLayoutConstraint.fillInSuperview(contentView)
-        constraints += NSLayoutConstraint.fillInSuperview(dimmedView)
-        constraints += NSLayoutConstraint.centerInSuperview(label)
+        constraints += NSLayoutConstraint.filledInSuperview(contentView)
+        constraints += NSLayoutConstraint.filledInSuperview(dimmedView)
+        constraints += NSLayoutConstraint.centeredInSuperview(label)
         NSLayoutConstraint.activate(constraints)
     }
 }

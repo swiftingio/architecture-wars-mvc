@@ -76,10 +76,10 @@ extension CardCell {
         contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         tappableView.contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         var constraints: [NSLayoutConstraint] = []
-        constraints += NSLayoutConstraint.centerInSuperview(nameLabel)
-        constraints += NSLayoutConstraint.fillInSuperview(effectView)
-        constraints += NSLayoutConstraint.fillInSuperview(imageView)
-        constraints += NSLayoutConstraint.fillInSuperview(tappableView)
+        constraints += NSLayoutConstraint.centeredInSuperview(nameLabel)
+        constraints += NSLayoutConstraint.filledInSuperview(effectView)
+        constraints += NSLayoutConstraint.filledInSuperview(imageView)
+        constraints += NSLayoutConstraint.filledInSuperview(tappableView)
         NSLayoutConstraint.activate(constraints)
     }
 

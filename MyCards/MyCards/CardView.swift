@@ -62,7 +62,7 @@ extension CardView {
             NSLayoutConstraint(item: photoCamera, attribute: .trailing, relatedBy:
                 .equal, toItem: photoCamera.superview!, attribute: .trailing, multiplier: 1, constant: -10),
             ]
-        constraints += NSLayoutConstraint.fillInSuperview(imageView)
+        constraints += NSLayoutConstraint.filledInSuperview(imageView)
         NSLayoutConstraint.activate(constraints)
     }
 
