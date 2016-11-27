@@ -269,16 +269,24 @@ extension PhotoCaptureViewController {
         })
     }
 }
+
 extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
 
-    func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-        if let photoSampleBuffer = photoSampleBuffer {
-            let photoData = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer, previewPhotoSampleBuffer: previewPhotoSampleBuffer)
-            //TODO: delegate
-            delegate?.photoTaken(photoData!)
-        } else {
-            print("Error capturing photo: \(error)")
-            return
-        }
+    //swiftlint:disable function_parameter_count
+    func capture(_ captureOutput: AVCapturePhotoOutput,
+                 didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?,
+                 previewPhotoSampleBuffer: CMSampleBuffer?,
+                 resolvedSettings: AVCaptureResolvedPhotoSettings,
+                 bracketSettings: AVCaptureBracketedStillImageSettings?,
+                 error: Error?) {
+        
+        guard let sample = photoSampleBuffer,
+            let photo = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:
+                sample, previewPhotoSampleBuffer: previewPhotoSampleBuffer)
+            else { print("Error capturing photo: \(error)"); return }
+
+        delegate?.photoTaken(photo)
     }
+    //swiftlint:enable function_parameter_count
+
 }
