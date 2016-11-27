@@ -17,6 +17,10 @@ final class CardsViewController: UIViewController {
     fileprivate var emptyScreen: UIImageView!
     fileprivate var collectionView: UICollectionView!
     fileprivate let reuseIdentifier: String = String(describing: CardCell.self)
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+    override var shouldAutorotate: Bool { return false }
 
     init(worker: CoreDataWorkerProtocol = CoreDataWorker()) {
         self.worker = worker
@@ -44,16 +48,6 @@ final class CardsViewController: UIViewController {
             showEmptyScreen()
         }
         collectionView.reloadData()
-    }
-
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        //TODO: layout change when rotating
-        collectionView.collectionViewLayout.invalidateLayout()
-    }
-
-
-    override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
-
     }
 }
 

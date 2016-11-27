@@ -15,6 +15,7 @@ class TappableView: UIView {
     fileprivate var alreadyTapped: Bool = false
     fileprivate var dimmedView: UIView!
     fileprivate var label: UILabel!
+    fileprivate var previousTransform: CGAffineTransform = .identity
 
     var tapped: (() -> Void)?
     var forceTapped: (() -> Void)?
@@ -132,10 +133,10 @@ extension TappableView {
     fileprivate func animateTap() {
         guard !alreadyTapped else { return }
         alreadyTapped = true
-
+        previousTransform = transform
         UIView.animate(withDuration: 0.2) {
             let scale: CGFloat = 0.8
-            self.transform = CGAffineTransform(scaleX: scale, y: scale)
+            self.transform = self.previousTransform.concatenating(CGAffineTransform(scaleX: scale, y: scale))
             self.dimmedView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
         }
     }
@@ -143,10 +144,10 @@ extension TappableView {
     fileprivate func undoTapAnimation() {
         guard alreadyTapped else { return }
         alreadyTapped = false
-
         UIView.animate(withDuration: 0.2) {
-            self.transform = .identity
+            self.transform = self.previousTransform
             self.dimmedView.backgroundColor = nil
         }
+        previousTransform = .identity
     }
 }

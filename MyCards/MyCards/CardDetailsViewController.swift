@@ -24,6 +24,9 @@ class CardDetailsViewController: UIViewController {
     fileprivate var back: CardView!
     fileprivate var takingPhotoFor: Card.Side?
     override var shouldAutorotate: Bool { return false }
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
 
     init(card: Card?, worker: CoreDataWorkerProtocol = CoreDataWorker()) {
         self.card = card
@@ -187,6 +190,7 @@ extension CardDetailsViewController {
         } else {
             imagePicker = UIImagePickerController().with {
                 $0.delegate = self
+                $0.view.backgroundColor = .white
             }
         }
         present(imagePicker, animated: true, completion: nil)

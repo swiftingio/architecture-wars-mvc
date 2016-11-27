@@ -13,7 +13,6 @@ protocol PhotoCaptureDelegate: class {
     func photoTaken(_ data: Data)
 }
 
-
 extension UIInterfaceOrientation {
     var videoOrientation: AVCaptureVideoOrientation? {
         switch self {
@@ -25,7 +24,6 @@ extension UIInterfaceOrientation {
         }
     }
 }
-
 
 class PhotoCaptureViewController: UIViewController {
     fileprivate enum SessionSetupResult {
@@ -40,7 +38,6 @@ class PhotoCaptureViewController: UIViewController {
     fileprivate var input: AVCaptureDeviceInput!
     fileprivate let queue = DispatchQueue(label: "AV Session Queue", attributes: [], target: nil)
     fileprivate var setupResult: SessionSetupResult = .success //TODO: refactor
-
     override var shouldAutorotate: Bool { return false }
     fileprivate var statusBarHidden: Bool = false {
         didSet {
@@ -51,25 +48,21 @@ class PhotoCaptureViewController: UIViewController {
     //swiftlint:disable variable_name
     override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation { return .fade }
     //swiftlint:enable variable_name
-
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .landscapeRight
+    }
 
     fileprivate let previewView = PreviewView()
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(previewView)
 
-        previewView.session = session
-        previewView.captureButton.tapped = { [unowned self] in self.takePhoto()}
-        previewView.closeButton.tapped = { [unowned self] in self.dismiss()}
-
+        configureViews()
         configureConstraints()
         checkAuthorizationStatus()
 
         queue.async { self.configureSession() }
     }
-
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -78,17 +71,26 @@ class PhotoCaptureViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        statusBarHidden = true
+        animatePreviewAppearance()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         stopSession()
         super.viewWillDisappear(animated)
     }
-
 }
 
 extension PhotoCaptureViewController {
+
+    fileprivate func configureViews() {
+        view.addSubview(previewView)
+        view.backgroundColor = .black
+        previewView.session = session
+        previewView.captureButton.tapped = { [unowned self] in self.takePhoto()}
+        previewView.closeButton.tapped = { [unowned self] in self.dismiss()}
+        previewView.controlsAlpha = 0.0
+        previewView.outline.transform = CGAffineTransform(rotationAngle: CGFloat.pi/2)
+    }
 
     fileprivate func configureConstraints() {
 
@@ -244,6 +246,28 @@ extension PhotoCaptureViewController {
 
     }
 
+    fileprivate func animatePreviewAppearance () {
+        UIView.animate(withDuration: 0.25, delay: 0, options: [], animations: {
+            self.statusBarHidden = true
+            self.previewView.controlsAlpha = 1.0
+        }, completion: { success in
+            guard success else { return }
+            UIView.animate(withDuration: 0.25) {
+                let rotation = CABasicAnimation(keyPath: "transform.rotation.z")
+                var angle: Float =  -3 * Float.pi / 2
+                rotation.toValue = NSNumber(value: angle)
+                rotation.duration = 0.25
+                self.previewView.captureButton.layer.add(rotation, forKey: "rotationAnimation")
+                angle = -Float.pi / 2
+                rotation.toValue = angle
+                self.previewView.closeButton.layer.add(rotation, forKey: "rotationAnimation")
+                self.previewView.outline.transform = CGAffineTransform.identity
+            }
+            let rotate = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+            self.previewView.captureButton.transform = rotate
+            self.previewView.closeButton.transform = rotate
+        })
+    }
 }
 extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
 

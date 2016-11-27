@@ -10,13 +10,21 @@ import UIKit
 
 class CloseButton: TappableView {
 
+    let cross: UIView = UIView(frame: .zero).with {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.backgroundColor = .white
+    }
+
+    override var bounds: CGRect {
+        didSet {
+            setCrossShape()
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        let x = UIView(frame: .zero)
-        x.translatesAutoresizingMaskIntoConstraints = false
-        x.backgroundColor = .darkerBlue
-        contentView.addSubview(x)
-        NSLayoutConstraint.activate(NSLayoutConstraint.filledInSuperview(x))
+        contentView.addSubview(cross)
+        NSLayoutConstraint.activate(NSLayoutConstraint.filledInSuperview(cross))
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -26,5 +34,15 @@ class CloseButton: TappableView {
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = frame.height/2
+    }
+
+    func setCrossShape() {
+        let rect = bounds
+        let crossShape = CAShapeLayer()
+        crossShape.path = rect.crossPath
+        crossShape.strokeColor = UIColor.white.cgColor
+        crossShape.lineWidth = 2.0
+        crossShape.cornerRadius = rect.height/2.0
+        cross.layer.mask = crossShape
     }
 }

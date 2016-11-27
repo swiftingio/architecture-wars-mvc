@@ -13,10 +13,17 @@ class PreviewView: UIView {
 
     let captureButton = PhotoCameraButton(frame: .zero)
     let closeButton = CloseButton(frame: .zero)
-    private let outline: UIView = UIView(frame: .zero).with { view in
+    let outline: UIView = UIView(frame: .zero).with { view in
         view.layer.cornerRadius = 10
         view.layer.borderWidth = 2
         view.layer.borderColor = UIColor.white.cgColor
+    }
+    var controlsAlpha: CGFloat = 1.0 {
+        didSet {
+            captureButton.alpha = controlsAlpha
+            closeButton.alpha = controlsAlpha
+            outline.alpha = controlsAlpha
+        }
     }
 
     override init(frame: CGRect) {
@@ -73,14 +80,14 @@ class PreviewView: UIView {
         let visual = [
             "V:[photoButton(photoButtonWidth)]-(padding)-|",
             "H:[photoButton(photoButtonHeight)]",
-            "V:[closeButton(closeButtonHeight)]-|",
-            "H:|-[closeButton(closeButtonWidth)]",
+            "V:|-(padding)-[closeButton(closeButtonHeight)]",
+            "H:[closeButton(closeButtonWidth)]-(padding)-|",
             "H:|-(padding2)-[outline]-(padding2)-|",
             ]
 
         var constraints: [NSLayoutConstraint] = NSLayoutConstraint.centeredInSuperview(outline)
         constraints.append(NSLayoutConstraint.centeredHorizontallyInSuperview(captureButton))
-        constraints.append(NSLayoutConstraint(item: outline, attribute: .height, relatedBy: .equal, toItem: outline, attribute: .width, multiplier: 5/3, constant: 0))
+        constraints.append(NSLayoutConstraint(item: outline, attribute: .height, relatedBy: .equal, toItem: outline, attribute: .width, multiplier: 4.75/3, constant: 0))
         visual.forEach {
             constraints += NSLayoutConstraint.constraints(withVisualFormat: $0, options:
                 [], metrics: metrics, views: views)
