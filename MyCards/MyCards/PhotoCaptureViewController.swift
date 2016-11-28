@@ -89,14 +89,17 @@ extension PhotoCaptureViewController {
         previewView.captureButton.tapped = { [unowned self] in self.takePhoto()}
         previewView.closeButton.tapped = { [unowned self] in self.dismiss()}
         previewView.controlsAlpha = 0.0
-        previewView.outline.transform = CGAffineTransform(rotationAngle: CGFloat.pi/2)
+        //display preview items in landscape right
+        let rotate = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+        previewView.captureButton.transform = rotate
+        previewView.closeButton.transform = rotate
     }
 
     fileprivate func configureConstraints() {
 
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
 
-        var constraints: [NSLayoutConstraint] = NSLayoutConstraint.filledInSuperview(previewView)
+        let constraints: [NSLayoutConstraint] = NSLayoutConstraint.filledInSuperview(previewView)
 
         NSLayoutConstraint.activate(constraints)
     }
@@ -247,26 +250,10 @@ extension PhotoCaptureViewController {
     }
 
     fileprivate func animatePreviewAppearance () {
-        UIView.animate(withDuration: 0.25, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: 0.25) {
             self.statusBarHidden = true
             self.previewView.controlsAlpha = 1.0
-        }, completion: { success in
-            guard success else { return }
-            UIView.animate(withDuration: 0.25) {
-                let rotation = CABasicAnimation(keyPath: "transform.rotation.z")
-                var angle: Float =  -3 * Float.pi / 2
-                rotation.toValue = NSNumber(value: angle)
-                rotation.duration = 0.25
-                self.previewView.captureButton.layer.add(rotation, forKey: "rotationAnimation")
-                angle = -Float.pi / 2
-                rotation.toValue = angle
-                self.previewView.closeButton.layer.add(rotation, forKey: "rotationAnimation")
-                self.previewView.outline.transform = CGAffineTransform.identity
-            }
-            let rotate = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-            self.previewView.captureButton.transform = rotate
-            self.previewView.closeButton.transform = rotate
-        })
+        }
     }
 }
 
@@ -279,7 +266,7 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
                  resolvedSettings: AVCaptureResolvedPhotoSettings,
                  bracketSettings: AVCaptureBracketedStillImageSettings?,
                  error: Error?) {
-        
+
         guard let sample = photoSampleBuffer,
             let photo = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:
                 sample, previewPhotoSampleBuffer: previewPhotoSampleBuffer)
