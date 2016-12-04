@@ -8,7 +8,7 @@
 
 import UIKit
 
-//MARK: - Lifecycle
+// MARK: - Lifecycle
 final class CardsViewController: UIViewController {
 
     fileprivate let worker: CoreDataWorkerProtocol
@@ -51,7 +51,7 @@ final class CardsViewController: UIViewController {
     }
 }
 
-//MARK: - Configuration
+// MARK: - Configuration
 extension CardsViewController {
 
     fileprivate func configureNavigationItem() {
@@ -78,7 +78,7 @@ extension CardsViewController {
     }
 }
 
-//MARK: - Helpers
+// MARK: - Helpers
 extension CardsViewController {
 
     fileprivate func makeFlowLayout() -> UICollectionViewFlowLayout {
@@ -135,7 +135,7 @@ extension CardsViewController {
 
 }
 
-//MARK: - UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource
 extension CardsViewController: UICollectionViewDataSource {
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -163,10 +163,10 @@ extension CardsViewController: UICollectionViewDataSource {
     }
 }
 
-//MARK: - UICollectionViewDelegate
+// MARK: - UICollectionViewDelegate
 extension CardsViewController: UICollectionViewDelegate {}
 
-//MARK: - IndexedCellDelegate
+// MARK: - IndexedCellDelegate
 extension CardsViewController: IndexedCellDelegate {
     func cellWasTapped(_ cell: IndexedCell) {
         guard let indexPath = cell.indexPath,

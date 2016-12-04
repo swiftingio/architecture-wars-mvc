@@ -13,6 +13,8 @@
 		693A44C71DD7422700EDCABA /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A44C61DD7422700EDCABA /* String+Localized.swift */; };
 		693A44C91DD7944B00EDCABA /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A44C81DD7944B00EDCABA /* CardView.swift */; };
 		693A44CB1DD7D9CE00EDCABA /* TappableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A44CA1DD7D9CE00EDCABA /* TappableView.swift */; };
+		694A73F21DF496FE00424107 /* AVCaptureDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694A73F11DF496FE00424107 /* AVCaptureDevice+Extension.swift */; };
+		694A73F41DF4972700424107 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694A73F31DF4972700424107 /* UIViewController+Extension.swift */; };
 		69769AEC1DE2203700DF2747 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69769AEB1DE2203700DF2747 /* LaunchScreen.storyboard */; };
 		69769AEE1DE2324D00DF2747 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AED1DE2324D00DF2747 /* UIColor+Extension.swift */; };
 		69769AF01DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AEF1DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift */; };
@@ -47,6 +49,8 @@
 		693A44C61DD7422700EDCABA /* String+Localized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Localized.swift"; sourceTree = "<group>"; };
 		693A44C81DD7944B00EDCABA /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		693A44CA1DD7D9CE00EDCABA /* TappableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TappableView.swift; sourceTree = "<group>"; };
+		694A73F11DF496FE00424107 /* AVCaptureDevice+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AVCaptureDevice+Extension.swift"; sourceTree = "<group>"; };
+		694A73F31DF4972700424107 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		69769AEB1DE2203700DF2747 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		69769AED1DE2324D00DF2747 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		69769AEF1DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerControllerSourceType+Extension.swift"; sourceTree = "<group>"; };
@@ -172,6 +176,8 @@
 				69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */,
 				69183D421DE653710026C1DF /* CloseButton.swift */,
 				699795481DEB631500CB408F /* CGRect+Extension.swift */,
+				694A73F11DF496FE00424107 /* AVCaptureDevice+Extension.swift */,
+				694A73F31DF4972700424107 /* UIViewController+Extension.swift */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -311,7 +317,9 @@
 				6991C0751DE6488E00442B8E /* PreviewView.swift in Sources */,
 				69769AEE1DE2324D00DF2747 /* UIColor+Extension.swift in Sources */,
 				693A2F601DE4D19F00975FA1 /* PhotoCaptureViewController.swift in Sources */,
+				694A73F41DF4972700424107 /* UIViewController+Extension.swift in Sources */,
 				69DDFA751DB3E6D500D856C5 /* Card.swift in Sources */,
+				694A73F21DF496FE00424107 /* AVCaptureDevice+Extension.swift in Sources */,
 				69ABD0E31DB395F800CB925C /* Result.swift in Sources */,
 				69DDFA791DB3E7B200D856C5 /* Array+Extension.swift in Sources */,
 				69AB4B2E1DD674C80014B996 /* NetworkWorker.swift in Sources */,

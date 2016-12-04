@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 enum CoreDataWorkerError: Error {
     case cannotFetch(String)
     case cannotSave(Error)
@@ -29,7 +28,6 @@ protocol NotificationCenterProtocol {
 }
 
 extension NotificationCenter: NotificationCenterProtocol {}
-
 
 extension CoreDataWorkerError: Equatable {}
 func == (lhs: CoreDataWorkerError, rhs: CoreDataWorkerError) -> Bool {

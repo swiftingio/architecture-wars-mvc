@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 enum ResultError: Error {
     case noValue
 }
@@ -61,7 +60,6 @@ enum Result<T> {
     }
 }
 
-
 func ==<T: Equatable> (lhs: Result<T>, rhs: Result<T>) -> Bool {
     switch (lhs, rhs) {
     case (.success(let lhss), .success(let rhss)):
@@ -74,7 +72,6 @@ func ==<T: Equatable> (lhs: Result<T>, rhs: Result<T>) -> Bool {
         return false
     }
 }
-
 
 extension Result {
     func map<U>(_ transform: (T) -> U) -> Result<U> {

@@ -141,10 +141,6 @@ extension CardDetailsViewController {
         mode = .edit
     }
 
-    fileprivate func dismiss() {
-        dismiss(animated: true, completion: nil)
-    }
-
     fileprivate func frontTapped() {
         switch mode {
         case .edit: showImagePickerSources(for: .front)
