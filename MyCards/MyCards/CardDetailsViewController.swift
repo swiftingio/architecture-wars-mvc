@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CardDetailsViewController: UIViewController {
+final class CardDetailsViewController: UIViewController {
 
     fileprivate var card: Card?
     fileprivate let worker: CoreDataWorkerProtocol
@@ -144,15 +144,14 @@ extension CardDetailsViewController {
     fileprivate func frontTapped() {
         switch mode {
         case .edit: showImagePickerSources(for: .front)
-        case .normal: break //TODO: open large image
-
+        case .normal: showImage(for: .front)
         }
     }
 
     fileprivate func backTapped() {
         switch mode {
         case .edit: showImagePickerSources(for: .back)
-        case .normal: break //TODO: open large image
+        case .normal: showImage(for: .back)
         }
     }
 
@@ -175,6 +174,17 @@ extension CardDetailsViewController {
         let cancel = UIAlertAction(title: .Cancel, style: .cancel, handler: nil)
         actionSheet.addAction(cancel)
         present(actionSheet, animated: true, completion: nil)
+    }
+
+    fileprivate func showImage(for side: Card.Side) {
+        var image: UIImage?
+        switch side {
+        case .front: image = front.image
+        case .back: image = back.image
+        }
+        guard let i = image else { return }
+        let vc = CardPhotoViewController(image: i)
+        present(vc, animated: true, completion: nil)
     }
 
     private func showImagePicker(sourceType: UIImagePickerControllerSourceType) {
@@ -232,16 +242,17 @@ extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigati
     }
 }
 
-extension CardDetailsViewController: PhotoCaptureDelegate {
-    func photoTaken(_ data: Data) {
+extension CardDetailsViewController: PhotoCaptureViewControllerDelegate {
+
+    func photoCaptureViewController(_ viewController: PhotoCaptureViewController, didTakePhoto image: UIImage) {
         guard
-            let side = takingPhotoFor,
-            let image = UIImage(data: data) else { return }
+            let side = takingPhotoFor else { return }
         //TODO: open picture edit view
         switch side {
         case .front: front.image = image
         case .back: back.image = image
         }
         takingPhotoFor = nil
-        dismiss()    }
+        dismiss()
+    }
 }

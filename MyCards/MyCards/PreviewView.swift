@@ -9,6 +9,9 @@
 import UIKit
 import AVFoundation
 
+extension CGFloat {
+    static let cardRatio: CGFloat = 4.75/3
+}
 class PreviewView: UIView {
 
     let captureButton = PhotoCameraButton(frame: .zero)
@@ -87,7 +90,7 @@ class PreviewView: UIView {
 
         var constraints: [NSLayoutConstraint] = NSLayoutConstraint.centeredInSuperview(outline)
         constraints.append(NSLayoutConstraint.centeredHorizontallyInSuperview(captureButton))
-        constraints.append(NSLayoutConstraint(item: outline, attribute: .height, relatedBy: .equal, toItem: outline, attribute: .width, multiplier: 4.75/3, constant: 0))
+        constraints.append(NSLayoutConstraint(item: outline, attribute: .height, relatedBy: .equal, toItem: outline, attribute: .width, multiplier: .cardRatio, constant: 0))
         visual.forEach {
             constraints += NSLayoutConstraint.constraints(withVisualFormat: $0, options:
                 [], metrics: metrics, views: views)

@@ -9,13 +9,13 @@
 import UIKit
 import AVFoundation
 
-protocol PhotoCaptureDelegate: class {
-    func photoTaken(_ data: Data)
+protocol PhotoCaptureViewControllerDelegate: class {
+    func photoCaptureViewController(_ viewController: PhotoCaptureViewController, didTakePhoto photo: UIImage)
 }
 
-class PhotoCaptureViewController: UIViewController {
+final class PhotoCaptureViewController: UIViewController {
 
-    weak var delegate: PhotoCaptureDelegate?
+    weak var delegate: PhotoCaptureViewControllerDelegate?
     fileprivate let previewView = PreviewView()
     fileprivate var statusBarHidden: Bool = false {
         didSet {
@@ -170,11 +170,27 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
                           bracketSettings: AVCaptureBracketedStillImageSettings?,
                           error: NSError?) {
         guard let sample = photoSampleBuffer,
-            let photo = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:
-                sample, previewPhotoSampleBuffer: previewPhotoSampleBuffer)
+            let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:
+                sample, previewPhotoSampleBuffer: previewPhotoSampleBuffer),
+            let image = UIImage(data: data)?.cgImage
             else { print("Error capturing photo: \(error)"); return }
-        //TODO: rotate, trim
-        delegate?.photoTaken(photo)
+
+        let pHeight = previewView.outline.frame.height
+        let pWidth = previewView.outline.frame.width
+        let height: CGFloat = CGFloat(image.height)
+        let width: CGFloat = CGFloat(image.width)
+        let vScale = height/pHeight
+        let hScale = width/pWidth
+        let horizontalPadding: CGFloat = 20 * hScale
+        let verticalPadding: CGFloat = 40 * vScale
+        let newWidth = pWidth * hScale
+        let newHeight = pHeight * vScale
+        let x = (width - newWidth) / 2
+        let y = (height - newHeight) / 2
+        guard let cropped = image.cropping(to: CGRect(x: x, y: y, width: newWidth, height: newHeight)) else { return }
+
+        let photo = UIImage(cgImage: cropped, scale: 1, orientation: .up)
+        delegate?.photoCaptureViewController(self, didTakePhoto: photo)
     }
     //swiftlint:enable function_parameter_count
     //swiftlint:enable line_length
