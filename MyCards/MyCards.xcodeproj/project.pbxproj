@@ -38,6 +38,8 @@
 		69ABD0E71DB3A1A300CB925C /* CardDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0E61DB3A1A300CB925C /* CardDetailsViewController.swift */; };
 		69D170761DF4CBDA009E5710 /* CardPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D170751DF4CBDA009E5710 /* CardPhotoViewController.swift */; };
 		69D170781DF5775D009E5710 /* CGFloat+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D170771DF5775D009E5710 /* CGFloat+Extension.swift */; };
+		69D1707A1DF579C5009E5710 /* UINavigationController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D170791DF579C5009E5710 /* UINavigationController+Extension.swift */; };
+		69D1707C1DF57AAA009E5710 /* HiddenStatusBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D1707B1DF57AAA009E5710 /* HiddenStatusBarViewController.swift */; };
 		69DDFA731DB3E6AD00D856C5 /* CardCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DDFA721DB3E6AD00D856C5 /* CardCell.swift */; };
 		69DDFA751DB3E6D500D856C5 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DDFA741DB3E6D500D856C5 /* Card.swift */; };
 		69DDFA771DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DDFA761DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift */; };
@@ -78,6 +80,8 @@
 		69ABD0E61DB3A1A300CB925C /* CardDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardDetailsViewController.swift; sourceTree = "<group>"; };
 		69D170751DF4CBDA009E5710 /* CardPhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardPhotoViewController.swift; sourceTree = "<group>"; };
 		69D170771DF5775D009E5710 /* CGFloat+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extension.swift"; sourceTree = "<group>"; };
+		69D170791DF579C5009E5710 /* UINavigationController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extension.swift"; sourceTree = "<group>"; };
+		69D1707B1DF57AAA009E5710 /* HiddenStatusBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiddenStatusBarViewController.swift; sourceTree = "<group>"; };
 		69DDFA721DB3E6AD00D856C5 /* CardCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardCell.swift; sourceTree = "<group>"; };
 		69DDFA741DB3E6D500D856C5 /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		69DDFA761DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutFormatOptions+Extension.swift"; sourceTree = "<group>"; };
@@ -183,6 +187,7 @@
 				694A73F11DF496FE00424107 /* AVCaptureDevice+Extension.swift */,
 				694A73F31DF4972700424107 /* UIViewController+Extension.swift */,
 				69D170771DF5775D009E5710 /* CGFloat+Extension.swift */,
+				69D170791DF579C5009E5710 /* UINavigationController+Extension.swift */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -192,6 +197,7 @@
 			children = (
 				69DDFA7C1DB3E81800D856C5 /* My Cards */,
 				69DDFA7D1DB3E81E00D856C5 /* Card Details */,
+				69D1707B1DF57AAA009E5710 /* HiddenStatusBarViewController.swift */,
 			);
 			name = "View + Controller";
 			sourceTree = "<group>";
@@ -319,6 +325,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69D1707A1DF579C5009E5710 /* UINavigationController+Extension.swift in Sources */,
 				69ABD0E71DB3A1A300CB925C /* CardDetailsViewController.swift in Sources */,
 				69D170761DF4CBDA009E5710 /* CardPhotoViewController.swift in Sources */,
 				6991C0751DE6488E00442B8E /* PreviewView.swift in Sources */,
@@ -336,6 +343,7 @@
 				69D170781DF5775D009E5710 /* CGFloat+Extension.swift in Sources */,
 				69ABD0C61DB391E100CB925C /* AppDelegate.swift in Sources */,
 				69769AF01DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift in Sources */,
+				69D1707C1DF57AAA009E5710 /* HiddenStatusBarViewController.swift in Sources */,
 				69183D411DE653420026C1DF /* PhotoCameraButton.swift in Sources */,
 				693A44CB1DD7D9CE00EDCABA /* TappableView.swift in Sources */,
 				69183D431DE653710026C1DF /* CloseButton.swift in Sources */,

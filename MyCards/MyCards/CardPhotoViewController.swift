@@ -8,7 +8,8 @@
 
 import UIKit
 
-final class CardPhotoViewController: UIViewController {
+final class CardPhotoViewController: HiddenStatusBarViewController {
+
     fileprivate let imageView: UIImageView = UIImageView(frame: .zero)
     fileprivate let backgroundImageView: UIImageView = UIImageView(frame: .zero)
     fileprivate let visualEffectView: UIVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
@@ -30,6 +31,14 @@ final class CardPhotoViewController: UIViewController {
         configureConstraints()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIView.animate(withDuration: 0.25) {
+            self.imageView.alpha = 1
+            self.closeButton.alpha = 1
+        }
+    }
+
     private func configureViews() {
         view.backgroundColor = .black
         view.addSubview(backgroundImageView)
@@ -39,7 +48,9 @@ final class CardPhotoViewController: UIViewController {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 20
         imageView.clipsToBounds = true
+        imageView.alpha = 0
         view.addSubview(closeButton)
+        closeButton.alpha = 0
         closeButton.tapped = { [unowned self] in self.dismiss() }
     }
 

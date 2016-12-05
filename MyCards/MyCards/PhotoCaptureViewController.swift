@@ -13,23 +13,10 @@ protocol PhotoCaptureViewControllerDelegate: class {
     func photoCaptureViewController(_ viewController: PhotoCaptureViewController, didTakePhoto photo: UIImage)
 }
 
-final class PhotoCaptureViewController: UIViewController {
+final class PhotoCaptureViewController: HiddenStatusBarViewController {
 
     weak var delegate: PhotoCaptureViewControllerDelegate?
     fileprivate let previewView = PreviewView()
-    fileprivate var statusBarHidden: Bool = false {
-        didSet {
-            setNeedsStatusBarAppearanceUpdate()
-        }
-    }
-    //swiftlint:disable variable_name
-    override var shouldAutorotate: Bool { return false }
-    override var prefersStatusBarHidden: Bool { return statusBarHidden }
-    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation { return .fade }
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .landscapeRight
-    }
-    //swiftlint:enable variable_name
 
     // MARK: AVFoundation components
     fileprivate let output = AVCapturePhotoOutput()
@@ -57,7 +44,9 @@ final class PhotoCaptureViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        animatePreviewAppearance()
+        UIView.animate(withDuration: 0.25) {
+            self.previewView.controlsAlpha = 1.0
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -147,13 +136,6 @@ extension PhotoCaptureViewController {
             guard self.authorizationStatus == .authorized else { return }
             guard self.session.isRunning else { return }
             self.session.stopRunning()
-        }
-    }
-
-    fileprivate func animatePreviewAppearance () {
-        UIView.animate(withDuration: 0.25) {
-            self.statusBarHidden = true
-            self.previewView.controlsAlpha = 1.0
         }
     }
 }
