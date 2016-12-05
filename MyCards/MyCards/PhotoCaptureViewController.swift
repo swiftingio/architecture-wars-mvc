@@ -169,30 +169,55 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
                           resolvedSettings: AVCaptureResolvedPhotoSettings,
                           bracketSettings: AVCaptureBracketedStillImageSettings?,
                           error: NSError?) {
+
         guard let sample = photoSampleBuffer,
             let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:
                 sample, previewPhotoSampleBuffer: previewPhotoSampleBuffer),
-            let image = UIImage(data: data)?.cgImage
+            let photo = process(data)
             else { print("Error capturing photo: \(error)"); return }
 
-        let pHeight = previewView.outline.frame.height
-        let pWidth = previewView.outline.frame.width
-        let height: CGFloat = CGFloat(image.height)
-        let width: CGFloat = CGFloat(image.width)
-        let vScale = height/pHeight
-        let hScale = width/pWidth
-        let horizontalPadding: CGFloat = 20 * hScale
-        let verticalPadding: CGFloat = 40 * vScale
-        let newWidth = pWidth * hScale
-        let newHeight = pHeight * vScale
-        let x = (width - newWidth) / 2
-        let y = (height - newHeight) / 2
-        guard let cropped = image.cropping(to: CGRect(x: x, y: y, width: newWidth, height: newHeight)) else { return }
-
-        let photo = UIImage(cgImage: cropped, scale: 1, orientation: .up)
         delegate?.photoCaptureViewController(self, didTakePhoto: photo)
     }
     //swiftlint:enable function_parameter_count
     //swiftlint:enable line_length
+
+    private func process(_ data: Data) -> UIImage? {
+        guard let image = UIImage(data: data)?.cgImage else { return nil }
+
+        //original image size
+        let height: CGFloat = CGFloat(image.height)
+        let width: CGFloat = CGFloat(image.width)
+
+        //preview view size
+        let pHeight = previewView.frame.height
+        let pWidth = previewView.frame.width
+
+        //calculate scale
+        let vScale = height/pHeight
+        let hScale = width/pWidth
+
+        //card outline size
+        let oHeight = previewView.outline.frame.height
+        let oWidth = previewView.outline.frame.width
+
+        //card outline offset (x,y)
+        let horizontalPadding: CGFloat = .cardOffsetX * hScale
+        let verticalPadding: CGFloat = .cardOffsetY * vScale
+
+        let x = (width - oWidth * hScale) / 2 + horizontalPadding
+        let y = (height - oHeight * vScale) / 2 + verticalPadding
+
+        let newWidth = oWidth * hScale
+        let newHeight = oHeight * vScale
+
+        let rect = CGRect(x: x, y: y,
+                          width: newWidth-horizontalPadding*2,
+                          height: newHeight-verticalPadding*2)
+
+        guard let cropped = image.cropping(to: rect) else { return nil }
+
+        let photo = UIImage(cgImage: cropped, scale: 1, orientation: .up)
+        return photo
+    }
 
 }
