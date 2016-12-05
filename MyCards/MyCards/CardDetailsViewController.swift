@@ -73,11 +73,12 @@ extension CardDetailsViewController {
         ]
 
         let visual = [
-            "V:|-(80)-[name(40)]-[front]-(20)-[back(==front)]-(60)-|",
-            "H:|-(20)-[name]-(20)-|"
+            "H:|-(20)-[name]-(20)-|",
+            "V:|-(80)-[name(40)]-(20)-[front]-(20)-[back(==front)]",
         ]
 
         var constraints: [NSLayoutConstraint] = []
+        constraints.append(NSLayoutConstraint(item: front, attribute: .height, relatedBy: .equal, toItem: front, attribute: .width, multiplier: 1 / .cardRatio, constant: 0))
         visual.forEach {
             constraints += NSLayoutConstraint.constraints(withVisualFormat: $0, options:
                 [.alignAllLeading, .alignAllTrailing], metrics: nil, views: views)
