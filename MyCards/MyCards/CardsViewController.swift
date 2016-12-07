@@ -51,7 +51,7 @@ final class CardsViewController: UIViewController {
         worker.get() {
             [weak self](result: Result<[Card]>) in
             switch result {
-            case .failure(let error): break
+            case .failure(let _): break
             case .success(let cards):
                 self?.cards = cards
                 self?.reloadData()
@@ -84,7 +84,7 @@ extension CardsViewController {
         emptyScreen = makeEmptyScreen()
         view.addSubview(emptyScreen)
 
-        collectionView = makeCollectionView()
+        collectionView = makeCollectionView(in: view.bounds)
         view.addSubview(collectionView)
     }
 
@@ -100,12 +100,11 @@ extension CardsViewController {
 // MARK: - Helpers
 extension CardsViewController {
 
-    fileprivate func makeFlowLayout() -> UICollectionViewFlowLayout {
+    fileprivate func makeFlowLayout(in rect: CGRect) -> UICollectionViewFlowLayout {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        //TODO: split from view.bounds.size.width
         let offset: CGFloat = 20
-        let width = view.bounds.size.width - 2 * offset
+        let width = rect.size.width - 2 * offset
         layout.itemSize = CGSize(width: width, height: width / .cardRatio)
         layout.sectionInset = UIEdgeInsets(top: 4.25*offset, left: offset, bottom: offset, right: offset)
         layout.minimumInteritemSpacing = offset
@@ -114,8 +113,8 @@ extension CardsViewController {
         return layout
     }
 
-    fileprivate func makeCollectionView() -> UICollectionView {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeFlowLayout())
+    fileprivate func makeCollectionView(in rect: CGRect) -> UICollectionView {
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeFlowLayout(in: rect))
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self

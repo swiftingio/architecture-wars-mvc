@@ -6,10 +6,10 @@
 import CoreData
 
 protocol CoreDataServiceProtocol:class {
-    var errorHandler: (Error) -> Void {get set}
-    var persistentContainer: NSPersistentContainer {get}
-    var viewContext: NSManagedObjectContext {get}
-    var backgroundContext: NSManagedObjectContext {get}
+    var errorHandler: (Error) -> Void { get set }
+    var persistentContainer: NSPersistentContainer { get }
+    var viewContext: NSManagedObjectContext { get }
+    var backgroundContext: NSManagedObjectContext { get }
     func performBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void)
     func performForegroundTask(_ block: @escaping (NSManagedObjectContext) -> Void)
 }
@@ -17,7 +17,7 @@ protocol CoreDataServiceProtocol:class {
 final class CoreDataService: CoreDataServiceProtocol {
 
     static let shared = CoreDataService()
-    var errorHandler: (Error) -> Void = {_ in }
+    var errorHandler: (Error) -> Void = { _ in }
 
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "DataModel")

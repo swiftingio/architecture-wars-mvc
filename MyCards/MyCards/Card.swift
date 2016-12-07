@@ -40,14 +40,3 @@ extension Card.Side: CustomStringConvertible {
         }
     }
 }
-
-extension Card {
-    //TODO: remove when needed
-    static func testCards(_ limit: Int) -> [Card] {
-        var c = [Card]()
-        for i in 0...limit {
-            c.append(Card(name: "My new card for \(i)"))
-        }
-        return c
-    }
-}
