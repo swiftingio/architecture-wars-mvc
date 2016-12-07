@@ -9,16 +9,23 @@
 import UIKit
 
 final class CardDetailsViewController: UIViewController {
-
-    fileprivate var card: Card?
+    
+    fileprivate var card: Card {
+        didSet {
+            front.image = card.front
+            back.image = card.back
+            name.text = card.name
+        }
+    }
     fileprivate let worker: CoreDataWorkerProtocol
     fileprivate var mode: Mode {
         didSet {
             configureNavigationItem()
             configureModeForViews()
+            dump(self.card)
         }
     }
-
+    
     fileprivate var name: UITextField!
     fileprivate var front: CardView!
     fileprivate var back: CardView!
@@ -27,19 +34,22 @@ final class CardDetailsViewController: UIViewController {
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
-
+    fileprivate let createNew: Bool
+    //TODO: add remove button
     init(card: Card?, worker: CoreDataWorkerProtocol = CoreDataWorker()) {
-        self.card = card
+        createNew = card == nil
+        self.card = card ?? Card(name: "")
         self.worker = worker
-        self.mode = card != nil ? .normal : .edit
+        self.mode = !createNew ? .normal : .edit
         super.init(nibName: nil, bundle: nil)
-        self.title = card == nil ? .AddNewCard : card!.name
+        self.title = createNew ? .AddNewCard : .CardDetails
+        dump(self.card)
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("NSCoding not supported")
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNavigationItem()
@@ -53,63 +63,67 @@ extension CardDetailsViewController {
     fileprivate func configureViews() {
         view.backgroundColor = .white
         name = makeNameField()
+        name.text = card.name
         view.addSubview(name)
-        front = makeCardView(with: card?.front)
+        front = makeCardView(with: card.front)
         front.tapped = { [unowned self] in self.frontTapped() }
         view.addSubview(front)
-        back = makeCardView(with: card?.back)
+        back = makeCardView(with: card.back)
         back.tapped = { [unowned self] in self.backTapped() }
         view.addSubview(back)
     }
-
+    
     fileprivate func configureConstraints() {
-
+        
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-
+        
         let views: [String: Any] = [
             "name": name,
             "front": front,
             "back": back
         ]
-
+        
         let visual = [
             "H:|-(20)-[name]-(20)-|",
             "V:|-(80)-[name(40)]-(20)-[front]-(20)-[back(==front)]",
-        ]
-
+            ]
+        
         var constraints: [NSLayoutConstraint] = []
-        constraints.append(NSLayoutConstraint(item: front, attribute: .height, relatedBy: .equal, toItem: front, attribute: .width, multiplier: 1 / .cardRatio, constant: 0))
+        constraints.append(NSLayoutConstraint(item: front, attribute: .height, relatedBy:
+            .equal, toItem: front, attribute: .width,
+                    multiplier: 1 / .cardRatio, constant: 0))
         visual.forEach {
             constraints += NSLayoutConstraint.constraints(withVisualFormat: $0, options:
                 [.alignAllLeading, .alignAllTrailing], metrics: nil, views: views)
         }
-
+        
         NSLayoutConstraint.activate(constraints)
     }
-
+    
     fileprivate func configureNavigationItem() {
         switch mode {
         case .normal:
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
                 .edit, target: self, action: #selector(editTapped))
         case .edit:
-
+            
             navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
                 .done, target: self, action: #selector(doneTapped))
-
+            
         }
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem:
             .cancel, target: self, action: #selector(cancelTapped))
     }
-
+    
     fileprivate func configureModeForViews() {
         let editMode = mode == .edit
         name.resignFirstResponder()
         name.isUserInteractionEnabled = editMode
+        name.placeholder = editMode ? .EnterCardName : .NoName
         front.photoCamera.isHidden = !editMode
         back.photoCamera.isHidden = !editMode
     }
-
+    
     fileprivate func makeNameField() -> UITextField {
         let name = UITextField()
         name.delegate = self
@@ -117,52 +131,63 @@ extension CardDetailsViewController {
         name.autocapitalizationType = .none
         name.placeholder = .EnterCardName
         name.returnKeyType = .done
+        name.addTarget(self, action: #selector(nameChanged(sender:)), for: .editingChanged)
         return name
     }
-
+    
     fileprivate func makeCardView(with image: UIImage?) -> CardView {
         let view = CardView(image: image)
         return view
     }
-
+    
     @objc fileprivate func doneTapped(sender: UIBarButtonItem) {
-        //TODO: save & dismiss worker.save {}
-        if card == nil {
+        //TODO: validate card before saving -> name, front, back
+        worker.upsert(entities: [card]) { _ in }
+        if createNew {
             dismiss()
         } else {
             mode = .normal
         }
     }
-
+    
     @objc fileprivate func cancelTapped(sender: UIBarButtonItem) {
         dismiss()
     }
-
+    
     @objc fileprivate func editTapped(sender: UIBarButtonItem) {
         mode = .edit
     }
-
+    
+    @objc fileprivate func nameChanged(sender textField: UITextField) {
+        guard let name = textField.text else { return }
+        card = Card(identifier: card.identifier,
+                    name: name,
+                    front: card.front,
+                    back: card.back)
+    }
+    
     fileprivate func frontTapped() {
         switch mode {
         case .edit: showImagePickerSources(for: .front)
         case .normal: showImage(for: .front)
         }
     }
-
+    
     fileprivate func backTapped() {
         switch mode {
         case .edit: showImagePickerSources(for: .back)
         case .normal: showImage(for: .back)
         }
     }
-
+    
     fileprivate func showImagePickerSources(for side: Card.Side) {
+        view.endEditing(true)
         let title: String = .Set + " " + side.description
         let actionSheet = UIAlertController(title: title, message:
             nil, preferredStyle: .actionSheet)
-
+        
         let actions: [UIImagePickerControllerSourceType] = UIImagePickerController.availableImagePickerSources()
-
+        
         actions.forEach { source in
             let action = UIAlertAction(title: source.description, style:
             .default) { [unowned self] _ in
@@ -171,13 +196,14 @@ extension CardDetailsViewController {
             }
             actionSheet.addAction(action)
         }
-
+        
         let cancel = UIAlertAction(title: .Cancel, style: .cancel, handler: nil)
         actionSheet.addAction(cancel)
         present(actionSheet, animated: true, completion: nil)
     }
-
+    
     fileprivate func showImage(for side: Card.Side) {
+        view.endEditing(true)
         var image: UIImage?
         switch side {
         case .front: image = front.image
@@ -187,7 +213,7 @@ extension CardDetailsViewController {
         let vc = CardPhotoViewController(image: i)
         present(vc, animated: true, completion: nil)
     }
-
+    
     private func showImagePicker(sourceType: UIImagePickerControllerSourceType) {
         let imagePicker: UIViewController
         if sourceType == .camera {
@@ -202,21 +228,30 @@ extension CardDetailsViewController {
         }
         present(imagePicker, animated: true, completion: nil)
     }
+    
+    fileprivate func set(_ image: UIImage, for side: Card.Side) {
+        switch side {
+        case .front:
+            card = Card(identifier: card.identifier,
+                        name: card.name,
+                        front: image,
+                        back: card.back)
+        case .back:
+            card = Card(identifier: card.identifier,
+                        name: card.name,
+                        front: card.front,
+                        back: image)
+        }
+    }
 }
 
 extension CardDetailsViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField,
-                   shouldChangeCharactersIn range: NSRange,
-                   replacementString string: String) -> Bool {
-        return true
-    }
-
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        //TODO: update card name
         return true
     }
 }
+
 extension CardDetailsViewController {
     enum Mode {
         case normal
@@ -228,31 +263,29 @@ extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigati
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [String : Any]) {
         guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage,
-        let side = takingPhotoFor else { return }
+            let side = takingPhotoFor else { return }
         //TODO: open picture edit view
-        switch side {
-        case .front: front.image = image
-        case .back: back.image = image
-        }
+        set(image, for: side)
         takingPhotoFor = nil
         dismiss()
     }
-
+    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         dismiss()
+    }
+    
+    func navigationController(_ navigationController: UINavigationController, willShow
+        viewController: UIViewController, animated: Bool) {
+        viewController.title = .SelectCardPhoto
     }
 }
 
 extension CardDetailsViewController: PhotoCaptureViewControllerDelegate {
-
+    
     func photoCaptureViewController(_ viewController: PhotoCaptureViewController, didTakePhoto image: UIImage) {
         guard
             let side = takingPhotoFor else { return }
-        //TODO: open picture edit view
-        switch side {
-        case .front: front.image = image
-        case .back: back.image = image
-        }
+        set(image, for: side)
         takingPhotoFor = nil
         dismiss()
     }

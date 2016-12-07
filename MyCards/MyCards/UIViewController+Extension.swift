@@ -10,6 +10,7 @@ import UIKit
 
 extension UIViewController {
     func dismiss() {
+        view.endEditing(true)
         dismiss(animated: true, completion: nil)
     }
 }

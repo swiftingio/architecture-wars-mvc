@@ -8,11 +8,18 @@
 
 import UIKit
 
+protocol IndexedCell {
+    var indexPath: IndexPath? { get set }
+}
+protocol IndexedCellDelegate: class {
+    func cellWasTapped(_ cell: IndexedCell)
+}
+
 // MARK: - Lifecycle
 final class CardsViewController: UIViewController {
 
     fileprivate let worker: CoreDataWorkerProtocol
-    fileprivate lazy var cards: [Card] = Card.testCards(100)
+    fileprivate lazy var cards: [Card] = []
 
     fileprivate var emptyScreen: UIImageView!
     fileprivate var collectionView: UICollectionView!
@@ -41,7 +48,19 @@ final class CardsViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //TODO: implement fetch and reload worker.get {}
+        worker.get() {
+            [weak self](result: Result<[Card]>) in
+            switch result {
+            case .failure(let error): break
+            case .success(let cards):
+                self?.cards = cards
+                self?.reloadData()
+            }
+
+        }
+    }
+
+    func reloadData() {
         if !cards.isEmpty {
             hideEmptyScreen()
         } else {
@@ -88,8 +107,10 @@ extension CardsViewController {
         let offset: CGFloat = 20
         let width = view.bounds.size.width - 2 * offset
         layout.itemSize = CGSize(width: width, height: width / .cardRatio)
-        layout.sectionInset = UIEdgeInsets(top: 4*offset, left: offset, bottom: offset, right: offset)
+        layout.sectionInset = UIEdgeInsets(top: 4.25*offset, left: offset, bottom: offset, right: offset)
         layout.minimumInteritemSpacing = offset
+        layout.minimumLineSpacing = offset
+
         return layout
     }
 
@@ -156,7 +177,7 @@ extension CardsViewController: UICollectionViewDataSource {
             else { return UICollectionViewCell() }
 
         cell.name = card.name
-        cell.image = card.front
+        cell.image = card.front ?? #imageLiteral(resourceName: "logo")
         cell.indexPath = indexPath
         cell.delegate = self
         return cell

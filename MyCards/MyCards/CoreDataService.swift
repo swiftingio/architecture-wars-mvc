@@ -1,12 +1,7 @@
 //
-//  CoreDataService.swift
-//  MyCards
+//  CoreDataStack.swift
+//  Created by swifting.io Team
 //
-//  Created by Maciej Piotrowski on 16/10/16.
-//  Copyright © 2016 Maciej Piotrowski. All rights reserved.
-//
-
-import Foundation
 
 import CoreData
 
@@ -31,12 +26,14 @@ final class CoreDataService: CoreDataServiceProtocol {
                 NSLog("CoreData error \(error), \(error._userInfo)")
                 self?.errorHandler(error)
             }
-            })
+        })
         return container
     }()
 
     lazy var viewContext: NSManagedObjectContext = {
-        return self.persistentContainer.viewContext
+        let context: NSManagedObjectContext = self.persistentContainer.viewContext
+        context.automaticallyMergesChangesFromParent = true
+        return context
     }()
 
     lazy var backgroundContext: NSManagedObjectContext = {

@@ -12,7 +12,7 @@ final class CardPhotoViewController: HiddenStatusBarViewController {
 
     fileprivate let imageView: UIImageView = UIImageView(frame: .zero)
     fileprivate let backgroundImageView: UIImageView = UIImageView(frame: .zero)
-    fileprivate let visualEffectView: UIVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+    fileprivate let visualEffectView: UIVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     fileprivate let closeButton = CloseButton(frame: .zero)
 
     init(image: UIImage) {
