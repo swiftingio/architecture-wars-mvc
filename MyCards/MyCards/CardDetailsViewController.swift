@@ -35,7 +35,12 @@ final class CardDetailsViewController: UIViewController {
         return .portrait
     }
     fileprivate let createNew: Bool
-    //TODO: add remove button
+    fileprivate var editButton: UIBarButtonItem!
+    fileprivate var deleteButton: UIBarButtonItem!
+    fileprivate var cancelButton: UIBarButtonItem!
+    fileprivate var doneButton: UIBarButtonItem!
+    fileprivate let toolbar = UIToolbar(frame: .zero)
+
     init(card: Card?, worker: CoreDataWorkerProtocol = CoreDataWorker()) {
         createNew = card == nil
         self.card = card ?? Card(name: "")
@@ -43,6 +48,14 @@ final class CardDetailsViewController: UIViewController {
         self.mode = !createNew ? .normal : .edit
         super.init(nibName: nil, bundle: nil)
         self.title = createNew ? .AddNewCard : .CardDetails
+        editButton = UIBarButtonItem(barButtonSystemItem:
+            .edit, target: self, action: #selector(editTapped))
+        deleteButton = UIBarButtonItem(barButtonSystemItem:
+            .trash, target: self, action: #selector(removeTapped))
+        cancelButton = UIBarButtonItem(barButtonSystemItem:
+            .cancel, target: self, action: #selector(cancelTapped))
+        doneButton = UIBarButtonItem(barButtonSystemItem:
+            .done, target: self, action: #selector(doneTapped))
         dump(self.card)
     }
 
@@ -71,6 +84,9 @@ extension CardDetailsViewController {
         back = makeCardView(with: card.back)
         back.tapped = { [unowned self] in self.backTapped() }
         view.addSubview(back)
+        let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        toolbar.items = [flexible, deleteButton, flexible]
+        view.addSubview(toolbar)
     }
 
     fileprivate func configureConstraints() {
@@ -80,12 +96,15 @@ extension CardDetailsViewController {
         let views: [String: Any] = [
             "name": name,
             "front": front,
-            "back": back
+            "back": back,
+            "toolbar": toolbar,
         ]
 
         let visual = [
             "H:|-(20)-[name]-(20)-|",
             "V:|-(80)-[name(40)]-(20)-[front]-(20)-[back(==front)]",
+            "H:|[toolbar]|",
+            "V:[toolbar(40)]|",
             ]
 
         var constraints: [NSLayoutConstraint] = []
@@ -103,16 +122,11 @@ extension CardDetailsViewController {
     fileprivate func configureNavigationItem() {
         switch mode {
         case .normal:
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
-                .edit, target: self, action: #selector(editTapped))
+            navigationItem.rightBarButtonItems = [editButton]
         case .edit:
-
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
-                .done, target: self, action: #selector(doneTapped))
-
+            navigationItem.rightBarButtonItems = [doneButton]
         }
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem:
-            .cancel, target: self, action: #selector(cancelTapped))
+        navigationItem.leftBarButtonItem = cancelButton
     }
 
     fileprivate func configureModeForViews() {
@@ -122,6 +136,7 @@ extension CardDetailsViewController {
         name.placeholder = editMode ? .EnterCardName : .NoName
         front.photoCamera.isHidden = !editMode
         back.photoCamera.isHidden = !editMode
+        toolbar.isHidden = createNew || !editMode
     }
 
     fileprivate func makeNameField() -> UITextField {
@@ -140,7 +155,7 @@ extension CardDetailsViewController {
         return view
     }
 
-    @objc fileprivate func doneTapped(sender: UIBarButtonItem) {
+    @objc fileprivate func doneTapped() {
         //TODO: validate card before saving -> name, front, back
         worker.upsert(entities: [card]) { _ in }
         if createNew {
@@ -150,11 +165,23 @@ extension CardDetailsViewController {
         }
     }
 
-    @objc fileprivate func cancelTapped(sender: UIBarButtonItem) {
-        dismiss()
+    @objc fileprivate func removeTapped() {
+        print("remove")
+        worker.remove(entities: [card]) { [weak self] error in
+            error.flatMap { print("\($0)") }
+            self?.dismiss()
+        }
     }
 
-    @objc fileprivate func editTapped(sender: UIBarButtonItem) {
+    @objc fileprivate func cancelTapped() {
+        if createNew || mode == .normal {
+            dismiss()
+        } else {
+            mode = .normal
+        }
+    }
+
+    @objc fileprivate func editTapped() {
         mode = .edit
     }
 

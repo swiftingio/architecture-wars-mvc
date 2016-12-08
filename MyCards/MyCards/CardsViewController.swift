@@ -51,7 +51,7 @@ final class CardsViewController: UIViewController {
         worker.get() {
             [weak self](result: Result<[Card]>) in
             switch result {
-            case .failure(let _): break
+            case .failure(_): break
             case .success(let cards):
                 self?.cards = cards
                 self?.reloadData()

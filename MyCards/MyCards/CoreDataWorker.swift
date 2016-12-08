@@ -15,7 +15,9 @@ protocol CoreDataWorkerProtocol {
     func upsert<Entity: ManagedObjectConvertible>
         (entities: [Entity],
          completion: @escaping (Error?) -> Void)
-
+    func remove<Entity: ManagedObjectConvertible>
+        (entities: [Entity],
+         completion: @escaping (Error?) -> Void)
 }
 
 extension CoreDataWorkerProtocol {
@@ -74,6 +76,23 @@ class CoreDataWorker: CoreDataWorkerProtocol {
             _ = entities.flatMap({ (entity) -> Entity.ManagedObject? in
                 return entity.toManagedObject(in: context)
             })
+            do {
+                try context.save()
+                completion(nil)
+            } catch {
+                completion(CoreDataWorkerError.cannotSave(error))
+            }
+        }
+    }
+
+    func remove<Entity: ManagedObjectConvertible>
+        (entities: [Entity], completion: @escaping (Error?) -> Void) {
+        coreData.performBackgroundTask { (context) in
+            for entity in entities {
+                if let managedEntity = entity.toManagedObject(in: context) as? NSManagedObject {
+                    context.delete(managedEntity)
+                }
+            }
             do {
                 try context.save()
                 completion(nil)
