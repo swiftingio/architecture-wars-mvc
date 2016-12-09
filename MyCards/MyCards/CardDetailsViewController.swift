@@ -22,7 +22,6 @@ final class CardDetailsViewController: UIViewController {
         didSet {
             configureNavigationItem()
             configureModeForViews()
-            dump(self.card)
         }
     }
 
@@ -290,11 +289,8 @@ extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigati
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [String : Any]) {
         guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage,
-            let side = takingPhotoFor else { return }
-        //TODO: open picture edit view
-        set(image, for: side)
-        takingPhotoFor = nil
-        dismiss()
+            let _ = takingPhotoFor else { return }
+        showImageCropping(for: image)
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -304,6 +300,14 @@ extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigati
     func navigationController(_ navigationController: UINavigationController, willShow
         viewController: UIViewController, animated: Bool) {
         viewController.title = .SelectCardPhoto
+    }
+
+    fileprivate func showImageCropping(for image: UIImage = #imageLiteral(resourceName: "logo")) {
+        let vc = CropViewController(image: image)
+        vc.delegate = self
+        dismiss(animated: true) {
+            self.present(vc, animated: true, completion: nil)
+        }
     }
 }
 
@@ -315,5 +319,13 @@ extension CardDetailsViewController: PhotoCaptureViewControllerDelegate {
         set(image, for: side)
         takingPhotoFor = nil
         dismiss()
+    }
+}
+
+extension CardDetailsViewController: CropViewControllerDelegate {
+    func cropViewController(_ viewController: CropViewController, didCropPhoto photo: UIImage) {
+        guard let side = takingPhotoFor else { return }
+        set(photo, for: side)
+        takingPhotoFor = nil
     }
 }
