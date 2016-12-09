@@ -40,3 +40,15 @@ extension Card.Side: CustomStringConvertible {
         }
     }
 }
+
+extension Card {
+    var isValid: Bool {
+        guard
+            let _ = front,
+            let _ = back,
+            !name.isEmpty,
+            !identifier.isEmpty
+            else { return false }
+        return true
+    }
+}

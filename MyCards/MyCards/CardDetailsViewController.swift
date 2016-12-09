@@ -10,11 +10,13 @@ import UIKit
 
 final class CardDetailsViewController: UIViewController {
 
+    fileprivate var history: [Card] = []
     fileprivate var card: Card {
         didSet {
             front.image = card.front
             back.image = card.back
             name.text = card.name
+            doneButton.isEnabled = card.isValid
         }
     }
     fileprivate let worker: CoreDataWorkerProtocol
@@ -45,6 +47,7 @@ final class CardDetailsViewController: UIViewController {
         self.card = card ?? Card(name: "")
         self.worker = worker
         self.mode = !createNew ? .normal : .edit
+        self.history.append(self.card)
         super.init(nibName: nil, bundle: nil)
         self.title = createNew ? .AddNewCard : .CardDetails
         editButton = UIBarButtonItem(barButtonSystemItem:
@@ -55,7 +58,6 @@ final class CardDetailsViewController: UIViewController {
             .cancel, target: self, action: #selector(cancelTapped))
         doneButton = UIBarButtonItem(barButtonSystemItem:
             .done, target: self, action: #selector(doneTapped))
-        dump(self.card)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -119,6 +121,7 @@ extension CardDetailsViewController {
     }
 
     fileprivate func configureNavigationItem() {
+        doneButton.isEnabled = card.isValid
         switch mode {
         case .normal:
             navigationItem.rightBarButtonItems = [editButton]
@@ -155,17 +158,20 @@ extension CardDetailsViewController {
     }
 
     @objc fileprivate func doneTapped() {
-        //TODO: validate card before saving -> name, front, back
-        worker.upsert(entities: [card]) { _ in }
+        guard card.isValid else { return }
+        worker.upsert(entities: [card]) { [weak self] error in
+            guard let strongSelf = self, error == nil else { return }
+            strongSelf.history.append(strongSelf.card)
+        }
         if createNew {
             dismiss()
         } else {
             mode = .normal
         }
+
     }
 
     @objc fileprivate func removeTapped() {
-        print("remove")
         worker.remove(entities: [card]) { [weak self] error in
             error.flatMap { print("\($0)") }
             self?.dismiss()
@@ -176,6 +182,7 @@ extension CardDetailsViewController {
         if createNew || mode == .normal {
             dismiss()
         } else {
+            history.last.flatMap { card = $0 }
             mode = .normal
         }
     }
@@ -302,7 +309,7 @@ extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigati
         viewController.title = .SelectCardPhoto
     }
 
-    fileprivate func showImageCropping(for image: UIImage = #imageLiteral(resourceName: "logo")) {
+    fileprivate func showImageCropping(for image: UIImage = #imageLiteral(resourceName: "background")) {
         let vc = CropViewController(image: image)
         vc.delegate = self
         dismiss(animated: true) {
@@ -323,6 +330,7 @@ extension CardDetailsViewController: PhotoCaptureViewControllerDelegate {
 }
 
 extension CardDetailsViewController: CropViewControllerDelegate {
+
     func cropViewController(_ viewController: CropViewController, didCropPhoto photo: UIImage) {
         guard let side = takingPhotoFor else { return }
         set(photo, for: side)

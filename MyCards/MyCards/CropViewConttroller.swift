@@ -40,7 +40,9 @@ class CropViewController: HiddenStatusBarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         closeButton.tapped = { [unowned self] in
-            self.delegate?.cropViewController(self, didCropPhoto: self.imageView.image!)
+            self.process().flatMap {
+            self.delegate?.cropViewController(self, didCropPhoto: $0)
+            }
             self.dismiss()
         }
         addSubviews()
@@ -121,6 +123,29 @@ class CropViewController: HiddenStatusBarViewController {
         scrollView.zoomScale = scrollView.minimumZoomScale
         let o = (scrollView.contentSize.width*scale-scrollView.frame.width)/2
         scrollView.contentInset = UIEdgeInsets(top: 0, left: -o, bottom: 0, right: o)
+    }
+
+    func process() -> UIImage? {
+        guard let image = imageView.image?.cgImage else { return nil }
+        // FIXME: scaling
+
+        //original image size
+//        let height: CGFloat = CGFloat(scrollView.contentSize.height)
+//        let width: CGFloat = CGFloat(scrollView.contentSize.width)
+
+        let scale = scrollView.zoomScale
+        let height = scrollView.bounds.height
+        let width = scrollView.bounds.width
+
+        let rect = CGRect(x: scrollView.bounds.origin.x,
+                          y: scrollView.bounds.origin.y,
+                          width: width / scale,
+                          height: height / scale)
+
+        guard let cropped = image.cropping(to: rect) else { return nil }
+
+        let photo = UIImage(cgImage: cropped, scale: 1, orientation: .up)
+        return photo
     }
 }
 

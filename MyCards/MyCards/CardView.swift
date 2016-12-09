@@ -30,7 +30,7 @@ class CardView: TappableView {
         set {
             imageView.image = newValue
             if newValue == nil {
-                imageView.image = #imageLiteral(resourceName: "logo")
+                imageView.image = #imageLiteral(resourceName: "background")
             }
         }
         get {

@@ -48,6 +48,7 @@ final class CardsViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        //TODO: Fetched results controller?
         worker.get() {
             [weak self](result: Result<[Card]>) in
             switch result {
@@ -175,8 +176,9 @@ extension CardsViewController: UICollectionViewDataSource {
             let card = cards[safe: indexPath.row]
             else { return UICollectionViewCell() }
 
+        //TODO: use smaller images / thumbnails
         cell.name = card.name
-        cell.image = card.front ?? #imageLiteral(resourceName: "logo")
+        cell.image = card.front ?? #imageLiteral(resourceName: "background")
         cell.indexPath = indexPath
         cell.delegate = self
         return cell

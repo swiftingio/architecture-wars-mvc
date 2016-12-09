@@ -15,6 +15,7 @@
 		693A44CB1DD7D9CE00EDCABA /* TappableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A44CA1DD7D9CE00EDCABA /* TappableView.swift */; };
 		694A73F21DF496FE00424107 /* AVCaptureDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694A73F11DF496FE00424107 /* AVCaptureDevice+Extension.swift */; };
 		694A73F41DF4972700424107 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694A73F31DF4972700424107 /* UIViewController+Extension.swift */; };
+		69545E7A1DFB00C60050A588 /* launch.png in Resources */ = {isa = PBXBuildFile; fileRef = 69545E791DFB00C60050A588 /* launch.png */; };
 		6965BB621DF7E0E8009F9CBC /* CardMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965BB601DF7E0E8009F9CBC /* CardMO+CoreDataClass.swift */; };
 		6965BB631DF7E0E8009F9CBC /* CardMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965BB611DF7E0E8009F9CBC /* CardMO+CoreDataProperties.swift */; };
 		6965BB671DF7E7BC009F9CBC /* ManagedObjectConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965BB651DF7E7BC009F9CBC /* ManagedObjectConvertible.swift */; };
@@ -60,6 +61,7 @@
 		693A44CA1DD7D9CE00EDCABA /* TappableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TappableView.swift; sourceTree = "<group>"; };
 		694A73F11DF496FE00424107 /* AVCaptureDevice+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AVCaptureDevice+Extension.swift"; sourceTree = "<group>"; };
 		694A73F31DF4972700424107 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
+		69545E791DFB00C60050A588 /* launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launch.png; sourceTree = "<group>"; };
 		6965BB601DF7E0E8009F9CBC /* CardMO+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CardMO+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6965BB611DF7E0E8009F9CBC /* CardMO+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CardMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		6965BB651DF7E7BC009F9CBC /* ManagedObjectConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObjectConvertible.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 		69ABD0DC1DB3938500CB925C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				69545E791DFB00C60050A588 /* launch.png */,
 				698319841DD7E2EA0091ED64 /* iTunesArtwork */,
 				698319851DD7E2EA0091ED64 /* iTunesArtwork@2x */,
 				69769AEB1DE2203700DF2747 /* LaunchScreen.storyboard */,
@@ -300,6 +303,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69545E7A1DFB00C60050A588 /* launch.png in Resources */,
 				698319871DD7E2EA0091ED64 /* iTunesArtwork@2x in Resources */,
 				69AB4B321DD676890014B996 /* .swiftlint.yml in Resources */,
 				69ABD0D01DB391E100CB925C /* Assets.xcassets in Resources */,
