@@ -48,7 +48,7 @@ final class CardsViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //TODO: Fetched results controller?
+        //FIXME: After adding new card this fetch doesn't return newly added card. Use NSManagedObjectContextDidSaveNotification ?
         worker.get() {
             [weak self](result: Result<[Card]>) in
             switch result {
