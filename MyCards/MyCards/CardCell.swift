@@ -10,7 +10,6 @@ import UIKit
 class CardCell: UICollectionViewCell, IndexedCell {
 
     fileprivate let nameLabel: UILabel
-//    fileprivate let effectView: UIVisualEffectView
     fileprivate let imageView: UIImageView
     fileprivate let tappableView: TappableView
 
@@ -38,7 +37,6 @@ class CardCell: UICollectionViewCell, IndexedCell {
     override init(frame: CGRect) {
         nameLabel = UILabel(frame: .zero)
         imageView = UIImageView(frame: .zero)
-//        effectView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
         tappableView = TappableView(frame: .zero)
         super.init(frame: frame)
         configureViews()
@@ -60,7 +58,6 @@ class CardCell: UICollectionViewCell, IndexedCell {
 extension CardCell {
     fileprivate func configureViews() {
         tappableView.contentView.addSubview(imageView)
-//        tappableView.contentView.addSubview(effectView)
         tappableView.contentView.addSubview(nameLabel)
         contentView.addSubview(tappableView)
 
@@ -76,7 +73,6 @@ extension CardCell {
         tappableView.contentView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         var constraints: [NSLayoutConstraint] = []
         constraints += NSLayoutConstraint.centeredInSuperview(nameLabel)
-//        constraints += NSLayoutConstraint.filledInSuperview(effectView)
         constraints += NSLayoutConstraint.filledInSuperview(imageView)
         constraints += NSLayoutConstraint.filledInSuperview(tappableView)
         NSLayoutConstraint.activate(constraints)

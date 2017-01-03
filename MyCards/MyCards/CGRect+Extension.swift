@@ -20,9 +20,9 @@ extension CGRect {
         let height = rect.size.height
         let line = UIBezierPath()
         line.move(to: rect.origin)
-        line.addLine(to: CGPoint(x: x+width, y: y+height))
-        line.move(to: CGPoint(x: x+width, y: y))
-        line.addLine(to: CGPoint(x: x, y: y+height))
+        line.addLine(to: CGPoint(x: x + width, y: y + height))
+        line.move(to: CGPoint(x: x + width, y: y))
+        line.addLine(to: CGPoint(x: x, y: y + height))
         return line.cgPath
     }
 }
