@@ -3,7 +3,6 @@
 //  MyCards
 //
 //  Created by Maciej Piotrowski on 04/12/16.
-//  Copyright © 2016 Maciej Piotrowski. All rights reserved.
 //
 
 import UIKit
@@ -63,7 +62,7 @@ final class CardPhotoViewController: HiddenStatusBarViewController {
             ]
 
         let metrics: [String: CGFloat]  = [
-            "padding":20,
+            "padding": 20,
             "closeButtonHeight": 40,
             "closeButtonWidth": 40,
             "hPadding": 30,

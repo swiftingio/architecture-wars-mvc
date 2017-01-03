@@ -3,7 +3,6 @@
 //  MyCards
 //
 //  Created by Maciej Piotrowski on 23/11/16.
-//  Copyright © 2016 Maciej Piotrowski. All rights reserved.
 //
 
 import UIKit
@@ -71,7 +70,7 @@ class PreviewView: UIView {
         let metrics: [String: CGFloat]  = [
             "photoButtonHeight": 80,
             "photoButtonWidth": 60,
-            "padding":20,
+            "padding": 20,
             "closeButtonHeight": 40,
             "closeButtonWidth": 40,
             "outlinePadX": .cardOffsetX,

@@ -21,7 +21,7 @@ final class CoreDataService: CoreDataServiceProtocol {
 
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "DataModel")
-        container.loadPersistentStores(completionHandler: { [weak self](storeDescription, error) in
+        container.loadPersistentStores(completionHandler: { [weak self](_, error) in
             if let error = error {
                 NSLog("CoreData error \(error), \(error._userInfo)")
                 self?.errorHandler(error)

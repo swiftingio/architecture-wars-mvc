@@ -3,7 +3,6 @@
 //  MyCards
 //
 //  Created by Maciej Piotrowski on 16/10/16.
-//  Copyright © 2016 Maciej Piotrowski. All rights reserved.
 //
 
 import UIKit
@@ -48,16 +47,17 @@ final class CardsViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //FIXME: After adding new card this fetch doesn't return newly added card. Use NSManagedObjectContextDidSaveNotification ?
-        worker.get() {
-            [weak self](result: Result<[Card]>) in
+        /*FIXME: 
+         After adding new card this fetch doesn't return newly added card.
+         Use NSManagedObjectContextDidSaveNotification ?
+         */
+        worker.get { [weak self] (result: Result<[Card]>) in
             switch result {
             case .failure(_): break
             case .success(let cards):
                 self?.cards = cards
                 self?.reloadData()
             }
-
         }
     }
 
