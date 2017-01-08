@@ -24,6 +24,7 @@ class CropViewController: HiddenStatusBarViewController {
     fileprivate let closeButton = CloseButton(frame: .zero)
     fileprivate let backgroundImageView: UIImageView = UIImageView(frame: .zero)
     fileprivate let visualEffectView: UIVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    fileprivate let  captureButton = PhotoCameraButton(frame: .zero)
 
     init(image: UIImage) {
         imageView.image = UIImage(cgImage: image.cgImage!, scale: 1, orientation: .right)
@@ -39,8 +40,11 @@ class CropViewController: HiddenStatusBarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         closeButton.tapped = { [unowned self] in
+            self.dismiss()
+        }
+        captureButton.tapped = { [unowned self] in
             self.process().flatMap {
-            self.delegate?.cropViewController(self, didCropPhoto: $0)
+                self.delegate?.cropViewController(self, didCropPhoto: $0)
             }
             self.dismiss()
         }
@@ -56,6 +60,7 @@ class CropViewController: HiddenStatusBarViewController {
         outline.addSubview(scrollView)
         scrollView.addSubview(imageView)
         view.addSubview(closeButton)
+        view.addSubview(captureButton)
     }
 
     private func configureViews() {
@@ -69,6 +74,9 @@ class CropViewController: HiddenStatusBarViewController {
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.isScrollEnabled = true
         scrollView.contentSize = imageView.intrinsicContentSize
+        let rotate = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
+        captureButton.transform = rotate
+        closeButton.transform = rotate
     }
 
     fileprivate func configureConstraints() {
@@ -79,6 +87,7 @@ class CropViewController: HiddenStatusBarViewController {
         let views: [String: Any] = [
             "closeButton": closeButton,
             "outline": outline,
+            "photoButton": captureButton,
             ]
 
         let metrics: [String: CGFloat]  = [
@@ -92,12 +101,15 @@ class CropViewController: HiddenStatusBarViewController {
             ]
 
         let visual = [
+            "V:[photoButton(photoButtonWidth)]-(padding)-|",
+            "H:[photoButton(photoButtonHeight)]",
             "V:|-(padding)-[closeButton(closeButtonHeight)]",
             "H:[closeButton(closeButtonWidth)]-(padding)-|",
             "H:|-(outlinePadY)-[outline]-(outlinePadY)-|",
             ]
 
         var constraints: [NSLayoutConstraint] = NSLayoutConstraint.centeredInSuperview(outline)
+        constraints.append(NSLayoutConstraint.centeredHorizontallyInSuperview(captureButton))
         constraints += NSLayoutConstraint.filledInSuperview(scrollView)
         constraints.append(NSLayoutConstraint(item: outline, attribute:
             .height, relatedBy: .equal, toItem: outline, attribute:
