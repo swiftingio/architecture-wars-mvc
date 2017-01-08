@@ -25,6 +25,7 @@
 		69769AEE1DE2324D00DF2747 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AED1DE2324D00DF2747 /* UIColor+Extension.swift */; };
 		69769AF01DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AEF1DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift */; };
 		69769AF21DE241D100DF2747 /* UIImagePickerController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */; };
+		6976F6E01E22F75300EA7B43 /* NotificationCenter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976F6DF1E22F75300EA7B43 /* NotificationCenter+Extension.swift */; };
 		698319861DD7E2EA0091ED64 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 698319841DD7E2EA0091ED64 /* iTunesArtwork */; };
 		698319871DD7E2EA0091ED64 /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = 698319851DD7E2EA0091ED64 /* iTunesArtwork@2x */; };
 		698319891DD9134F0091ED64 /* PhotoCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698319881DD9134F0091ED64 /* PhotoCamera.swift */; };
@@ -71,6 +72,7 @@
 		69769AED1DE2324D00DF2747 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		69769AEF1DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerControllerSourceType+Extension.swift"; sourceTree = "<group>"; };
 		69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerController+Extension.swift"; sourceTree = "<group>"; };
+		6976F6DF1E22F75300EA7B43 /* NotificationCenter+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Extension.swift"; sourceTree = "<group>"; };
 		698319841DD7E2EA0091ED64 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		698319851DD7E2EA0091ED64 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
 		698319881DD9134F0091ED64 /* PhotoCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCamera.swift; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				694A73F31DF4972700424107 /* UIViewController+Extension.swift */,
 				69D170771DF5775D009E5710 /* CGFloat+Extension.swift */,
 				69D170791DF579C5009E5710 /* UINavigationController+Extension.swift */,
+				6976F6DF1E22F75300EA7B43 /* NotificationCenter+Extension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -365,6 +368,7 @@
 				693A44C71DD7422700EDCABA /* String+Localized.swift in Sources */,
 				69ABD0CE1DB391E100CB925C /* DataModel.xcdatamodeld in Sources */,
 				69AB4B2C1DD66F190014B996 /* NSObject+Builder.swift in Sources */,
+				6976F6E01E22F75300EA7B43 /* NotificationCenter+Extension.swift in Sources */,
 				6965BB671DF7E7BC009F9CBC /* ManagedObjectConvertible.swift in Sources */,
 				69769AF21DE241D100DF2747 /* UIImagePickerController+Extension.swift in Sources */,
 				6967D4271DFAC163001A073B /* CropViewConttroller.swift in Sources */,

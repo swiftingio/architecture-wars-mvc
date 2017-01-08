@@ -18,24 +18,34 @@ protocol IndexedCellDelegate: class {
 final class CardsViewController: UIViewController {
 
     fileprivate let worker: CoreDataWorkerProtocol
+    fileprivate let notificationCenter: NotificationCenterProtocol
     fileprivate lazy var cards: [Card] = []
-
     fileprivate var emptyScreen: UIImageView!
     fileprivate var collectionView: UICollectionView!
     fileprivate let reuseIdentifier: String = String(describing: CardCell.self)
+    fileprivate var observer: NSObjectProtocol?
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
     override var shouldAutorotate: Bool { return false }
 
-    init(worker: CoreDataWorkerProtocol = CoreDataWorker()) {
+    init(worker: CoreDataWorkerProtocol = CoreDataWorker(),
+         notificationCenter: NotificationCenterProtocol = NotificationCenter.default) {
         self.worker = worker
+        self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
         self.title = .MyCards
+        observer = notificationCenter.observeChanges(for: CardMO.self) { [weak self] in
+            self?.getCards()
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("NSCoding not supported")
+    }
+
+    deinit {
+        observer.flatMap { notificationCenter.removeObserver($0) }
     }
 
     override func viewDidLoad() {
@@ -43,14 +53,10 @@ final class CardsViewController: UIViewController {
         configureNavigationItem()
         configureViews()
         configureConstraints()
+        getCards()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        /*FIXME: 
-         After adding new card this fetch doesn't return newly added card.
-         Use NSManagedObjectContextDidSaveNotification ?
-         */
+    func getCards() {
         worker.get { [weak self] (result: Result<[Card]>) in
             switch result {
             case .failure(_): break
