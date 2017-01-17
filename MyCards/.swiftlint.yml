@@ -3,6 +3,7 @@ disabled_rules: # rule identifiers to exclude from running
 - missing_docs
 - type_name # Swift 3 suggests lowercase enum cases
 - nesting
+- trailing_comma
 opt_in_rules: # some rules are only opt-in
   - empty_count
   - cyclomatic_complexity
@@ -11,11 +12,12 @@ opt_in_rules: # some rules are only opt-in
   - overridden_super_call
   - redundant_nil_coalesing
   - private_outlet
+  - file_header
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - DerivedData
 # binary rules can set their severity level
-force_cast: error
-force_try: error
+force_cast: warning
+force_try: warning
 line_length: 120
 type_body_length:
   - 300 # warning
