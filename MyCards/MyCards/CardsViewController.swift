@@ -186,7 +186,6 @@ extension CardsViewController: UICollectionViewDataSource {
             else { return UICollectionViewCell() }
 
         //TODO: use smaller images / thumbnails
-        cell.name = card.name
         cell.image = card.front ?? #imageLiteral(resourceName: "background")
         cell.indexPath = indexPath
         cell.delegate = self

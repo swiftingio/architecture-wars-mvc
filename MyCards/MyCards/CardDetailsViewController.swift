@@ -9,6 +9,11 @@ import UIKit
 
 final class CardDetailsViewController: UIViewController {
 
+    override var shouldAutorotate: Bool { return false }
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
     fileprivate var history: [Card] = []
     fileprivate var card: Card {
         didSet {
@@ -18,23 +23,19 @@ final class CardDetailsViewController: UIViewController {
             doneButton.isEnabled = card.isValid
         }
     }
-    fileprivate let worker: CoreDataWorkerProtocol
     fileprivate var mode: Mode {
         didSet {
             configureNavigationItem()
             configureModeForViews()
         }
     }
+    fileprivate let worker: CoreDataWorkerProtocol
 
+    // MARK: Views
     fileprivate var name: UITextField!
     fileprivate var front: CardView!
     fileprivate var back: CardView!
     fileprivate var takingPhotoFor: Card.Side?
-    override var shouldAutorotate: Bool { return false }
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
-    fileprivate let createNew: Bool
     fileprivate var editButton: UIBarButtonItem!
     fileprivate var deleteButton: UIBarButtonItem!
     fileprivate var cancelButton: UIBarButtonItem!
@@ -42,13 +43,11 @@ final class CardDetailsViewController: UIViewController {
     fileprivate let toolbar = UIToolbar(frame: .zero)
 
     init(card: Card?, worker: CoreDataWorkerProtocol = CoreDataWorker()) {
-        createNew = card == nil
         self.card = card ?? Card(name: "")
         self.worker = worker
-        self.mode = !createNew ? .normal : .edit
+        self.mode = card == nil ? .create : .normal
         self.history.append(self.card)
         super.init(nibName: nil, bundle: nil)
-        self.title = createNew ? .AddNewCard : .CardDetails
         editButton = UIBarButtonItem(barButtonSystemItem:
             .edit, target: self, action: #selector(editTapped))
         deleteButton = UIBarButtonItem(barButtonSystemItem:
@@ -120,24 +119,25 @@ extension CardDetailsViewController {
     }
 
     fileprivate func configureNavigationItem() {
+        title = mode == .create ? .AddNewCard : .CardDetails
         doneButton.isEnabled = card.isValid
         switch mode {
         case .normal:
             navigationItem.rightBarButtonItems = [editButton]
-        case .edit:
+        case .edit, .create:
             navigationItem.rightBarButtonItems = [doneButton]
         }
         navigationItem.leftBarButtonItem = cancelButton
     }
 
     fileprivate func configureModeForViews() {
-        let editMode = mode == .edit
+        let editMode = mode != .normal
         name.resignFirstResponder()
         name.isUserInteractionEnabled = editMode
         name.placeholder = editMode ? .EnterCardName : .NoName
         front.photoCamera.isHidden = !editMode
         back.photoCamera.isHidden = !editMode
-        toolbar.isHidden = createNew || !editMode
+        toolbar.isHidden = !(mode == .edit)
     }
 
     fileprivate func makeNameField() -> UITextField {
@@ -162,12 +162,10 @@ extension CardDetailsViewController {
             guard let strongSelf = self, error == nil else { return }
             strongSelf.history.append(strongSelf.card)
         }
-        if createNew {
-            dismiss()
-        } else {
-            mode = .normal
+        switch mode {
+        case .create: dismiss()
+        default: mode = .normal
         }
-
     }
 
     @objc fileprivate func removeTapped() {
@@ -178,9 +176,9 @@ extension CardDetailsViewController {
     }
 
     @objc fileprivate func cancelTapped() {
-        if createNew || mode == .normal {
-            dismiss()
-        } else {
+        switch mode {
+        case .create, .normal: dismiss()
+        case .edit:
             history.last.flatMap { card = $0 }
             mode = .normal
         }
@@ -200,14 +198,14 @@ extension CardDetailsViewController {
 
     fileprivate func frontTapped() {
         switch mode {
-        case .edit: showImagePickerSources(for: .front)
+        case .edit, .create: showImagePickerSources(for: .front)
         case .normal: showImage(for: .front)
         }
     }
 
     fileprivate func backTapped() {
         switch mode {
-        case .edit: showImagePickerSources(for: .back)
+        case .edit, .create: showImagePickerSources(for: .back)
         case .normal: showImage(for: .back)
         }
     }
@@ -288,6 +286,7 @@ extension CardDetailsViewController {
     enum Mode {
         case normal
         case edit
+        case create
     }
 }
 
