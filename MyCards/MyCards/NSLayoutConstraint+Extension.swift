@@ -26,13 +26,15 @@ extension NSLayoutConstraint {
             view.superview!, attribute: .centerY, multiplier: 1, constant: 0)
     }
 
-    class func filledInSuperview(_ view: UIView) -> [NSLayoutConstraint] {
+    class func filledInSuperview(_ view: UIView, padding: CGFloat? = nil) -> [NSLayoutConstraint] {
         let views = ["view": view]
+        var metrics: [String: Any] = ["pad": 0]
+        padding.map { metrics["pad"] = $0 }
         var constraints: [NSLayoutConstraint] = []
         constraints += NSLayoutConstraint.constraints(withVisualFormat:
-            "V:|[view]|", options: [], metrics: nil, views: views)
+            "V:|-(==pad)-[view]-(==pad)-|", options: [], metrics: metrics, views: views)
         constraints += NSLayoutConstraint.constraints(withVisualFormat:
-            "H:|[view]|", options: [], metrics: nil, views: views)
+            "H:|-(==pad)-[view]-(==pad)-|", options: [], metrics: metrics, views: views)
         return constraints
     }
 }

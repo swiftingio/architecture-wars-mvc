@@ -87,6 +87,7 @@ extension CardsViewController {
 
     fileprivate func configureViews() {
         view.backgroundColor = . white
+        view.clipsToBounds = true
 
         emptyScreen = makeEmptyScreen()
         view.addSubview(emptyScreen)
@@ -98,7 +99,7 @@ extension CardsViewController {
     fileprivate func configureConstraints() {
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         var constraints: [NSLayoutConstraint] = []
-        constraints += NSLayoutConstraint.centeredInSuperview(emptyScreen)
+        constraints += NSLayoutConstraint.filledInSuperview(emptyScreen, padding: 60)
         constraints += NSLayoutConstraint.filledInSuperview(collectionView)
         NSLayoutConstraint.activate(constraints)
     }
@@ -131,7 +132,9 @@ extension CardsViewController {
     }
 
     fileprivate func makeEmptyScreen() -> UIImageView {
-        let emptyScreen = UIImageView(image: #imageLiteral(resourceName: "bluebird"))
+        let emptyScreen = UIImageView(image: #imageLiteral(resourceName: "MyCards"))
+        emptyScreen.contentMode = .scaleAspectFit
+        emptyScreen.clipsToBounds = true
         emptyScreen.alpha = cards.isEmpty ? 1.0 : 0.0
         return emptyScreen
     }
