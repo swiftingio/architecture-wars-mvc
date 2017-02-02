@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		69183D411DE653420026C1DF /* PhotoCameraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69183D401DE653420026C1DF /* PhotoCameraButton.swift */; };
 		69183D431DE653710026C1DF /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69183D421DE653710026C1DF /* CloseButton.swift */; };
+		691D7D0D1E436E5F00E53AF1 /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = 691D7D0C1E436E5600E53AF1 /* iTunesArtwork@2x */; };
+		691D7D0E1E436E6100E53AF1 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 691D7D0B1E436E4D00E53AF1 /* iTunesArtwork */; };
 		693A2F601DE4D19F00975FA1 /* PhotoCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A2F5F1DE4D19F00975FA1 /* PhotoCaptureViewController.swift */; };
 		693A44C71DD7422700EDCABA /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A44C61DD7422700EDCABA /* String+Localized.swift */; };
 		693A44C91DD7944B00EDCABA /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A44C81DD7944B00EDCABA /* CardView.swift */; };
 		693A44CB1DD7D9CE00EDCABA /* TappableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A44CA1DD7D9CE00EDCABA /* TappableView.swift */; };
 		694A73F21DF496FE00424107 /* AVCaptureDevice+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694A73F11DF496FE00424107 /* AVCaptureDevice+Extension.swift */; };
 		694A73F41DF4972700424107 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694A73F31DF4972700424107 /* UIViewController+Extension.swift */; };
-		69545E7A1DFB00C60050A588 /* launch.png in Resources */ = {isa = PBXBuildFile; fileRef = 69545E791DFB00C60050A588 /* launch.png */; };
 		6965BB621DF7E0E8009F9CBC /* CardMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965BB601DF7E0E8009F9CBC /* CardMO+CoreDataClass.swift */; };
 		6965BB631DF7E0E8009F9CBC /* CardMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965BB611DF7E0E8009F9CBC /* CardMO+CoreDataProperties.swift */; };
 		6965BB671DF7E7BC009F9CBC /* ManagedObjectConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965BB651DF7E7BC009F9CBC /* ManagedObjectConvertible.swift */; };
@@ -26,8 +27,6 @@
 		69769AF01DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AEF1DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift */; };
 		69769AF21DE241D100DF2747 /* UIImagePickerController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */; };
 		6976F6E01E22F75300EA7B43 /* NotificationCenter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976F6DF1E22F75300EA7B43 /* NotificationCenter+Extension.swift */; };
-		698319861DD7E2EA0091ED64 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 698319841DD7E2EA0091ED64 /* iTunesArtwork */; };
-		698319871DD7E2EA0091ED64 /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = 698319851DD7E2EA0091ED64 /* iTunesArtwork@2x */; };
 		698319891DD9134F0091ED64 /* PhotoCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698319881DD9134F0091ED64 /* PhotoCamera.swift */; };
 		6991C0751DE6488E00442B8E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6991C0741DE6488E00442B8E /* PreviewView.swift */; };
 		699795491DEB631500CB408F /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699795481DEB631500CB408F /* CGRect+Extension.swift */; };
@@ -56,13 +55,14 @@
 /* Begin PBXFileReference section */
 		69183D401DE653420026C1DF /* PhotoCameraButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCameraButton.swift; sourceTree = "<group>"; };
 		69183D421DE653710026C1DF /* CloseButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloseButton.swift; sourceTree = "<group>"; };
+		691D7D0B1E436E4D00E53AF1 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = SOURCE_ROOT; };
+		691D7D0C1E436E5600E53AF1 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = SOURCE_ROOT; };
 		693A2F5F1DE4D19F00975FA1 /* PhotoCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCaptureViewController.swift; sourceTree = "<group>"; };
 		693A44C61DD7422700EDCABA /* String+Localized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Localized.swift"; sourceTree = "<group>"; };
 		693A44C81DD7944B00EDCABA /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		693A44CA1DD7D9CE00EDCABA /* TappableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TappableView.swift; sourceTree = "<group>"; };
 		694A73F11DF496FE00424107 /* AVCaptureDevice+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AVCaptureDevice+Extension.swift"; sourceTree = "<group>"; };
 		694A73F31DF4972700424107 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
-		69545E791DFB00C60050A588 /* launch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launch.png; sourceTree = "<group>"; };
 		6965BB601DF7E0E8009F9CBC /* CardMO+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CardMO+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6965BB611DF7E0E8009F9CBC /* CardMO+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CardMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		6965BB651DF7E7BC009F9CBC /* ManagedObjectConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObjectConvertible.swift; sourceTree = "<group>"; };
@@ -73,8 +73,6 @@
 		69769AEF1DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerControllerSourceType+Extension.swift"; sourceTree = "<group>"; };
 		69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerController+Extension.swift"; sourceTree = "<group>"; };
 		6976F6DF1E22F75300EA7B43 /* NotificationCenter+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Extension.swift"; sourceTree = "<group>"; };
-		698319841DD7E2EA0091ED64 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
-		698319851DD7E2EA0091ED64 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
 		698319881DD9134F0091ED64 /* PhotoCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCamera.swift; sourceTree = "<group>"; };
 		6991C0741DE6488E00442B8E /* PreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		699795481DEB631500CB408F /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
@@ -162,9 +160,8 @@
 		69ABD0DC1DB3938500CB925C /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				69545E791DFB00C60050A588 /* launch.png */,
-				698319841DD7E2EA0091ED64 /* iTunesArtwork */,
-				698319851DD7E2EA0091ED64 /* iTunesArtwork@2x */,
+				691D7D0C1E436E5600E53AF1 /* iTunesArtwork@2x */,
+				691D7D0B1E436E4D00E53AF1 /* iTunesArtwork */,
 				69769AEB1DE2203700DF2747 /* LaunchScreen.storyboard */,
 				69AB4B311DD676890014B996 /* .swiftlint.yml */,
 				69ABD0CF1DB391E100CB925C /* Assets.xcassets */,
@@ -306,12 +303,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				69545E7A1DFB00C60050A588 /* launch.png in Resources */,
-				698319871DD7E2EA0091ED64 /* iTunesArtwork@2x in Resources */,
+				691D7D0D1E436E5F00E53AF1 /* iTunesArtwork@2x in Resources */,
+				691D7D0E1E436E6100E53AF1 /* iTunesArtwork in Resources */,
 				69AB4B321DD676890014B996 /* .swiftlint.yml in Resources */,
 				69ABD0D01DB391E100CB925C /* Assets.xcassets in Resources */,
 				69769AEC1DE2203700DF2747 /* LaunchScreen.storyboard in Resources */,
-				698319861DD7E2EA0091ED64 /* iTunesArtwork in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
