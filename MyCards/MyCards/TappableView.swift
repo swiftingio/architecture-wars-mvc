@@ -7,34 +7,24 @@
 
 import UIKit
 
+struct AnimationState {
+    var performed: Bool = false
+    var restoration: CGAffineTransform = .identity
+}
+
 class TappableView: UIView {
 
     fileprivate var touchingDownInside: Bool = false
-    fileprivate var forceTouchDownInside: Bool = false
-    fileprivate var alreadyTapped: Bool = false
-    fileprivate var dimmedView: UIView!
-    fileprivate var label: UILabel!
-    fileprivate var previousTransform: CGAffineTransform = .identity
-
+    fileprivate let dimmedView: UIView
+    fileprivate var animationState = AnimationState()
+    let contentView: UIView
     var tapped: (() -> Void)?
-    var forceTapped: (() -> Void)?
 
-    var contentView: UIView!
-
-    var text: String? {
-        set {
-            label.text = newValue
-        }
-        get {
-            return label.text
-        }
-    }
     convenience init() {
         self.init(frame: .zero)
     }
 
     override init(frame: CGRect) {
-        label = UILabel(frame: .zero)
         contentView = UIView(frame: .zero)
         dimmedView = UIView(frame: .zero)
         super.init(frame: frame)
@@ -72,10 +62,6 @@ class TappableView: UIView {
         addSubview(contentView)
         contentView.clipsToBounds = true
         addSubview(dimmedView)
-        addSubview(label)
-        label.textColor = .white
-        label.font = UIFont.preferredFont(forTextStyle: .caption2)
-        label.numberOfLines = 0
         clipsToBounds = true
     }
 
@@ -84,7 +70,6 @@ class TappableView: UIView {
         var constraints: [NSLayoutConstraint] = []
         constraints += NSLayoutConstraint.filledInSuperview(contentView)
         constraints += NSLayoutConstraint.filledInSuperview(dimmedView)
-        constraints += NSLayoutConstraint.centeredInSuperview(label)
         NSLayoutConstraint.activate(constraints)
     }
 }
@@ -97,10 +82,6 @@ extension TappableView {
         touchingDownInside = boundsContain(touches)
         if touchingDownInside {
             animateTap()
-            if forceTouchAvailable(),
-                let touch = touches.first {
-                forceTouchDownInside = touch.force == touch.maximumPossibleForce
-            }
         } else {
             undoTapAnimation()
         }
@@ -108,9 +89,7 @@ extension TappableView {
 
     fileprivate func touchesUp(_ touches: Set<UITouch>? = nil) {
         undoTapAnimation()
-        if forceTouchAvailable() && forceTouchDownInside {
-            forceTapped?()
-        } else if touchingDownInside {
+        if touchingDownInside {
             tapped?()
         }
         clearTouchDownInside()
@@ -118,7 +97,6 @@ extension TappableView {
 
     fileprivate func clearTouchDownInside() {
         touchingDownInside = false
-        forceTouchDownInside = false
     }
 
     fileprivate func boundsContain(_ touches: Set<UITouch>) -> Bool {
@@ -130,23 +108,23 @@ extension TappableView {
     }
 
     fileprivate func animateTap() {
-        guard !alreadyTapped else { return }
-        alreadyTapped = true
-        previousTransform = transform
+        guard !animationState.performed else { return }
+        animationState.performed = true
+        animationState.restoration = transform
         UIView.animate(withDuration: 0.2) {
             let scale: CGFloat = 0.8
-            self.transform = self.previousTransform.concatenating(CGAffineTransform(scaleX: scale, y: scale))
+            self.transform = self.animationState.restoration.concatenating(CGAffineTransform(scaleX: scale, y: scale))
             self.dimmedView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
         }
     }
 
     fileprivate func undoTapAnimation() {
-        guard alreadyTapped else { return }
-        alreadyTapped = false
+        guard animationState.performed else { return }
+        animationState.performed = false
         UIView.animate(withDuration: 0.2) {
-            self.transform = self.previousTransform
+            self.transform = self.animationState.restoration
             self.dimmedView.backgroundColor = nil
         }
-        previousTransform = .identity
+        animationState.restoration = .identity
     }
 }

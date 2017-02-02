@@ -154,11 +154,11 @@ extension CardsViewController {
     }
 
     @objc fileprivate func addTapped(sender: UIBarButtonItem) {
-        showDetails(of: nil)
+        showDetails(of: Card(name: ""), mode: .create)
     }
 
-    fileprivate func showDetails(of card: Card?) {
-        let viewController = CardDetailsViewController(card: card)
+    fileprivate func showDetails(of card: Card, mode: CardDetailsViewController.Mode = .normal) {
+        let viewController = CardDetailsViewController(card: card, mode: mode)
         let navigationController = UINavigationController(rootViewController: viewController)
         present(navigationController, animated: true, completion: nil)
     }
@@ -186,7 +186,6 @@ extension CardsViewController: UICollectionViewDataSource {
             else { return UICollectionViewCell() }
 
         //TODO: use smaller images / thumbnails
-        cell.name = card.name
         cell.image = card.front ?? #imageLiteral(resourceName: "background")
         cell.indexPath = indexPath
         cell.delegate = self

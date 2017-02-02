@@ -9,12 +9,14 @@ import UIKit
 import AVFoundation
 
 protocol PhotoCaptureViewControllerDelegate: class {
-    func photoCaptureViewController(_ viewController: PhotoCaptureViewController, didTakePhoto photo: UIImage)
+    func photoCaptureViewController(_ viewController: PhotoCaptureViewController, didTakePhoto
+        photo: UIImage, for side: Card.Side)
 }
 
 final class PhotoCaptureViewController: HiddenStatusBarViewController {
 
     weak var delegate: PhotoCaptureViewControllerDelegate?
+    let side: Card.Side
     fileprivate let previewView = PreviewView()
 
     // MARK: AVFoundation components
@@ -23,6 +25,15 @@ final class PhotoCaptureViewController: HiddenStatusBarViewController {
     fileprivate let queue = DispatchQueue(label: "AV Session Queue", attributes: [], target: nil)
     fileprivate var authorizationStatus: AVAuthorizationStatus {
         return AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+    }
+
+    init(side: Card.Side) {
+        self.side = side
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: Lifecycle
@@ -141,6 +152,7 @@ extension PhotoCaptureViewController {
 
 extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
 
+    // codebeat:disable[ARITY]
     //swiftlint:disable function_parameter_count
     //swiftlint:disable line_length
     @objc(captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:)
@@ -157,10 +169,11 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
             let photo = process(data)
             else { print("Error capturing photo: \(error)"); return }
 
-        delegate?.photoCaptureViewController(self, didTakePhoto: photo)
+        delegate?.photoCaptureViewController(self, didTakePhoto: photo, for: side)
     }
     //swiftlint:enable function_parameter_count
     //swiftlint:enable line_length
+    // codebeat:enable[ARITY]
 
     private func process(_ data: Data) -> UIImage? {
         guard let image = UIImage(data: data)?.cgImage else { return nil }
