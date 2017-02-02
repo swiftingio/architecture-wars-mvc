@@ -7,6 +7,21 @@
 
 import UIKit
 
+final class ImagePickerController: UIImagePickerController {
+    var side: Card.Side?
+}
+
+extension UITextField {
+    fileprivate class func makeNameField() -> UITextField {
+        let name = UITextField()
+        name.autocorrectionType = .no
+        name.autocapitalizationType = .none
+        name.placeholder = .EnterCardName
+        name.returnKeyType = .done
+        return name
+    }
+}
+
 final class CardDetailsViewController: UIViewController {
 
     override var shouldAutorotate: Bool { return false }
@@ -32,30 +47,25 @@ final class CardDetailsViewController: UIViewController {
     fileprivate let worker: CoreDataWorkerProtocol
 
     // MARK: Views
+    // codebeat:disable[TOO_MANY_IVARS]
     fileprivate var name: UITextField!
     fileprivate var front: CardView!
     fileprivate var back: CardView!
-    fileprivate var takingPhotoFor: Card.Side?
     fileprivate var editButton: UIBarButtonItem!
-    fileprivate var deleteButton: UIBarButtonItem!
     fileprivate var cancelButton: UIBarButtonItem!
     fileprivate var doneButton: UIBarButtonItem!
+    fileprivate var deleteButton: UIBarButtonItem!
     fileprivate let toolbar = UIToolbar(frame: .zero)
+    // codebeat:enable[TOO_MANY_IVARS]
 
-    init(card: Card?, worker: CoreDataWorkerProtocol = CoreDataWorker()) {
-        self.card = card ?? Card(name: "")
+    init(card: Card,
+         mode: Mode = .normal,
+         worker: CoreDataWorkerProtocol = CoreDataWorker()) {
+        self.card = card
         self.worker = worker
-        self.mode = card == nil ? .create : .normal
+        self.mode = mode
         self.history.append(self.card)
         super.init(nibName: nil, bundle: nil)
-        editButton = UIBarButtonItem(barButtonSystemItem:
-            .edit, target: self, action: #selector(editTapped))
-        deleteButton = UIBarButtonItem(barButtonSystemItem:
-            .trash, target: self, action: #selector(removeTapped))
-        cancelButton = UIBarButtonItem(barButtonSystemItem:
-            .cancel, target: self, action: #selector(cancelTapped))
-        doneButton = UIBarButtonItem(barButtonSystemItem:
-            .done, target: self, action: #selector(doneTapped))
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -64,23 +74,34 @@ final class CardDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        makeAndConfigureViews()
         configureNavigationItem()
-        configureViews()
         configureModeForViews()
         configureConstraints()
     }
 }
 
 extension CardDetailsViewController {
-    fileprivate func configureViews() {
+    fileprivate func makeAndConfigureViews() {
+        editButton = UIBarButtonItem(barButtonSystemItem:
+            .edit, target: self, action: #selector(editTapped))
+        deleteButton = UIBarButtonItem(barButtonSystemItem:
+            .trash, target: self, action: #selector(removeTapped))
+        cancelButton = UIBarButtonItem(barButtonSystemItem:
+            .cancel, target: self, action: #selector(cancelTapped))
+        doneButton = UIBarButtonItem(barButtonSystemItem:
+            .done, target: self, action: #selector(doneTapped))
+
         view.backgroundColor = .white
-        name = makeNameField()
+        name = UITextField.makeNameField()
         name.text = card.name
+        name.delegate = self
+        name.addTarget(self, action: #selector(nameChanged(sender:)), for: .editingChanged)
         view.addSubview(name)
-        front = makeCardView(with: card.front)
+        front = CardView(image: card.front)
         front.tapped = { [unowned self] in self.frontTapped() }
         view.addSubview(front)
-        back = makeCardView(with: card.back)
+        back = CardView(image: card.back)
         back.tapped = { [unowned self] in self.backTapped() }
         view.addSubview(back)
         let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
@@ -138,22 +159,6 @@ extension CardDetailsViewController {
         front.photoCamera.isHidden = !editMode
         back.photoCamera.isHidden = !editMode
         toolbar.isHidden = !(mode == .edit)
-    }
-
-    fileprivate func makeNameField() -> UITextField {
-        let name = UITextField()
-        name.delegate = self
-        name.autocorrectionType = .no
-        name.autocapitalizationType = .none
-        name.placeholder = .EnterCardName
-        name.returnKeyType = .done
-        name.addTarget(self, action: #selector(nameChanged(sender:)), for: .editingChanged)
-        return name
-    }
-
-    fileprivate func makeCardView(with image: UIImage?) -> CardView {
-        let view = CardView(image: image)
-        return view
     }
 
     @objc fileprivate func doneTapped() {
@@ -221,8 +226,7 @@ extension CardDetailsViewController {
         actions.forEach { source in
             let action = UIAlertAction(title: source.description, style:
             .default) { [unowned self] _ in
-                self.showImagePicker(sourceType: source)
-                self.takingPhotoFor = side
+                self.showImagePicker(sourceType: source, for: side)
             }
             actionSheet.addAction(action)
         }
@@ -244,16 +248,17 @@ extension CardDetailsViewController {
         present(vc, animated: true, completion: nil)
     }
 
-    private func showImagePicker(sourceType: UIImagePickerControllerSourceType) {
+    private func showImagePicker(sourceType: UIImagePickerControllerSourceType, for side: Card.Side) {
         let imagePicker: UIViewController
         if sourceType == .camera {
-            imagePicker = PhotoCaptureViewController().with {
+            imagePicker = PhotoCaptureViewController(side: side).with {
                 $0.delegate = self
             }
         } else {
-            imagePicker = UIImagePickerController().with {
+            imagePicker = ImagePickerController().with {
                 $0.delegate = self
                 $0.view.backgroundColor = .white
+                $0.side = side
             }
         }
         present(imagePicker, animated: true, completion: nil)
@@ -294,8 +299,8 @@ extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigati
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [String : Any]) {
         guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage,
-            let _ = takingPhotoFor else { return }
-        showImageCropping(for: image)
+            let side = (picker as? ImagePickerController)?.side else { return }
+        showImageCropping(for: image, side: side)
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -307,8 +312,9 @@ extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigati
         viewController.title = .SelectCardPhoto
     }
 
-    fileprivate func showImageCropping(for image: UIImage = #imageLiteral(resourceName: "background")) {
-        let vc = CropViewController(image: image)
+    fileprivate func showImageCropping(for image: UIImage = #imageLiteral(resourceName: "background"),
+                                       side: Card.Side) {
+        let vc = CropViewController(image: image, side: side)
         vc.delegate = self
         dismiss(animated: true) {
             self.present(vc, animated: true, completion: nil)
@@ -318,20 +324,16 @@ extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigati
 
 extension CardDetailsViewController: PhotoCaptureViewControllerDelegate {
 
-    func photoCaptureViewController(_ viewController: PhotoCaptureViewController, didTakePhoto image: UIImage) {
-        guard
-            let side = takingPhotoFor else { return }
+    func photoCaptureViewController(_ viewController: PhotoCaptureViewController, didTakePhoto
+        image: UIImage, for side: Card.Side) {
         set(image, for: side)
-        takingPhotoFor = nil
         dismiss()
     }
 }
 
 extension CardDetailsViewController: CropViewControllerDelegate {
 
-    func cropViewController(_ viewController: CropViewController, didCropPhoto photo: UIImage) {
-        guard let side = takingPhotoFor else { return }
+    func cropViewController(_ viewController: CropViewController, didCropPhoto photo: UIImage, for side: Card.Side) {
         set(photo, for: side)
-        takingPhotoFor = nil
     }
 }

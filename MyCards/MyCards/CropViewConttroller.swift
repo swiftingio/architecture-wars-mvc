@@ -8,12 +8,15 @@
 import UIKit
 
 protocol CropViewControllerDelegate: class {
-    func cropViewController(_ viewController: CropViewController, didCropPhoto photo: UIImage)
+    func cropViewController(_ viewController: CropViewController, didCropPhoto photo: UIImage, for side: Card.Side)
 }
 
 class CropViewController: HiddenStatusBarViewController {
 
     weak var delegate: CropViewControllerDelegate?
+    fileprivate let side: Card.Side
+
+    // MARK: Views
     fileprivate let outline: UIView = UIView(frame: .zero).with { view in
         view.layer.cornerRadius = 10
         view.layer.borderWidth = 2
@@ -26,9 +29,10 @@ class CropViewController: HiddenStatusBarViewController {
     fileprivate let visualEffectView: UIVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     fileprivate let  captureButton = PhotoCameraButton(frame: .zero)
 
-    init(image: UIImage) {
+    init(image: UIImage, side: Card.Side) {
         imageView.image = UIImage(cgImage: image.cgImage!, scale: 1, orientation: .right)
         backgroundImageView.image = imageView.image
+        self.side = side
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -44,7 +48,7 @@ class CropViewController: HiddenStatusBarViewController {
         }
         captureButton.tapped = { [unowned self] in
             self.process().flatMap {
-                self.delegate?.cropViewController(self, didCropPhoto: $0)
+                self.delegate?.cropViewController(self, didCropPhoto: $0, for: self.side)
             }
             self.dismiss()
         }
