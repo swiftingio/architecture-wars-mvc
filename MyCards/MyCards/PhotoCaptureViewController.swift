@@ -141,6 +141,7 @@ extension PhotoCaptureViewController {
 
 extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
 
+    // codebeat:disable[ARITY]
     //swiftlint:disable function_parameter_count
     //swiftlint:disable line_length
     @objc(captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:)
@@ -161,6 +162,7 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
     }
     //swiftlint:enable function_parameter_count
     //swiftlint:enable line_length
+    // codebeat:enable[ARITY]
 
     private func process(_ data: Data) -> UIImage? {
         guard let image = UIImage(data: data)?.cgImage else { return nil }

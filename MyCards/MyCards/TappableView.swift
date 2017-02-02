@@ -12,29 +12,18 @@ class TappableView: UIView {
     fileprivate var touchingDownInside: Bool = false
     fileprivate var forceTouchDownInside: Bool = false
     fileprivate var alreadyTapped: Bool = false
-    fileprivate var dimmedView: UIView!
-    fileprivate var label: UILabel!
-    fileprivate var previousTransform: CGAffineTransform = .identity
 
+    fileprivate let dimmedView: UIView
+    fileprivate var previousTransform: CGAffineTransform = .identity
+    let contentView: UIView
     var tapped: (() -> Void)?
     var forceTapped: (() -> Void)?
 
-    var contentView: UIView!
-
-    var text: String? {
-        set {
-            label.text = newValue
-        }
-        get {
-            return label.text
-        }
-    }
     convenience init() {
         self.init(frame: .zero)
     }
 
     override init(frame: CGRect) {
-        label = UILabel(frame: .zero)
         contentView = UIView(frame: .zero)
         dimmedView = UIView(frame: .zero)
         super.init(frame: frame)
@@ -72,10 +61,6 @@ class TappableView: UIView {
         addSubview(contentView)
         contentView.clipsToBounds = true
         addSubview(dimmedView)
-        addSubview(label)
-        label.textColor = .white
-        label.font = UIFont.preferredFont(forTextStyle: .caption2)
-        label.numberOfLines = 0
         clipsToBounds = true
     }
 
@@ -84,7 +69,6 @@ class TappableView: UIView {
         var constraints: [NSLayoutConstraint] = []
         constraints += NSLayoutConstraint.filledInSuperview(contentView)
         constraints += NSLayoutConstraint.filledInSuperview(dimmedView)
-        constraints += NSLayoutConstraint.centeredInSuperview(label)
         NSLayoutConstraint.activate(constraints)
     }
 }
