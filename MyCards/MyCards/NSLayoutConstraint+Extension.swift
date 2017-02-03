@@ -8,24 +8,24 @@
 import UIKit
 
 extension NSLayoutConstraint {
-
+    
     class func centeredInSuperview(_ view: UIView) -> [NSLayoutConstraint] {
         return [
             centeredHorizontallyInSuperview(view),
             centeredVerticallyInSuperview(view)
         ]
     }
-
+    
     class func centeredHorizontallyInSuperview(_ view: UIView) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: view, attribute: .centerX, relatedBy: .equal, toItem:
             view.superview!, attribute: .centerX, multiplier: 1, constant: 0)
     }
-
+    
     class func centeredVerticallyInSuperview(_ view: UIView) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: view, attribute: .centerY, relatedBy: .equal, toItem:
             view.superview!, attribute: .centerY, multiplier: 1, constant: 0)
     }
-
+    
     class func filledInSuperview(_ view: UIView, padding: CGFloat? = nil) -> [NSLayoutConstraint] {
         let views = ["view": view]
         var metrics: [String: Any] = ["pad": 0]
@@ -36,5 +36,11 @@ extension NSLayoutConstraint {
         constraints += NSLayoutConstraint.constraints(withVisualFormat:
             "H:|-(==pad)-[view]-(==pad)-|", options: [], metrics: metrics, views: views)
         return constraints
+    }
+    
+    class func height2WidthCardRatio(for view: UIView) -> NSLayoutConstraint {
+        return NSLayoutConstraint(item: view, attribute:
+            .height, relatedBy: .equal, toItem: view, attribute:
+            .width, multiplier: .cardRatio, constant: 0)
     }
 }

@@ -11,6 +11,8 @@
 		69183D431DE653710026C1DF /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69183D421DE653710026C1DF /* CloseButton.swift */; };
 		691D7D0D1E436E5F00E53AF1 /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = 691D7D0C1E436E5600E53AF1 /* iTunesArtwork@2x */; };
 		691D7D0E1E436E6100E53AF1 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 691D7D0B1E436E4D00E53AF1 /* iTunesArtwork */; };
+		691D7D101E4404ED00E53AF1 /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691D7D0F1E4404ED00E53AF1 /* ImagePickerController.swift */; };
+		691D7D121E44050F00E53AF1 /* UITextField+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691D7D111E44050F00E53AF1 /* UITextField+Extension.swift */; };
 		693A2F601DE4D19F00975FA1 /* PhotoCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A2F5F1DE4D19F00975FA1 /* PhotoCaptureViewController.swift */; };
 		693A44C71DD7422700EDCABA /* String+Localized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A44C61DD7422700EDCABA /* String+Localized.swift */; };
 		693A44C91DD7944B00EDCABA /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693A44C81DD7944B00EDCABA /* CardView.swift */; };
@@ -57,6 +59,8 @@
 		69183D421DE653710026C1DF /* CloseButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CloseButton.swift; sourceTree = "<group>"; };
 		691D7D0B1E436E4D00E53AF1 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = SOURCE_ROOT; };
 		691D7D0C1E436E5600E53AF1 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = SOURCE_ROOT; };
+		691D7D0F1E4404ED00E53AF1 /* ImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerController.swift; sourceTree = "<group>"; };
+		691D7D111E44050F00E53AF1 /* UITextField+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextField+Extension.swift"; sourceTree = "<group>"; };
 		693A2F5F1DE4D19F00975FA1 /* PhotoCaptureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCaptureViewController.swift; sourceTree = "<group>"; };
 		693A44C61DD7422700EDCABA /* String+Localized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Localized.swift"; sourceTree = "<group>"; };
 		693A44C81DD7944B00EDCABA /* CardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
@@ -214,6 +218,7 @@
 				69D170771DF5775D009E5710 /* CGFloat+Extension.swift */,
 				69D170791DF579C5009E5710 /* UINavigationController+Extension.swift */,
 				6976F6DF1E22F75300EA7B43 /* NotificationCenter+Extension.swift */,
+				691D7D111E44050F00E53AF1 /* UITextField+Extension.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -227,6 +232,7 @@
 				69D170751DF4CBDA009E5710 /* CardPhotoViewController.swift */,
 				69D1707B1DF57AAA009E5710 /* HiddenStatusBarViewController.swift */,
 				6967D4261DFAC163001A073B /* CropViewConttroller.swift */,
+				691D7D0F1E4404ED00E53AF1 /* ImagePickerController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -340,6 +346,7 @@
 				69D170761DF4CBDA009E5710 /* CardPhotoViewController.swift in Sources */,
 				6991C0751DE6488E00442B8E /* PreviewView.swift in Sources */,
 				69769AEE1DE2324D00DF2747 /* UIColor+Extension.swift in Sources */,
+				691D7D121E44050F00E53AF1 /* UITextField+Extension.swift in Sources */,
 				693A2F601DE4D19F00975FA1 /* PhotoCaptureViewController.swift in Sources */,
 				694A73F41DF4972700424107 /* UIViewController+Extension.swift in Sources */,
 				69DDFA751DB3E6D500D856C5 /* Card.swift in Sources */,
@@ -366,6 +373,7 @@
 				69AB4B2C1DD66F190014B996 /* NSObject+Builder.swift in Sources */,
 				6976F6E01E22F75300EA7B43 /* NotificationCenter+Extension.swift in Sources */,
 				6965BB671DF7E7BC009F9CBC /* ManagedObjectConvertible.swift in Sources */,
+				691D7D101E4404ED00E53AF1 /* ImagePickerController.swift in Sources */,
 				69769AF21DE241D100DF2747 /* UIImagePickerController+Extension.swift in Sources */,
 				6967D4271DFAC163001A073B /* CropViewConttroller.swift in Sources */,
 				69AB4B2A1DD652270014B996 /* NSLayoutConstraint+Extension.swift in Sources */,
