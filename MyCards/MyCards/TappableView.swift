@@ -38,12 +38,17 @@ class TappableView: UIView {
 
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        touchesDown(touches)
+        touchingDownInside = boundsContain(touches)
+        if touchingDownInside {
+            animateTap()
+        }
     }
 
     override open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
-        touchesDown(touches)
+        if !boundsContain(touches) {
+            undoTapAnimation()
+        }
     }
 
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -75,27 +80,11 @@ class TappableView: UIView {
 }
 
 extension TappableView {
-    fileprivate func forceTouchAvailable() -> Bool {
-        return traitCollection.forceTouchCapability == .available
-    }
-    fileprivate func touchesDown(_ touches: Set<UITouch>) {
-        touchingDownInside = boundsContain(touches)
-        if touchingDownInside {
-            animateTap()
-        } else {
-            undoTapAnimation()
-        }
-    }
-
     fileprivate func touchesUp(_ touches: Set<UITouch>? = nil) {
         undoTapAnimation()
         if touchingDownInside {
             tapped?()
         }
-        clearTouchDownInside()
-    }
-
-    fileprivate func clearTouchDownInside() {
         touchingDownInside = false
     }
 

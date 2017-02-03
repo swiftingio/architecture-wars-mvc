@@ -7,21 +7,6 @@
 
 import UIKit
 
-final class ImagePickerController: UIImagePickerController {
-    var side: Card.Side?
-}
-
-extension UITextField {
-    fileprivate class func makeNameField() -> UITextField {
-        let name = UITextField()
-        name.autocorrectionType = .no
-        name.autocapitalizationType = .none
-        name.placeholder = .EnterCardName
-        name.returnKeyType = .done
-        return name
-    }
-}
-
 final class CardDetailsViewController: UIViewController {
 
     override var shouldAutorotate: Bool { return false }
@@ -99,10 +84,10 @@ extension CardDetailsViewController {
         name.addTarget(self, action: #selector(nameChanged(sender:)), for: .editingChanged)
         view.addSubview(name)
         front = CardView(image: card.front)
-        front.tapped = { [unowned self] in self.frontTapped() }
+        front.tapped = { [unowned self] in self.cardTapped(.front) }
         view.addSubview(front)
         back = CardView(image: card.back)
-        back.tapped = { [unowned self] in self.backTapped() }
+        back.tapped = { [unowned self] in self.cardTapped(.back) }
         view.addSubview(back)
         let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolbar.items = [flexible, deleteButton, flexible]
@@ -201,17 +186,10 @@ extension CardDetailsViewController {
                     back: card.back)
     }
 
-    fileprivate func frontTapped() {
+    fileprivate func cardTapped(_ side: Card.Side) {
         switch mode {
-        case .edit, .create: showImagePickerSources(for: .front)
+        case .edit, .create: showImagePickerSources(for: side)
         case .normal: showImage(for: .front)
-        }
-    }
-
-    fileprivate func backTapped() {
-        switch mode {
-        case .edit, .create: showImagePickerSources(for: .back)
-        case .normal: showImage(for: .back)
         }
     }
 
