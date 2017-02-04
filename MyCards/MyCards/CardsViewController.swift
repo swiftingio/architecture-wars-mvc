@@ -7,13 +7,6 @@
 
 import UIKit
 
-protocol IndexedCell {
-    var indexPath: IndexPath? { get set }
-}
-protocol IndexedCellDelegate: class {
-    func cellWasTapped(_ cell: IndexedCell)
-}
-
 // MARK: - Lifecycle
 final class CardsViewController: UIViewController {
 
@@ -80,14 +73,12 @@ final class CardsViewController: UIViewController {
 // MARK: - Configuration
 extension CardsViewController {
 
-    fileprivate func configureNavigationItem() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
-            .add, target: self, action: #selector(addTapped))
-    }
-
     fileprivate func configureViews() {
         view.backgroundColor = . white
         view.clipsToBounds = true
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
+            .add, target: self, action: #selector(addTapped))
 
         emptyScreen = makeEmptyScreen()
         view.addSubview(emptyScreen)
@@ -192,9 +183,6 @@ extension CardsViewController: UICollectionViewDataSource {
         return cell
     }
 }
-
-// MARK: - UICollectionViewDelegate
-extension CardsViewController: UICollectionViewDelegate {}
 
 // MARK: - IndexedCellDelegate
 extension CardsViewController: IndexedCellDelegate {
