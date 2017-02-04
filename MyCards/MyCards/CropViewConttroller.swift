@@ -113,11 +113,9 @@ class CropViewController: HiddenStatusBarViewController {
             ]
 
         var constraints: [NSLayoutConstraint] = NSLayoutConstraint.centeredInSuperview(outline)
-        constraints.append(NSLayoutConstraint.centeredHorizontallyInSuperview(captureButton))
+        constraints.append(NSLayoutConstraint.centeredInSuperview(captureButton, with: .centerX))
         constraints += NSLayoutConstraint.filledInSuperview(scrollView)
-        constraints.append(NSLayoutConstraint(item: outline, attribute:
-            .height, relatedBy: .equal, toItem: outline, attribute:
-            .width, multiplier: .cardRatio, constant: 0))
+        constraints.append(NSLayoutConstraint.height2WidthCardRatio(for: outline))
         constraints += NSLayoutConstraint.filledInSuperview(backgroundImageView)
         constraints += NSLayoutConstraint.filledInSuperview(visualEffectView)
         visual.forEach {

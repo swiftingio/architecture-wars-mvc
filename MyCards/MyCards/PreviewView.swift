@@ -86,7 +86,7 @@ class PreviewView: UIView {
             ]
 
         var constraints: [NSLayoutConstraint] = NSLayoutConstraint.centeredInSuperview(outline)
-        constraints.append(NSLayoutConstraint.centeredHorizontallyInSuperview(captureButton))
+        constraints.append(NSLayoutConstraint.centeredInSuperview(captureButton, with: .centerX))
         constraints.append(NSLayoutConstraint.height2WidthCardRatio(for: outline))
         visual.forEach {
             constraints += NSLayoutConstraint.constraints(withVisualFormat: $0, options:
