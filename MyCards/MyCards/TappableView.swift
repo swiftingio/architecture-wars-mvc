@@ -46,7 +46,8 @@ class TappableView: UIView {
 
     override open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesMoved(touches, with: event)
-        if !boundsContain(touches) {
+        touchingDownInside = boundsContain(touches)
+        if touchingDownInside {
             undoTapAnimation()
         }
     }

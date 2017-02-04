@@ -8,36 +8,33 @@
 import UIKit
 
 extension NSLayoutConstraint {
-    
+
     class func centeredInSuperview(_ view: UIView) -> [NSLayoutConstraint] {
         return [
-            centeredHorizontallyInSuperview(view),
-            centeredVerticallyInSuperview(view)
+            centeredInSuperview(view, with: .centerX),
+            centeredInSuperview(view, with: .centerY)
         ]
     }
-    
-    class func centeredHorizontallyInSuperview(_ view: UIView) -> NSLayoutConstraint {
-        return NSLayoutConstraint(item: view, attribute: .centerX, relatedBy: .equal, toItem:
-            view.superview!, attribute: .centerX, multiplier: 1, constant: 0)
+
+    class func centeredInSuperview(_ view: UIView, with attribute: NSLayoutAttribute) -> NSLayoutConstraint {
+        return NSLayoutConstraint(item: view, attribute: attribute, relatedBy: .equal, toItem:
+            view.superview!, attribute: attribute, multiplier: 1, constant: 0)
     }
-    
-    class func centeredVerticallyInSuperview(_ view: UIView) -> NSLayoutConstraint {
-        return NSLayoutConstraint(item: view, attribute: .centerY, relatedBy: .equal, toItem:
-            view.superview!, attribute: .centerY, multiplier: 1, constant: 0)
+
+    class func filledInSuperview(_ view: UIView, padding: CGFloat = 0) -> [NSLayoutConstraint] {
+        guard let superview = view.superview else { return  [] }
+        let insets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        view.layoutMargins = insets
+        superview.layoutMargins = insets
+        let layoutMarginsGuide = superview.layoutMarginsGuide
+        return [
+            view.leftAnchor.constraint(equalTo: layoutMarginsGuide.leftAnchor, constant: padding),
+            view.rightAnchor.constraint(equalTo: layoutMarginsGuide.rightAnchor, constant: -padding),
+            view.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: padding),
+            view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -padding)
+        ]
     }
-    
-    class func filledInSuperview(_ view: UIView, padding: CGFloat? = nil) -> [NSLayoutConstraint] {
-        let views = ["view": view]
-        var metrics: [String: Any] = ["pad": 0]
-        padding.map { metrics["pad"] = $0 }
-        var constraints: [NSLayoutConstraint] = []
-        constraints += NSLayoutConstraint.constraints(withVisualFormat:
-            "V:|-(==pad)-[view]-(==pad)-|", options: [], metrics: metrics, views: views)
-        constraints += NSLayoutConstraint.constraints(withVisualFormat:
-            "H:|-(==pad)-[view]-(==pad)-|", options: [], metrics: metrics, views: views)
-        return constraints
-    }
-    
+
     class func height2WidthCardRatio(for view: UIView) -> NSLayoutConstraint {
         return NSLayoutConstraint(item: view, attribute:
             .height, relatedBy: .equal, toItem: view, attribute:
