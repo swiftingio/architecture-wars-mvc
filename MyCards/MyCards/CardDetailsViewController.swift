@@ -7,12 +7,7 @@
 
 import UIKit
 
-final class CardDetailsViewController: UIViewController {
-
-    override var shouldAutorotate: Bool { return false }
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
+final class CardDetailsViewController: PortraitViewController {
 
     fileprivate var history: [Card] = []
     fileprivate var card: Card {
