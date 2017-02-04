@@ -8,7 +8,7 @@
 import UIKit
 
 // MARK: - Lifecycle
-final class CardsViewController: UIViewController {
+final class CardsViewController: PortraitViewController {
 
     fileprivate let worker: CoreDataWorkerProtocol
     fileprivate let notificationCenter: NotificationCenterProtocol
@@ -17,10 +17,6 @@ final class CardsViewController: UIViewController {
     fileprivate var collectionView: UICollectionView!
     fileprivate let reuseIdentifier: String = String(describing: CardCell.self)
     fileprivate var observer: NSObjectProtocol?
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
-    override var shouldAutorotate: Bool { return false }
 
     init(worker: CoreDataWorkerProtocol = CoreDataWorker(),
          notificationCenter: NotificationCenterProtocol = NotificationCenter.default) {
@@ -43,7 +39,6 @@ final class CardsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureNavigationItem()
         configureViews()
         configureConstraints()
         getCards()
@@ -83,7 +78,9 @@ extension CardsViewController {
         emptyScreen = makeEmptyScreen()
         view.addSubview(emptyScreen)
 
-        collectionView = makeCollectionView(in: view.bounds)
+        collectionView = UICollectionView.makeCollectionView(in: view.bounds)
+        collectionView.dataSource = self
+        collectionView.delegate = self
         view.addSubview(collectionView)
     }
 
@@ -98,29 +95,6 @@ extension CardsViewController {
 
 // MARK: - Helpers
 extension CardsViewController {
-
-    fileprivate func makeFlowLayout(in rect: CGRect) -> UICollectionViewFlowLayout {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        let offset: CGFloat = 20
-        let width = rect.size.width - 2 * offset
-        layout.itemSize = CGSize(width: width, height: width / .cardRatio)
-        layout.sectionInset = UIEdgeInsets(top: 4.25*offset, left: offset, bottom: offset, right: offset)
-        layout.minimumInteritemSpacing = offset
-        layout.minimumLineSpacing = offset
-
-        return layout
-    }
-
-    fileprivate func makeCollectionView(in rect: CGRect) -> UICollectionView {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeFlowLayout(in: rect))
-        collectionView.backgroundColor = .clear
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(CardCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        collectionView.alpha = 0.0
-        return collectionView
-    }
 
     fileprivate func makeEmptyScreen() -> UIImageView {
         let emptyScreen = UIImageView(image: #imageLiteral(resourceName: "MyCards"))
@@ -183,6 +157,9 @@ extension CardsViewController: UICollectionViewDataSource {
         return cell
     }
 }
+
+// MARK: - UICollectionViewDelegate
+extension CardsViewController: UICollectionViewDelegate {}
 
 // MARK: - IndexedCellDelegate
 extension CardsViewController: IndexedCellDelegate {
