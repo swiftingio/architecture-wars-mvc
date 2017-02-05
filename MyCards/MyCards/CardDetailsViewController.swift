@@ -28,13 +28,22 @@ final class CardDetailsViewController: PortraitViewController {
 
     // MARK: Views
     // codebeat:disable[TOO_MANY_IVARS]
-    fileprivate var name: UITextField!
-    fileprivate var front: CardView!
-    fileprivate var back: CardView!
     fileprivate var editButton: UIBarButtonItem!
     fileprivate var cancelButton: UIBarButtonItem!
     fileprivate var doneButton: UIBarButtonItem!
-    fileprivate let toolbar = UIToolbar(frame: .zero)
+    fileprivate lazy var name: UITextField = UITextField.makeNameField().with {
+        $0.text = self.card.name
+        $0.delegate = self
+        $0.addTarget(self, action: #selector(nameChanged(sender:)), for: .editingChanged)
+    }
+    fileprivate var front: CardView!
+    fileprivate var back: CardView!
+    fileprivate lazy var toolbar: UIToolbar = UIToolbar.constrained().with {
+        let delete = UIBarButtonItem(barButtonSystemItem:
+            .trash, target: self, action: #selector(removeTapped))
+        let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        $0.items = [flexible, delete, flexible]
+    }
     // codebeat:enable[TOO_MANY_IVARS]
 
     init(card: Card,
@@ -69,22 +78,17 @@ extension CardDetailsViewController {
         doneButton = UIBarButtonItem(barButtonSystemItem:
             .done, target: self, action: #selector(doneTapped))
 
+        front = CardView(image: card.front).with {
+            $0.tapped = { [unowned self] in self.cardTapped(.front) }
+        }
+        back = CardView(image: card.back) .with {
+            $0.tapped = { [unowned self] in self.cardTapped(.back) }
+        }
+
         view.backgroundColor = .white
-        name = UITextField.makeNameField()
-        name.text = card.name
-        name.delegate = self
-        name.addTarget(self, action: #selector(nameChanged(sender:)), for: .editingChanged)
         view.addSubview(name)
-        front = CardView(image: card.front)
-        front.tapped = { [unowned self] in self.cardTapped(.front) }
         view.addSubview(front)
-        back = CardView(image: card.back)
-        back.tapped = { [unowned self] in self.cardTapped(.back) }
         view.addSubview(back)
-        let deleteButton = UIBarButtonItem(barButtonSystemItem:
-            .trash, target: self, action: #selector(removeTapped))
-        let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        toolbar.items = [flexible, deleteButton, flexible]
         view.addSubview(toolbar)
     }
 
