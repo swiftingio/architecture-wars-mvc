@@ -19,28 +19,33 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="Wgu-WR-shi">
-                                <rect key="frame" x="36" y="0.0" width="303" height="667"/>
+                                <rect key="frame" x="40" y="0.0" width="334" height="736"/>
                                 <edgeInsets key="layoutMargins" top="9" left="0.0" bottom="0.0" right="0.0"/>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="MyCards" translatesAutoresizingMaskIntoConstraints="NO" id="qiS-7b-DlN">
-                                <rect key="frame" x="60" y="60" width="255" height="547"/>
-                                <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                <rect key="frame" x="44" y="44" width="326" height="648"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="qiS-7b-DlN" secondAttribute="trailing" constant="60" id="6E7-YT-ZTl"/>
+                            <constraint firstAttribute="trailing" secondItem="qiS-7b-DlN" secondAttribute="trailing" constant="44" id="6E7-YT-ZTl"/>
                             <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="Wgu-WR-shi" secondAttribute="bottom" id="KLz-iR-3Md"/>
                             <constraint firstItem="Wgu-WR-shi" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="-20" id="WCx-cV-k2a"/>
                             <constraint firstItem="Wgu-WR-shi" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="20" id="alI-5e-3TZ"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="qiS-7b-DlN" secondAttribute="bottom" constant="60" id="eCF-Zu-zzP"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="qiS-7b-DlN" secondAttribute="bottom" constant="40" id="eCF-Zu-zzP">
+                                <variation key="widthClass=compact" constant="44"/>
+                            </constraint>
                             <constraint firstAttribute="trailingMargin" secondItem="Wgu-WR-shi" secondAttribute="trailing" constant="20" id="ivQ-MG-Jgt"/>
-                            <constraint firstItem="qiS-7b-DlN" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="60" id="jVY-1H-IrA"/>
-                            <constraint firstItem="qiS-7b-DlN" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" constant="60" id="umC-AB-Nsb"/>
+                            <constraint firstItem="qiS-7b-DlN" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="40" id="jVY-1H-IrA">
+                                <variation key="widthClass=compact" constant="44"/>
+                            </constraint>
+                            <constraint firstItem="qiS-7b-DlN" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" constant="40" id="umC-AB-Nsb">
+                                <variation key="widthClass=compact" constant="44"/>
+                            </constraint>
                         </constraints>
                     </view>
                 </viewController>
@@ -56,6 +61,6 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
+        <simulatedScreenMetrics key="destination" type="retina5_5.fullscreen"/>
     </simulatedMetricsContainer>
 </document>

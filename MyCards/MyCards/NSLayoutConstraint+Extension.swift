@@ -23,14 +23,11 @@ extension NSLayoutConstraint {
 
     class func filledInSuperview(_ view: UIView, padding: CGFloat = 0) -> [NSLayoutConstraint] {
         guard let superview = view.superview else { return  [] }
-        view.layoutMargins = .zero
-        superview.layoutMargins = .zero
-        let layoutMarginsGuide = superview.layoutMarginsGuide
         return [
-            view.leftAnchor.constraint(equalTo: layoutMarginsGuide.leftAnchor, constant: padding),
-            view.rightAnchor.constraint(equalTo: layoutMarginsGuide.rightAnchor, constant: -padding),
-            view.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor, constant: padding),
-            view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -padding)
+            view.leftAnchor.constraint(equalTo: superview.leftAnchor, constant: padding),
+            view.rightAnchor.constraint(equalTo: superview.rightAnchor, constant: -padding),
+            view.topAnchor.constraint(equalTo: superview.topAnchor, constant: padding),
+            view.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -padding)
         ]
     }
 
