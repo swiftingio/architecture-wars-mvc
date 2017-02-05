@@ -3,7 +3,6 @@
 //  MyCards
 //
 //  Created by Maciej Piotrowski on 05/02/17.
-//  Copyright © 2017 Maciej Piotrowski. All rights reserved.
 //
 
 import UIKit

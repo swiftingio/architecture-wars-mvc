@@ -31,13 +31,13 @@ final class CardDetailsViewController: PortraitViewController {
     fileprivate var editButton: UIBarButtonItem!
     fileprivate var cancelButton: UIBarButtonItem!
     fileprivate var doneButton: UIBarButtonItem!
+    fileprivate var front: CardView!
+    fileprivate var back: CardView!
     fileprivate lazy var name: UITextField = UITextField.makeNameField().with {
         $0.text = self.card.name
         $0.delegate = self
         $0.addTarget(self, action: #selector(nameChanged(sender:)), for: .editingChanged)
     }
-    fileprivate var front: CardView!
-    fileprivate var back: CardView!
     fileprivate lazy var toolbar: UIToolbar = UIToolbar.constrained().with {
         let delete = UIBarButtonItem(barButtonSystemItem:
             .trash, target: self, action: #selector(removeTapped))
@@ -109,7 +109,8 @@ extension CardDetailsViewController {
         constraints.append(toolbar.heightAnchor.constraint(equalToConstant: 40))
         constraints.append(toolbar.leftAnchor.constraint(equalTo: view.leftAnchor))
         constraints.append(toolbar.rightAnchor.constraint(equalTo: view.rightAnchor))
-               NSLayoutConstraint.activate(constraints)
+        constraints.append(toolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        NSLayoutConstraint.activate(constraints)
     }
 
     fileprivate func configureNavigationItem() {
