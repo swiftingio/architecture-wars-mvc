@@ -184,7 +184,7 @@ extension CardDetailsViewController {
     fileprivate func cardTapped(_ side: Card.Side) {
         switch mode {
         case .edit, .create: showImagePickerSources(for: side)
-        case .normal: showImage(for: .front)
+        case .normal: showImage(for: side)
         }
     }
 
