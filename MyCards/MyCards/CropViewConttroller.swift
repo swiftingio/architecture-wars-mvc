@@ -17,21 +17,16 @@ class CropViewController: HiddenStatusBarViewController {
     fileprivate let side: Card.Side
 
     // MARK: Views
-    fileprivate let outline: UIView = UIView(frame: .zero).with { view in
-        view.layer.cornerRadius = 10
-        view.layer.borderWidth = 2
-        view.layer.borderColor = UIColor.white.cgColor
-    }
-    fileprivate let imageView: UIImageView = UIImageView(frame: .zero)
-    fileprivate let scrollView: UIScrollView = UIScrollView(frame: .zero)
-    fileprivate let closeButton = CloseButton(frame: .zero)
-    fileprivate let backgroundImageView: UIImageView = UIImageView(frame: .zero)
-    fileprivate let visualEffectView: UIVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    fileprivate let  captureButton = PhotoCameraButton(frame: .zero)
+    fileprivate let preview: PreviewOutline = PreviewOutline.constrained()
+    fileprivate let background: UIImageView = UIImageView.constrained()
+    fileprivate let backgroundEffect: UIVisualEffectView = UIVisualEffectView(effect:
+        UIBlurEffect(style: .dark)).with { $0.translatesAutoresizingMaskIntoConstraints = false }
+    fileprivate let scrollView: UIScrollView = UIScrollView.constrained()
+    fileprivate let imageView: UIImageView = UIImageView.constrained()
 
     init(image: UIImage, side: Card.Side) {
         imageView.image = UIImage(cgImage: image.cgImage!, scale: 1, orientation: .right)
-        backgroundImageView.image = imageView.image
+        background.image = imageView.image
         self.side = side
         super.init(nibName: nil, bundle: nil)
     }
@@ -43,10 +38,10 @@ class CropViewController: HiddenStatusBarViewController {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        closeButton.tapped = { [unowned self] in
+        preview.closeButton.tapped = { [unowned self] in
             self.dismiss()
         }
-        captureButton.tapped = { [unowned self] in
+        preview.captureButton.tapped = { [unowned self] in
             self.process().flatMap {
                 self.delegate?.cropViewController(self, didCropPhoto: $0, for: self.side)
             }
@@ -58,20 +53,18 @@ class CropViewController: HiddenStatusBarViewController {
     }
 
     private func addSubviews() {
-        view.addSubview(backgroundImageView)
-        view.addSubview(visualEffectView)
-        view.addSubview(outline)
-        outline.addSubview(scrollView)
+        view.addSubview(background)
+        view.addSubview(backgroundEffect)
+        view.addSubview(preview)
+        preview.outline.addSubview(scrollView)
         scrollView.addSubview(imageView)
-        view.addSubview(closeButton)
-        view.addSubview(captureButton)
     }
 
     private func configureViews() {
         view.clipsToBounds = true
-        backgroundImageView.contentMode = .scaleAspectFill
+        background.contentMode = .scaleAspectFill
         imageView.contentMode = .center
-        outline.clipsToBounds = true
+        preview.outline.clipsToBounds = true
         scrollView.delegate = self
         scrollView.maximumZoomScale = 2
         scrollView.showsVerticalScrollIndicator = false
@@ -79,58 +72,24 @@ class CropViewController: HiddenStatusBarViewController {
         scrollView.isScrollEnabled = true
         scrollView.contentSize = imageView.intrinsicContentSize
         let rotate = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-        captureButton.transform = rotate
-        closeButton.transform = rotate
+        preview.captureButton.transform = rotate
+        preview.closeButton.transform = rotate
     }
 
     fileprivate func configureConstraints() {
-
-        view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-
-        let views: [String: Any] = [
-            "closeButton": closeButton,
-            "outline": outline,
-            "photoButton": captureButton,
-            ]
-
-        let metrics: [String: CGFloat]  = [
-            "photoButtonHeight": 80,
-            "photoButtonWidth": 60,
-            "padding": 20,
-            "closeButtonHeight": 40,
-            "closeButtonWidth": 40,
-            "outlinePadX": .cardOffsetX,
-            "outlinePadY": .cardOffsetY,
-            ]
-
-        let visual = [
-            "V:[photoButton(photoButtonWidth)]-(padding)-|",
-            "H:[photoButton(photoButtonHeight)]",
-            "V:|-(padding)-[closeButton(closeButtonHeight)]",
-            "H:[closeButton(closeButtonWidth)]-(padding)-|",
-            "H:|-(outlinePadY)-[outline]-(outlinePadY)-|",
-            ]
-
-        var constraints: [NSLayoutConstraint] = NSLayoutConstraint.centeredInSuperview(outline)
-        constraints.append(NSLayoutConstraint.centeredInSuperview(captureButton, with: .centerX))
+        var constraints: [NSLayoutConstraint] = []
+        constraints += NSLayoutConstraint.filledInSuperview(preview)
         constraints += NSLayoutConstraint.filledInSuperview(scrollView)
-        constraints.append(NSLayoutConstraint.height2WidthCardRatio(for: outline))
-        constraints += NSLayoutConstraint.filledInSuperview(backgroundImageView)
-        constraints += NSLayoutConstraint.filledInSuperview(visualEffectView)
-        visual.forEach {
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: $0, options:
-                [], metrics: metrics, views: views)
-        }
-
+        constraints += NSLayoutConstraint.filledInSuperview(background)
+        constraints += NSLayoutConstraint.filledInSuperview(backgroundEffect)
         NSLayoutConstraint.activate(constraints)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         imageView.sizeToFit()
-        let w = outline.frame.width / imageView.frame.width
-        let h = outline.frame.height / imageView.frame.height
+        let w = preview.outline.frame.width / imageView.frame.width
+        let h = preview.outline.frame.height / imageView.frame.height
         let scale = max(w, h)
         scrollView.minimumZoomScale = scale
         scrollView.zoomScale = scrollView.minimumZoomScale
