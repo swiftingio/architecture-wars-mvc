@@ -100,20 +100,16 @@ class CropViewController: HiddenStatusBarViewController {
 
     func process() -> UIImage? {
         guard let image = imageView.image?.cgImage else { return nil }
-        // FIXME: scaling
-
-        //original image size
-//        let height: CGFloat = CGFloat(scrollView.contentSize.height)
-//        let width: CGFloat = CGFloat(scrollView.contentSize.width)
 
         let scale = scrollView.zoomScale
+        let x = scrollView.bounds.origin.y
+        let y = -scrollView.bounds.origin.x - scrollView.bounds.width + scrollView.contentSize.width
         let height = scrollView.bounds.height
         let width = scrollView.bounds.width
-
-        let rect = CGRect(x: scrollView.bounds.origin.x,
-                          y: scrollView.bounds.origin.y,
-                          width: width / scale,
-                          height: height / scale)
+        let rect = CGRect(x: x / scale,
+                          y: y / scale,
+                          width: height / scale,
+                          height: width / scale)
 
         guard let cropped = image.cropping(to: rect) else { return nil }
 
