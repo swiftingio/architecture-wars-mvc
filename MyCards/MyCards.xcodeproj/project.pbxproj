@@ -32,6 +32,8 @@
 		69769AF21DE241D100DF2747 /* UIImagePickerController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */; };
 		6976F6E01E22F75300EA7B43 /* NotificationCenter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976F6DF1E22F75300EA7B43 /* NotificationCenter+Extension.swift */; };
 		698319891DD9134F0091ED64 /* PhotoCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698319881DD9134F0091ED64 /* PhotoCamera.swift */; };
+		698C57EC1E4759EC0035A8B7 /* UIView+Constrained.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698C57EB1E4759EC0035A8B7 /* UIView+Constrained.swift */; };
+		698C57EE1E475D700035A8B7 /* PreviewOutline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698C57ED1E475D700035A8B7 /* PreviewOutline.swift */; };
 		6991C0751DE6488E00442B8E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6991C0741DE6488E00442B8E /* PreviewView.swift */; };
 		699795491DEB631500CB408F /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699795481DEB631500CB408F /* CGRect+Extension.swift */; };
 		69AB4B2A1DD652270014B996 /* NSLayoutConstraint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AB4B291DD652270014B996 /* NSLayoutConstraint+Extension.swift */; };
@@ -82,6 +84,8 @@
 		69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerController+Extension.swift"; sourceTree = "<group>"; };
 		6976F6DF1E22F75300EA7B43 /* NotificationCenter+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Extension.swift"; sourceTree = "<group>"; };
 		698319881DD9134F0091ED64 /* PhotoCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCamera.swift; sourceTree = "<group>"; };
+		698C57EB1E4759EC0035A8B7 /* UIView+Constrained.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Constrained.swift"; sourceTree = "<group>"; };
+		698C57ED1E475D700035A8B7 /* PreviewOutline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewOutline.swift; sourceTree = "<group>"; };
 		6991C0741DE6488E00442B8E /* PreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
 		699795481DEB631500CB408F /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		69AB4B291DD652270014B996 /* NSLayoutConstraint+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint+Extension.swift"; sourceTree = "<group>"; };
@@ -122,6 +126,7 @@
 		6965BB641DF7E64B009F9CBC /* View */ = {
 			isa = PBXGroup;
 			children = (
+				698C57ED1E475D700035A8B7 /* PreviewOutline.swift */,
 				69183D421DE653710026C1DF /* CloseButton.swift */,
 				69183D401DE653420026C1DF /* PhotoCameraButton.swift */,
 				69DDFA721DB3E6AD00D856C5 /* CardCell.swift */,
@@ -224,6 +229,7 @@
 				6976F6DF1E22F75300EA7B43 /* NotificationCenter+Extension.swift */,
 				691D7D111E44050F00E53AF1 /* UITextField+Extension.swift */,
 				696C84471E463B1A00F73EFD /* UICollectionView+Extension.swift */,
+				698C57EB1E4759EC0035A8B7 /* UIView+Constrained.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -355,6 +361,7 @@
 				691D7D121E44050F00E53AF1 /* UITextField+Extension.swift in Sources */,
 				693A2F601DE4D19F00975FA1 /* PhotoCaptureViewController.swift in Sources */,
 				694A73F41DF4972700424107 /* UIViewController+Extension.swift in Sources */,
+				698C57EC1E4759EC0035A8B7 /* UIView+Constrained.swift in Sources */,
 				69DDFA751DB3E6D500D856C5 /* Card.swift in Sources */,
 				694A73F21DF496FE00424107 /* AVCaptureDevice+Extension.swift in Sources */,
 				69ABD0E31DB395F800CB925C /* Result.swift in Sources */,
@@ -375,6 +382,7 @@
 				696C84461E463A3600F73EFD /* PortraitViewController.swift in Sources */,
 				698319891DD9134F0091ED64 /* PhotoCamera.swift in Sources */,
 				699795491DEB631500CB408F /* CGRect+Extension.swift in Sources */,
+				698C57EE1E475D700035A8B7 /* PreviewOutline.swift in Sources */,
 				693A44C71DD7422700EDCABA /* String+Localized.swift in Sources */,
 				69ABD0CE1DB391E100CB925C /* DataModel.xcdatamodeld in Sources */,
 				69AB4B2C1DD66F190014B996 /* NSObject+Builder.swift in Sources */,
@@ -492,10 +500,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 5VHW7X9NK4;
 				INFOPLIST_FILE = MyCards/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = io.swifting.MyCards;
+				PRODUCT_BUNDLE_IDENTIFIER = io.swifting;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -505,10 +514,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = 5VHW7X9NK4;
 				INFOPLIST_FILE = MyCards/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = io.swifting.MyCards;
+				PRODUCT_BUNDLE_IDENTIFIER = io.swifting;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};

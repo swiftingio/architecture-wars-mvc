@@ -28,14 +28,22 @@ final class CardDetailsViewController: PortraitViewController {
 
     // MARK: Views
     // codebeat:disable[TOO_MANY_IVARS]
-    fileprivate var name: UITextField!
-    fileprivate var front: CardView!
-    fileprivate var back: CardView!
     fileprivate var editButton: UIBarButtonItem!
     fileprivate var cancelButton: UIBarButtonItem!
     fileprivate var doneButton: UIBarButtonItem!
-    fileprivate var deleteButton: UIBarButtonItem!
-    fileprivate let toolbar = UIToolbar(frame: .zero)
+    fileprivate var front: CardView!
+    fileprivate var back: CardView!
+    fileprivate lazy var name: UITextField = UITextField.makeNameField().with {
+        $0.text = self.card.name
+        $0.delegate = self
+        $0.addTarget(self, action: #selector(nameChanged(sender:)), for: .editingChanged)
+    }
+    fileprivate lazy var toolbar: UIToolbar = UIToolbar.constrained().with {
+        let delete = UIBarButtonItem(barButtonSystemItem:
+            .trash, target: self, action: #selector(removeTapped))
+        let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        $0.items = [flexible, delete, flexible]
+    }
     // codebeat:enable[TOO_MANY_IVARS]
 
     init(card: Card,
@@ -65,57 +73,43 @@ extension CardDetailsViewController {
     fileprivate func makeAndConfigureViews() {
         editButton = UIBarButtonItem(barButtonSystemItem:
             .edit, target: self, action: #selector(editTapped))
-        deleteButton = UIBarButtonItem(barButtonSystemItem:
-            .trash, target: self, action: #selector(removeTapped))
         cancelButton = UIBarButtonItem(barButtonSystemItem:
             .cancel, target: self, action: #selector(cancelTapped))
         doneButton = UIBarButtonItem(barButtonSystemItem:
             .done, target: self, action: #selector(doneTapped))
 
+        front = CardView(image: card.front).with {
+            $0.tapped = { [unowned self] in self.cardTapped(.front) }
+        }
+        back = CardView(image: card.back) .with {
+            $0.tapped = { [unowned self] in self.cardTapped(.back) }
+        }
+
         view.backgroundColor = .white
-        name = UITextField.makeNameField()
-        name.text = card.name
-        name.delegate = self
-        name.addTarget(self, action: #selector(nameChanged(sender:)), for: .editingChanged)
         view.addSubview(name)
-        front = CardView(image: card.front)
-        front.tapped = { [unowned self] in self.cardTapped(.front) }
         view.addSubview(front)
-        back = CardView(image: card.back)
-        back.tapped = { [unowned self] in self.cardTapped(.back) }
         view.addSubview(back)
-        let flexible = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        toolbar.items = [flexible, deleteButton, flexible]
         view.addSubview(toolbar)
     }
 
     fileprivate func configureConstraints() {
-
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-
-        let views: [String: Any] = [
-            "name": name,
-            "front": front,
-            "back": back,
-            "toolbar": toolbar,
-        ]
-
-        let visual = [
-            "H:|-(20)-[name]-(20)-|",
-            "V:|-(80)-[name(40)]-(20)-[front]-(20)-[back(==front)]",
-            "H:|[toolbar]|",
-            "V:[toolbar(40)]|",
-            ]
-
         var constraints: [NSLayoutConstraint] = []
-        constraints.append(NSLayoutConstraint(item: front, attribute: .height, relatedBy:
-            .equal, toItem: front, attribute: .width,
-                    multiplier: 1 / .cardRatio, constant: 0))
-        visual.forEach {
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: $0, options:
-                [.alignAllLeading, .alignAllTrailing], metrics: nil, views: views)
-        }
-
+        constraints.append(name.topAnchor.constraint(equalTo: view.topAnchor, constant: 80))
+        constraints.append(name.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20))
+        constraints.append(name.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20))
+        constraints.append(front.leftAnchor.constraint(equalTo: name.leftAnchor, constant: 0))
+        constraints.append(front.rightAnchor.constraint(equalTo: name.rightAnchor, constant: 0))
+        constraints.append(front.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 20))
+        constraints.append(front.heightAnchor.constraint(equalTo: front.widthAnchor, multiplier: 1 / .cardRatio))
+        constraints.append(back.topAnchor.constraint(equalTo: front.bottomAnchor, constant: 20))
+        constraints.append(back.leftAnchor.constraint(equalTo: front.leftAnchor, constant: 0))
+        constraints.append(back.rightAnchor.constraint(equalTo: front.rightAnchor, constant: 0))
+        constraints.append(back.heightAnchor.constraint(equalTo: front.heightAnchor, constant: 0))
+        constraints.append(toolbar.heightAnchor.constraint(equalToConstant: 40))
+        constraints.append(toolbar.leftAnchor.constraint(equalTo: view.leftAnchor))
+        constraints.append(toolbar.rightAnchor.constraint(equalTo: view.rightAnchor))
+        constraints.append(toolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor))
         NSLayoutConstraint.activate(constraints)
     }
 
@@ -184,7 +178,7 @@ extension CardDetailsViewController {
     fileprivate func cardTapped(_ side: Card.Side) {
         switch mode {
         case .edit, .create: showImagePickerSources(for: side)
-        case .normal: showImage(for: .front)
+        case .normal: showImage(for: side)
         }
     }
 
