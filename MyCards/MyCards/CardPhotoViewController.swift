@@ -77,9 +77,7 @@ final class CardPhotoViewController: HiddenStatusBarViewController {
         var constraints: [NSLayoutConstraint] = NSLayoutConstraint.filledInSuperview(backgroundImageView)
         constraints += NSLayoutConstraint.filledInSuperview(visualEffectView)
         constraints += NSLayoutConstraint.centeredInSuperview(imageView)
-        constraints.append(NSLayoutConstraint(item: imageView, attribute:
-            .height, relatedBy: .equal, toItem: imageView, attribute:
-            .width, multiplier: .cardRatio, constant: 0))
+        constraints.append(NSLayoutConstraint.height2WidthCardRatio(for: imageView))
         visual.forEach {
             constraints += NSLayoutConstraint.constraints(withVisualFormat: $0, options:
                 [], metrics: metrics, views: views)

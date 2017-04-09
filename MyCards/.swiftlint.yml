@@ -4,6 +4,7 @@ disabled_rules: # rule identifiers to exclude from running
 - type_name # Swift 3 suggests lowercase enum cases
 - nesting
 - trailing_comma
+- vertical_parameter_alignment
 opt_in_rules: # some rules are only opt-in
   - empty_count
   - cyclomatic_complexity

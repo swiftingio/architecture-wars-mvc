@@ -7,15 +7,8 @@
 
 import UIKit
 
-protocol IndexedCell {
-    var indexPath: IndexPath? { get set }
-}
-protocol IndexedCellDelegate: class {
-    func cellWasTapped(_ cell: IndexedCell)
-}
-
 // MARK: - Lifecycle
-final class CardsViewController: UIViewController {
+final class CardsViewController: PortraitViewController {
 
     fileprivate let worker: CoreDataWorkerProtocol
     fileprivate let notificationCenter: NotificationCenterProtocol
@@ -24,10 +17,6 @@ final class CardsViewController: UIViewController {
     fileprivate var collectionView: UICollectionView!
     fileprivate let reuseIdentifier: String = String(describing: CardCell.self)
     fileprivate var observer: NSObjectProtocol?
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
-    override var shouldAutorotate: Bool { return false }
 
     init(worker: CoreDataWorkerProtocol = CoreDataWorker(),
          notificationCenter: NotificationCenterProtocol = NotificationCenter.default) {
@@ -50,7 +39,6 @@ final class CardsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureNavigationItem()
         configureViews()
         configureConstraints()
         getCards()
@@ -80,25 +68,26 @@ final class CardsViewController: UIViewController {
 // MARK: - Configuration
 extension CardsViewController {
 
-    fileprivate func configureNavigationItem() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
-            .add, target: self, action: #selector(addTapped))
-    }
-
     fileprivate func configureViews() {
         view.backgroundColor = . white
+        view.clipsToBounds = true
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
+            .add, target: self, action: #selector(addTapped))
 
         emptyScreen = makeEmptyScreen()
         view.addSubview(emptyScreen)
 
-        collectionView = makeCollectionView(in: view.bounds)
+        collectionView = UICollectionView.makeCollectionView(in: view.bounds)
+        collectionView.dataSource = self
+        collectionView.delegate = self
         view.addSubview(collectionView)
     }
 
     fileprivate func configureConstraints() {
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         var constraints: [NSLayoutConstraint] = []
-        constraints += NSLayoutConstraint.centeredInSuperview(emptyScreen)
+        constraints += NSLayoutConstraint.filledInSuperview(emptyScreen, padding: 44)
         constraints += NSLayoutConstraint.filledInSuperview(collectionView)
         NSLayoutConstraint.activate(constraints)
     }
@@ -107,31 +96,10 @@ extension CardsViewController {
 // MARK: - Helpers
 extension CardsViewController {
 
-    fileprivate func makeFlowLayout(in rect: CGRect) -> UICollectionViewFlowLayout {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        let offset: CGFloat = 20
-        let width = rect.size.width - 2 * offset
-        layout.itemSize = CGSize(width: width, height: width / .cardRatio)
-        layout.sectionInset = UIEdgeInsets(top: 4.25*offset, left: offset, bottom: offset, right: offset)
-        layout.minimumInteritemSpacing = offset
-        layout.minimumLineSpacing = offset
-
-        return layout
-    }
-
-    fileprivate func makeCollectionView(in rect: CGRect) -> UICollectionView {
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: makeFlowLayout(in: rect))
-        collectionView.backgroundColor = .clear
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(CardCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        collectionView.alpha = 0.0
-        return collectionView
-    }
-
     fileprivate func makeEmptyScreen() -> UIImageView {
-        let emptyScreen = UIImageView(image: #imageLiteral(resourceName: "bluebird"))
+        let emptyScreen = UIImageView(image: #imageLiteral(resourceName: "MyCards"))
+        emptyScreen.contentMode = .scaleAspectFit
+        emptyScreen.clipsToBounds = true
         emptyScreen.alpha = cards.isEmpty ? 1.0 : 0.0
         return emptyScreen
     }
@@ -151,11 +119,11 @@ extension CardsViewController {
     }
 
     @objc fileprivate func addTapped(sender: UIBarButtonItem) {
-        showDetails(of: nil)
+        showDetails(of: Card(name: ""), mode: .create)
     }
 
-    fileprivate func showDetails(of card: Card?) {
-        let viewController = CardDetailsViewController(card: card)
+    fileprivate func showDetails(of card: Card, mode: CardDetailsViewController.Mode = .normal) {
+        let viewController = CardDetailsViewController(card: card, mode: mode)
         let navigationController = UINavigationController(rootViewController: viewController)
         present(navigationController, animated: true, completion: nil)
     }
@@ -183,7 +151,6 @@ extension CardsViewController: UICollectionViewDataSource {
             else { return UICollectionViewCell() }
 
         //TODO: use smaller images / thumbnails
-        cell.name = card.name
         cell.image = card.front ?? #imageLiteral(resourceName: "background")
         cell.indexPath = indexPath
         cell.delegate = self

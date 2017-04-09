@@ -7,6 +7,13 @@
 
 import UIKit
 
+protocol IndexedCell {
+    var indexPath: IndexPath? { get set }
+}
+protocol IndexedCellDelegate: class {
+    func cellWasTapped(_ cell: IndexedCell)
+}
+
 class CardCell: UICollectionViewCell, IndexedCell {
 
     fileprivate let nameLabel: UILabel
