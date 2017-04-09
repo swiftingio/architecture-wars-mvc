@@ -51,3 +51,20 @@ extension Card {
         return true
     }
 }
+
+extension Card {
+    enum JSONKey: String {
+        case identifier, name, front, back
+    }
+    init?(json: [String : Any]) {
+        guard let identifier = json[JSONKey.identifier.rawValue] as? String,
+            let name = json[JSONKey.name.rawValue] as? String,
+            let front = json[JSONKey.front.rawValue] as? String,
+            let back = json[JSONKey.back.rawValue] as? String
+            else { return nil }
+        self.identifier = identifier
+        self.name = name
+        self.front = Data(base64Encoded: front).flatMap(UIImage.init(data:))
+        self.back = Data(base64Encoded: back).flatMap(UIImage.init(data:))
+    }
+}

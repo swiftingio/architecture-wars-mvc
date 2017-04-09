@@ -11,16 +11,20 @@ import UIKit
 final class CardsViewController: PortraitViewController {
 
     fileprivate let worker: CoreDataWorkerProtocol
+    fileprivate let loader: ResourceLoading
     fileprivate let notificationCenter: NotificationCenterProtocol
     fileprivate lazy var cards: [Card] = []
+
     fileprivate var emptyScreen: UIImageView!
     fileprivate var collectionView: UICollectionView!
     fileprivate let reuseIdentifier: String = String(describing: CardCell.self)
     fileprivate var observer: NSObjectProtocol?
 
     init(worker: CoreDataWorkerProtocol = CoreDataWorker(),
+         loader: ResourceLoading = NetworkLoader.shared,
          notificationCenter: NotificationCenterProtocol = NotificationCenter.default) {
         self.worker = worker
+        self.loader = loader
         self.notificationCenter = notificationCenter
         super.init(nibName: nil, bundle: nil)
         self.title = .MyCards
@@ -41,16 +45,28 @@ final class CardsViewController: PortraitViewController {
         super.viewDidLoad()
         configureViews()
         configureConstraints()
+        loadCards()
         getCards()
+    }
+
+    func loadCards() {
+        //NOTE: python -m SimpleHTTPServer 8000 in the directory of `cards.json`
+        loader.download(from: "/cards.json", parser: CardParser()) { [unowned self] (cards) in
+            guard let cards = cards as? [Card] else { self.getCards(); return }
+            self.worker.upsert(entities: cards) { [unowned self] (_) in
+                self.getCards()
+            }
+        }
     }
 
     func getCards() {
         worker.get { [weak self] (result: Result<[Card]>) in
+            guard let sself = self else { return }
             switch result {
             case .failure(_): break
             case .success(let cards):
-                self?.cards = cards
-                self?.reloadData()
+                sself.cards = cards
+                sself.reloadData()
             }
         }
     }
@@ -149,8 +165,6 @@ extension CardsViewController: UICollectionViewDataSource {
             reuseIdentifier, for: indexPath) as? CardCell,
             let card = cards[safe: indexPath.row]
             else { return UICollectionViewCell() }
-
-        //TODO: use smaller images / thumbnails
         cell.image = card.front ?? #imageLiteral(resourceName: "background")
         cell.indexPath = indexPath
         cell.delegate = self
