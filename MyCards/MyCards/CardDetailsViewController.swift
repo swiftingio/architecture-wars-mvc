@@ -297,8 +297,14 @@ extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigati
     }
 
     fileprivate func resize(image: UIImage) -> UIImage {
-        //TODO: resize image to 600px wide
-        return image
+        let width: CGFloat = 600
+        let height: CGFloat = width / .cardRatio
+        let size = CGSize(width: width, height: height)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        image.draw(in: CGRect(origin: CGPoint.zero, size: size))
+        let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return newImage
     }
 }
 
