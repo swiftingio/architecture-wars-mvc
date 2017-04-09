@@ -35,6 +35,7 @@
 		6981E6381E9A43B100AA1D5A /* cards.json in Resources */ = {isa = PBXBuildFile; fileRef = 6981E6371E9A43B100AA1D5A /* cards.json */; };
 		6981E6411E9AB9B000AA1D5A /* CardParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6981E6401E9AB9B000AA1D5A /* CardParser.swift */; };
 		6981E6431E9AB9F600AA1D5A /* NetworLoader+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6981E6421E9AB9F600AA1D5A /* NetworLoader+Shared.swift */; };
+		6981E6441E9ABF0500AA1D5A /* CardDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0E61DB3A1A300CB925C /* CardDetailsViewController.swift */; };
 		698319891DD9134F0091ED64 /* PhotoCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698319881DD9134F0091ED64 /* PhotoCamera.swift */; };
 		698C57EC1E4759EC0035A8B7 /* UIView+Constrained.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698C57EB1E4759EC0035A8B7 /* UIView+Constrained.swift */; };
 		698C57EE1E475D700035A8B7 /* PreviewOutline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698C57ED1E475D700035A8B7 /* PreviewOutline.swift */; };
@@ -390,6 +391,7 @@
 				693A44CB1DD7D9CE00EDCABA /* TappableView.swift in Sources */,
 				69183D431DE653710026C1DF /* CloseButton.swift in Sources */,
 				696C84461E463A3600F73EFD /* PortraitViewController.swift in Sources */,
+				6981E6441E9ABF0500AA1D5A /* CardDetailsViewController.swift in Sources */,
 				698319891DD9134F0091ED64 /* PhotoCamera.swift in Sources */,
 				699795491DEB631500CB408F /* CGRect+Extension.swift in Sources */,
 				698C57EE1E475D700035A8B7 /* PreviewOutline.swift in Sources */,
