@@ -150,6 +150,7 @@
 			children = (
 				69AB4B2D1DD674C80014B996 /* NetworkLoader.swift */,
 				6981E6421E9AB9F600AA1D5A /* NetworLoader+Shared.swift */,
+				6981E6401E9AB9B000AA1D5A /* CardParser.swift */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -248,7 +249,6 @@
 			isa = PBXGroup;
 			children = (
 				69ABD0DE1DB3953600CB925C /* CardsViewController.swift */,
-				6981E6401E9AB9B000AA1D5A /* CardParser.swift */,
 				69ABD0E61DB3A1A300CB925C /* CardDetailsViewController.swift */,
 				693A2F5F1DE4D19F00975FA1 /* PhotoCaptureViewController.swift */,
 				69D170751DF4CBDA009E5710 /* CardPhotoViewController.swift */,
