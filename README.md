@@ -2,3 +2,5 @@
 
 # architecture-wars-mvc
 Architecture Wars: MVC strikes back
+
+![](https://raw.githubusercontent.com/swiftingio/blog/%2341-MVC-strikes-back/5.png)
