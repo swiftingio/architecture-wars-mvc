@@ -8,7 +8,7 @@
 import UIKit
 
 // MARK: - Lifecycle
-final class CardsViewController: PortraitViewController {
+final class CardsViewController: UIViewController {
 
     fileprivate let worker: CoreDataWorkerProtocol
     fileprivate let loader: ResourceLoading

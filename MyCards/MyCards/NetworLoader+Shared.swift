@@ -8,5 +8,5 @@
 import Foundation
 
 extension NetworkLoader {
-    static let shared: NetworkLoader = NetworkLoader(URL(string: "http://localhost:9000")!)
+    static let shared: NetworkLoader = NetworkLoader(URL(string: "http://localhost:8000")!)
 }

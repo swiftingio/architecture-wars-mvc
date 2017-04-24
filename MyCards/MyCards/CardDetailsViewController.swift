@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CardDetailsViewController: PortraitViewController {
+final class CardDetailsViewController: UIViewController {
 
     fileprivate var history: [Card] = []
     fileprivate var card: Card {
