@@ -55,34 +55,16 @@ final class CardPhotoViewController: HiddenStatusBarViewController {
 
     private func configureConstraints() {
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
-
-        let views: [String: Any] = [
-            "closeButton": closeButton,
-            "imageView": imageView,
-            ]
-
-        let metrics: [String: CGFloat]  = [
-            "padding": 20,
-            "closeButtonHeight": 40,
-            "closeButtonWidth": 40,
-            "hPadding": 30,
-            ]
-
-        let visual = [
-            "V:|-(padding)-[closeButton(closeButtonHeight)]",
-            "H:[closeButton(closeButtonWidth)]-(padding)-|",
-            "H:|-(hPadding)-[imageView]-(hPadding)-|",
-            ]
-
         var constraints: [NSLayoutConstraint] = NSLayoutConstraint.filledInSuperview(backgroundImageView)
         constraints += NSLayoutConstraint.filledInSuperview(visualEffectView)
         constraints += NSLayoutConstraint.centeredInSuperview(imageView)
         constraints.append(NSLayoutConstraint.height2WidthCardRatio(for: imageView))
-        visual.forEach {
-            constraints += NSLayoutConstraint.constraints(withVisualFormat: $0, options:
-                [], metrics: metrics, views: views)
-        }
-
+        constraints.append(closeButton.heightAnchor.constraint(equalToConstant: 40))
+        constraints.append(closeButton.widthAnchor.constraint(equalToConstant: 40))
+        constraints.append(closeButton.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor, constant: 20))
+        constraints.append(closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20))
+        constraints.append(imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30))
+        constraints.append(imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30))
         NSLayoutConstraint.activate(constraints)
     }
 }

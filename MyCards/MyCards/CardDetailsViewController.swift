@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CardDetailsViewController: PortraitViewController {
+final class CardDetailsViewController: UIViewController {
 
     fileprivate var history: [Card] = []
     fileprivate var card: Card {
@@ -25,6 +25,7 @@ final class CardDetailsViewController: PortraitViewController {
         }
     }
     fileprivate let worker: CoreDataWorkerProtocol
+    fileprivate let loader: ResourceLoading
 
     // MARK: Views
     // codebeat:disable[TOO_MANY_IVARS]
@@ -48,10 +49,12 @@ final class CardDetailsViewController: PortraitViewController {
 
     init(card: Card,
          mode: Mode = .normal,
-         worker: CoreDataWorkerProtocol = CoreDataWorker()) {
+         worker: CoreDataWorkerProtocol = CoreDataWorker(),
+         loader: ResourceLoading = NetworkLoader.shared) {
         self.card = card
-        self.worker = worker
         self.mode = mode
+        self.worker = worker
+        self.loader = loader
         self.history.append(self.card)
         super.init(nibName: nil, bundle: nil)
     }
@@ -140,11 +143,16 @@ extension CardDetailsViewController {
         worker.upsert(entities: [card]) { [weak self] error in
             guard let strongSelf = self, error == nil else { return }
             strongSelf.history.append(strongSelf.card)
+            strongSelf.saveCard()
         }
         switch mode {
         case .create: dismiss()
         default: mode = .normal
         }
+    }
+
+    fileprivate func saveCard() {
+        loader.upload(object: [card], to: "/cards", parser: CardParser()) { _ in }
     }
 
     @objc fileprivate func removeTapped() {
@@ -287,13 +295,25 @@ extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigati
             self.present(vc, animated: true, completion: nil)
         }
     }
+
+    fileprivate func resize(image: UIImage) -> UIImage {
+        let width: CGFloat = 600
+        let height: CGFloat = width / .cardRatio
+        let size = CGSize(width: width, height: height)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        image.draw(in: CGRect(origin: CGPoint.zero, size: size))
+        let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return newImage
+    }
 }
 
 extension CardDetailsViewController: PhotoCaptureViewControllerDelegate {
 
     func photoCaptureViewController(_ viewController: PhotoCaptureViewController, didTakePhoto
         image: UIImage, for side: Card.Side) {
-        set(image, for: side)
+        let resized = resize(image: image)
+        set(resized, for: side)
         dismiss()
     }
 }
@@ -301,6 +321,7 @@ extension CardDetailsViewController: PhotoCaptureViewControllerDelegate {
 extension CardDetailsViewController: CropViewControllerDelegate {
 
     func cropViewController(_ viewController: CropViewController, didCropPhoto photo: UIImage, for side: Card.Side) {
-        set(photo, for: side)
+        let resized = resize(image: photo)
+        set(resized, for: side)
     }
 }
