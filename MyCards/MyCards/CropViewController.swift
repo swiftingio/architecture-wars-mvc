@@ -17,11 +17,28 @@ class CropViewController: HiddenStatusBarViewController {
     fileprivate let side: Card.Side
 
     // MARK: Views
-    fileprivate let previewView: PreviewOutline = PreviewOutline.constrained()
-    fileprivate let backgroundView: UIImageView = UIImageView.constrained()
+    fileprivate lazy var previewView: PreviewOutline = PreviewOutline.constrained().with {
+        $0.outline.clipsToBounds = true
+        $0.captureButton.transform = .rotateRight
+        $0.closeButton.transform = .rotateRight
+        $0.closeButton.tapped = { [unowned self] in
+            self.dismiss()
+        }
+        $0.captureButton.tapped = { [unowned self] in
+            self.process().flatMap {
+                self.delegate?.cropViewController(self, didCropPhoto: $0, for: self.side)
+            }
+            self.dismiss()
+        }
+    }
+    fileprivate lazy var backgroundView: UIImageView = UIImageView.constrained().with {
+        $0.contentMode = .scaleAspectFill
+    }
     fileprivate let backgroundEffectView: UIVisualEffectView = UIVisualEffectView(effect:
         UIBlurEffect(style: .dark)).with { $0.translatesAutoresizingMaskIntoConstraints = false }
-    fileprivate let imageView: UIImageView = UIImageView(frame: .zero)
+    fileprivate lazy var imageView: UIImageView = UIImageView(frame: .zero).with {
+        $0.contentMode = .center
+    }
     fileprivate lazy var scrollView: UIScrollView = UIScrollView.constrained().with {
         $0.delegate = self
         $0.maximumZoomScale = 2
@@ -31,10 +48,10 @@ class CropViewController: HiddenStatusBarViewController {
     }
 
     init(image: UIImage, side: Card.Side) {
-        imageView.image = UIImage(cgImage: image.cgImage!, scale: 1, orientation: .right)
-        backgroundView.image = imageView.image
         self.side = side
         super.init(nibName: nil, bundle: nil)
+        imageView.image = UIImage(cgImage: image.cgImage!, scale: 1, orientation: .right)
+        backgroundView.image = imageView.image
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -44,35 +61,17 @@ class CropViewController: HiddenStatusBarViewController {
     // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        previewView.closeButton.tapped = { [unowned self] in
-            self.dismiss()
-        }
-        previewView.captureButton.tapped = { [unowned self] in
-            self.process().flatMap {
-                self.delegate?.cropViewController(self, didCropPhoto: $0, for: self.side)
-            }
-            self.dismiss()
-        }
-        addSubviews()
         configureViews()
         configureConstraints()
     }
 
-    private func addSubviews() {
+    private func configureViews() {
+        view.clipsToBounds = true
         view.addSubview(backgroundView)
         view.addSubview(backgroundEffectView)
         view.addSubview(previewView)
         previewView.outline.addSubview(scrollView)
         scrollView.addSubview(imageView)
-    }
-
-    private func configureViews() {
-        view.clipsToBounds = true
-        backgroundView.contentMode = .scaleAspectFill
-        imageView.contentMode = .center
-        previewView.outline.clipsToBounds = true
-        previewView.captureButton.transform = .rotateRight
-        previewView.closeButton.transform = .rotateRight
     }
 
     fileprivate func configureConstraints() {
@@ -97,7 +96,7 @@ class CropViewController: HiddenStatusBarViewController {
         scrollView.zoomScale = scrollView.minimumZoomScale
     }
 
-    func process() -> UIImage? {
+    fileprivate func process() -> UIImage? {
         guard let image = imageView.image?.cgImage else { return nil }
 
         let scale = scrollView.zoomScale

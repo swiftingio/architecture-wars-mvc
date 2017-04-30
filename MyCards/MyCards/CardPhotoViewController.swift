@@ -9,15 +9,25 @@ import UIKit
 
 final class CardPhotoViewController: HiddenStatusBarViewController {
 
-    fileprivate let imageView: UIImageView = UIImageView(frame: .zero)
-    fileprivate let backgroundImageView: UIImageView = UIImageView(frame: .zero)
-    fileprivate let visualEffectView: UIVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    fileprivate let closeButton = CloseButton(frame: .zero)
+    fileprivate lazy var imageView: UIImageView = UIImageView(frame: .zero).with {
+        $0.contentMode = .scaleAspectFill
+    }
+    fileprivate lazy var backgroundImageView: UIImageView = UIImageView(frame: .zero).with {
+        $0.contentMode = .scaleAspectFill
+        $0.layer.cornerRadius = 20
+        $0.clipsToBounds = true
+        $0.alpha = 0
+    }
+    fileprivate lazy var visualEffectView: UIVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    fileprivate lazy var closeButton: CloseButton = CloseButton(frame: .zero).with {
+        $0.alpha = 0
+        $0.tapped = { [unowned self] in self.dismiss() }
+    }
 
     init(image: UIImage) {
+        super.init(nibName: nil, bundle: nil)
         imageView.image = UIImage(cgImage: image.cgImage!, scale: 1, orientation: .right)
         backgroundImageView.image = imageView.image
-        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -41,16 +51,9 @@ final class CardPhotoViewController: HiddenStatusBarViewController {
     private func configureViews() {
         view.backgroundColor = .black
         view.addSubview(backgroundImageView)
-        backgroundImageView.contentMode = .scaleAspectFill
         view.addSubview(visualEffectView)
         view.addSubview(imageView)
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 20
-        imageView.clipsToBounds = true
-        imageView.alpha = 0
         view.addSubview(closeButton)
-        closeButton.alpha = 0
-        closeButton.tapped = { [unowned self] in self.dismiss() }
     }
 
     private func configureConstraints() {
