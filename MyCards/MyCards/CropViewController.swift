@@ -71,9 +71,8 @@ class CropViewController: HiddenStatusBarViewController {
         backgroundView.contentMode = .scaleAspectFill
         imageView.contentMode = .center
         previewView.outline.clipsToBounds = true
-        let rotate = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-        previewView.captureButton.transform = rotate
-        previewView.closeButton.transform = rotate
+        previewView.captureButton.transform = .rotateRight
+        previewView.closeButton.transform = .rotateRight
     }
 
     fileprivate func configureConstraints() {
