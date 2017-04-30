@@ -15,9 +15,27 @@ final class CardsViewController: UIViewController {
     fileprivate let notificationCenter: NotificationCenterProtocol
     fileprivate lazy var cards: [Card] = []
 
-    fileprivate var emptyScreen: UIImageView!
-    fileprivate var collectionView: UICollectionView!
-    fileprivate let reuseIdentifier: String = String(describing: CardCell.self)
+    fileprivate lazy var emptyScreen: UIImageView = UIImageView(image: #imageLiteral(resourceName: "MyCards")).with {
+        $0.contentMode = .scaleAspectFit
+        $0.clipsToBounds = true
+        $0.alpha = self.cards.isEmpty ? 1.0 : 0.0
+    }
+    fileprivate lazy var collectionView: UICollectionView = UICollectionView(frame:
+        .zero, collectionViewLayout: self.layout).with {
+        $0.dataSource = self
+        $0.delegate = self
+        $0.backgroundColor = .clear
+        $0.register(CardCell.self)
+        $0.alpha = 0.0
+    }
+    fileprivate lazy var layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout().with {
+        $0.scrollDirection = .vertical
+        let offset: CGFloat = 20
+        $0.sectionInset = UIEdgeInsets(top: 4.25*offset, left: offset, bottom: offset, right: offset)
+        $0.minimumInteritemSpacing = offset
+        $0.minimumLineSpacing = offset
+    }
+
     fileprivate var observer: NSObjectProtocol?
 
     init(worker: CoreDataWorkerProtocol = CoreDataWorker(),
@@ -47,6 +65,12 @@ final class CardsViewController: UIViewController {
         configureConstraints()
         loadCards()
         getCards()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let width = view.bounds.size.width - 2 * layout.minimumInteritemSpacing
+        layout.itemSize = CGSize(width: width, height: width / .cardRatio)
     }
 
     func loadCards() {
@@ -91,12 +115,7 @@ extension CardsViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem:
             .add, target: self, action: #selector(addTapped))
 
-        emptyScreen = makeEmptyScreen()
         view.addSubview(emptyScreen)
-
-        collectionView = UICollectionView.makeCollectionView(in: view.bounds)
-        collectionView.dataSource = self
-        collectionView.delegate = self
         view.addSubview(collectionView)
     }
 
@@ -111,14 +130,6 @@ extension CardsViewController {
 
 // MARK: - Helpers
 extension CardsViewController {
-
-    fileprivate func makeEmptyScreen() -> UIImageView {
-        let emptyScreen = UIImageView(image: #imageLiteral(resourceName: "MyCards"))
-        emptyScreen.contentMode = .scaleAspectFit
-        emptyScreen.clipsToBounds = true
-        emptyScreen.alpha = cards.isEmpty ? 1.0 : 0.0
-        return emptyScreen
-    }
 
     fileprivate func hideEmptyScreen() {
         UIView.animate(withDuration: 0.2) {
@@ -160,15 +171,12 @@ extension CardsViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier:
-            reuseIdentifier, for: indexPath) as? CardCell,
-            let card = cards[safe: indexPath.row]
-            else { return UICollectionViewCell() }
-        cell.image = card.front ?? #imageLiteral(resourceName: "background")
-        cell.indexPath = indexPath
-        cell.delegate = self
-        return cell
+        return collectionView.dequeueReusableCell(of: CardCell.self, for: indexPath) { cell in
+            guard let card = cards[safe: indexPath.row] else { return }
+            cell.image = card.front ?? #imageLiteral(resourceName: "background")
+            cell.indexPath = indexPath
+            cell.delegate = self
+        }
     }
 }
 
