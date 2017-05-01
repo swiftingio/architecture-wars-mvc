@@ -20,6 +20,12 @@ class CloseButton: TappableView {
         }
     }
 
+    override var frame: CGRect {
+        didSet {
+            setCrossShape()
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(cross)

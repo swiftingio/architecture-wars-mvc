@@ -16,8 +16,16 @@ protocol PhotoCaptureViewControllerDelegate: class {
 final class PhotoCaptureViewController: HiddenStatusBarViewController {
 
     weak var delegate: PhotoCaptureViewControllerDelegate?
-    let side: Card.Side
-    fileprivate let previewView = PreviewView()
+    fileprivate let side: Card.Side
+    fileprivate lazy var previewView: PreviewView = PreviewView().with {
+        $0.session = self.session
+        $0.captureButton.tapped = { [unowned self] in self.takePhoto() }
+        $0.closeButton.tapped = { [unowned self] in self.dismiss() }
+        $0.controlsAlpha = 0.0
+        //display preview items in landscape right
+        $0.captureButton.transform = .rotateRight
+        $0.closeButton.transform = .rotateRight
+    }
 
     // MARK: AVFoundation components
     fileprivate let output = AVCapturePhotoOutput()
@@ -70,14 +78,6 @@ extension PhotoCaptureViewController {
     fileprivate func configureViews() {
         view.addSubview(previewView)
         view.backgroundColor = .black
-        previewView.session = session
-        previewView.captureButton.tapped = { [unowned self] in self.takePhoto() }
-        previewView.closeButton.tapped = { [unowned self] in self.dismiss() }
-        previewView.controlsAlpha = 0.0
-        //display preview items in landscape right
-        let rotate = CGAffineTransform(rotationAngle: CGFloat.pi / 2)
-        previewView.captureButton.transform = rotate
-        previewView.closeButton.transform = rotate
     }
 
     fileprivate func configureConstraints() {
@@ -178,21 +178,26 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
     private func process(_ data: Data) -> UIImage? {
         guard let image = UIImage(data: data)?.cgImage else { return nil }
 
+        return cropp(image, preview: previewView.frame.size, outline: previewView.outline.frame.size)
+
+    }
+
+    func cropp(_ image: CGImage, preview: CGSize, outline: CGSize) -> UIImage? {
         //original image size
         let height: CGFloat = CGFloat(image.height)
         let width: CGFloat = CGFloat(image.width)
 
         //preview view size
-        let pHeight = previewView.frame.height
-        let pWidth = previewView.frame.width
+        let pHeight = preview.height
+        let pWidth = preview.width
+
+        //card outline size
+        let oHeight = outline.height
+        let oWidth = outline.width
 
         //calculate scale
         let vScale = height/pHeight
         let hScale = width/pWidth
-
-        //card outline size
-        let oHeight = previewView.outline.frame.height
-        let oWidth = previewView.outline.frame.width
 
         //card outline offset (x,y)
         let horizontalPadding: CGFloat = .cardOffsetX * hScale

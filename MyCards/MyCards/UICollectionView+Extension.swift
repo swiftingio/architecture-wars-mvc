@@ -7,28 +7,26 @@
 
 import UIKit
 
-extension UICollectionView {
-    class func makeCollectionView(in rect: CGRect) -> UICollectionView {
-        let collectionView = UICollectionView(frame:
-            .zero, collectionViewLayout: UICollectionViewFlowLayout.makeFlowLayout(in: rect))
-        collectionView.backgroundColor = .clear
-        collectionView.register(CardCell.self, forCellWithReuseIdentifier: String(describing: CardCell.self))
-        collectionView.alpha = 0.0
-        return collectionView
-    }
+public extension UICollectionViewCell {
+    public static var identifier: String { return String(describing: self) }
 }
 
-extension UICollectionViewFlowLayout {
-    class func makeFlowLayout(in rect: CGRect) -> UICollectionViewFlowLayout {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        let offset: CGFloat = 20
-        let width = rect.size.width - 2 * offset
-        layout.itemSize = CGSize(width: width, height: width / .cardRatio)
-        layout.sectionInset = UIEdgeInsets(top: 4.25*offset, left: offset, bottom: offset, right: offset)
-        layout.minimumInteritemSpacing = offset
-        layout.minimumLineSpacing = offset
+public extension UICollectionView {
+    public func register(_ cell: UICollectionViewCell.Type) {
+        register(cell, forCellWithReuseIdentifier: cell.identifier)
+    }
 
-        return layout
+    public func dequeueReusableCell<CellClass: UICollectionViewCell>(of class: CellClass.Type,
+                                    for indexPath: IndexPath,
+                                    configure: ((CellClass) -> Void) = { _ in }) -> UICollectionViewCell {
+
+        let cell = dequeueReusableCell(withReuseIdentifier: CellClass.identifier,
+                                       for: indexPath)
+
+        if let typedCell = cell as? CellClass {
+            configure(typedCell)
+        }
+
+        return cell
     }
 }

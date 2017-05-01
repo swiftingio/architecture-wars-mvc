@@ -23,14 +23,18 @@
 		6965BB631DF7E0E8009F9CBC /* CardMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965BB611DF7E0E8009F9CBC /* CardMO+CoreDataProperties.swift */; };
 		6965BB671DF7E7BC009F9CBC /* ManagedObjectConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965BB651DF7E7BC009F9CBC /* ManagedObjectConvertible.swift */; };
 		6965BB681DF7E7BC009F9CBC /* ManagedObjectProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6965BB661DF7E7BC009F9CBC /* ManagedObjectProtocol.swift */; };
-		6967D4271DFAC163001A073B /* CropViewConttroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6967D4261DFAC163001A073B /* CropViewConttroller.swift */; };
-		696C84461E463A3600F73EFD /* PortraitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696C84451E463A3600F73EFD /* PortraitViewController.swift */; };
+		6967D4271DFAC163001A073B /* CropViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6967D4261DFAC163001A073B /* CropViewController.swift */; };
 		696C84481E463B1A00F73EFD /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696C84471E463B1A00F73EFD /* UICollectionView+Extension.swift */; };
 		69769AEC1DE2203700DF2747 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 69769AEB1DE2203700DF2747 /* LaunchScreen.storyboard */; };
 		69769AEE1DE2324D00DF2747 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AED1DE2324D00DF2747 /* UIColor+Extension.swift */; };
 		69769AF01DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AEF1DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift */; };
 		69769AF21DE241D100DF2747 /* UIImagePickerController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */; };
 		6976F6E01E22F75300EA7B43 /* NotificationCenter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6976F6DF1E22F75300EA7B43 /* NotificationCenter+Extension.swift */; };
+		6981E6361E9A412400AA1D5A /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6981E6351E9A412400AA1D5A /* Data+Extension.swift */; };
+		6981E6381E9A43B100AA1D5A /* cards.json in Resources */ = {isa = PBXBuildFile; fileRef = 6981E6371E9A43B100AA1D5A /* cards.json */; };
+		6981E6411E9AB9B000AA1D5A /* CardParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6981E6401E9AB9B000AA1D5A /* CardParser.swift */; };
+		6981E6431E9AB9F600AA1D5A /* NetworLoader+Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6981E6421E9AB9F600AA1D5A /* NetworLoader+Shared.swift */; };
+		6981E6441E9ABF0500AA1D5A /* CardDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0E61DB3A1A300CB925C /* CardDetailsViewController.swift */; };
 		698319891DD9134F0091ED64 /* PhotoCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698319881DD9134F0091ED64 /* PhotoCamera.swift */; };
 		698C57EC1E4759EC0035A8B7 /* UIView+Constrained.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698C57EB1E4759EC0035A8B7 /* UIView+Constrained.swift */; };
 		698C57EE1E475D700035A8B7 /* PreviewOutline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 698C57ED1E475D700035A8B7 /* PreviewOutline.swift */; };
@@ -38,8 +42,7 @@
 		699795491DEB631500CB408F /* CGRect+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 699795481DEB631500CB408F /* CGRect+Extension.swift */; };
 		69AB4B2A1DD652270014B996 /* NSLayoutConstraint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AB4B291DD652270014B996 /* NSLayoutConstraint+Extension.swift */; };
 		69AB4B2C1DD66F190014B996 /* NSObject+Builder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AB4B2B1DD66F190014B996 /* NSObject+Builder.swift */; };
-		69AB4B2E1DD674C80014B996 /* NetworkWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AB4B2D1DD674C80014B996 /* NetworkWorker.swift */; };
-		69AB4B321DD676890014B996 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 69AB4B311DD676890014B996 /* .swiftlint.yml */; };
+		69AB4B2E1DD674C80014B996 /* NetworkLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69AB4B2D1DD674C80014B996 /* NetworkLoader.swift */; };
 		69ABD0C61DB391E100CB925C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0C51DB391E100CB925C /* AppDelegate.swift */; };
 		69ABD0CE1DB391E100CB925C /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0CC1DB391E100CB925C /* DataModel.xcdatamodeld */; };
 		69ABD0D01DB391E100CB925C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69ABD0CF1DB391E100CB925C /* Assets.xcassets */; };
@@ -47,7 +50,6 @@
 		69ABD0DF1DB3953600CB925C /* CardsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0DE1DB3953600CB925C /* CardsViewController.swift */; };
 		69ABD0E11DB3955000CB925C /* CoreDataWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0E01DB3955000CB925C /* CoreDataWorker.swift */; };
 		69ABD0E31DB395F800CB925C /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0E21DB395F800CB925C /* Result.swift */; };
-		69ABD0E71DB3A1A300CB925C /* CardDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69ABD0E61DB3A1A300CB925C /* CardDetailsViewController.swift */; };
 		69D170761DF4CBDA009E5710 /* CardPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D170751DF4CBDA009E5710 /* CardPhotoViewController.swift */; };
 		69D170781DF5775D009E5710 /* CGFloat+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D170771DF5775D009E5710 /* CGFloat+Extension.swift */; };
 		69D1707A1DF579C5009E5710 /* UINavigationController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D170791DF579C5009E5710 /* UINavigationController+Extension.swift */; };
@@ -56,6 +58,8 @@
 		69DDFA751DB3E6D500D856C5 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DDFA741DB3E6D500D856C5 /* Card.swift */; };
 		69DDFA771DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DDFA761DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift */; };
 		69DDFA791DB3E7B200D856C5 /* Array+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69DDFA781DB3E7B200D856C5 /* Array+Extension.swift */; };
+		69FD28F81EB608B700B3B664 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69FD28F71EB608B700B3B664 /* UIImage+Extension.swift */; };
+		69FD28FA1EB64F6E00B3B664 /* CGAffineTransform+Rotate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69FD28F91EB64F6E00B3B664 /* CGAffineTransform+Rotate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,14 +79,17 @@
 		6965BB611DF7E0E8009F9CBC /* CardMO+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CardMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		6965BB651DF7E7BC009F9CBC /* ManagedObjectConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObjectConvertible.swift; sourceTree = "<group>"; };
 		6965BB661DF7E7BC009F9CBC /* ManagedObjectProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObjectProtocol.swift; sourceTree = "<group>"; };
-		6967D4261DFAC163001A073B /* CropViewConttroller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropViewConttroller.swift; sourceTree = "<group>"; };
-		696C84451E463A3600F73EFD /* PortraitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PortraitViewController.swift; sourceTree = "<group>"; };
+		6967D4261DFAC163001A073B /* CropViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CropViewController.swift; sourceTree = "<group>"; };
 		696C84471E463B1A00F73EFD /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
 		69769AEB1DE2203700DF2747 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		69769AED1DE2324D00DF2747 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		69769AEF1DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerControllerSourceType+Extension.swift"; sourceTree = "<group>"; };
 		69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImagePickerController+Extension.swift"; sourceTree = "<group>"; };
 		6976F6DF1E22F75300EA7B43 /* NotificationCenter+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NotificationCenter+Extension.swift"; sourceTree = "<group>"; };
+		6981E6351E9A412400AA1D5A /* Data+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
+		6981E6371E9A43B100AA1D5A /* cards.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cards.json; sourceTree = "<group>"; };
+		6981E6401E9AB9B000AA1D5A /* CardParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CardParser.swift; sourceTree = "<group>"; };
+		6981E6421E9AB9F600AA1D5A /* NetworLoader+Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NetworLoader+Shared.swift"; sourceTree = "<group>"; };
 		698319881DD9134F0091ED64 /* PhotoCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCamera.swift; sourceTree = "<group>"; };
 		698C57EB1E4759EC0035A8B7 /* UIView+Constrained.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Constrained.swift"; sourceTree = "<group>"; };
 		698C57ED1E475D700035A8B7 /* PreviewOutline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewOutline.swift; sourceTree = "<group>"; };
@@ -90,7 +97,7 @@
 		699795481DEB631500CB408F /* CGRect+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extension.swift"; sourceTree = "<group>"; };
 		69AB4B291DD652270014B996 /* NSLayoutConstraint+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutConstraint+Extension.swift"; sourceTree = "<group>"; };
 		69AB4B2B1DD66F190014B996 /* NSObject+Builder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Builder.swift"; sourceTree = "<group>"; };
-		69AB4B2D1DD674C80014B996 /* NetworkWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkWorker.swift; sourceTree = "<group>"; };
+		69AB4B2D1DD674C80014B996 /* NetworkLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkLoader.swift; sourceTree = "<group>"; };
 		69AB4B311DD676890014B996 /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = .swiftlint.yml; path = ../.swiftlint.yml; sourceTree = "<group>"; };
 		69ABD0C21DB391E100CB925C /* MyCards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyCards.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		69ABD0C51DB391E100CB925C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -110,6 +117,8 @@
 		69DDFA741DB3E6D500D856C5 /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		69DDFA761DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSLayoutFormatOptions+Extension.swift"; sourceTree = "<group>"; };
 		69DDFA781DB3E7B200D856C5 /* Array+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extension.swift"; sourceTree = "<group>"; };
+		69FD28F71EB608B700B3B664 /* UIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
+		69FD28F91EB64F6E00B3B664 /* CGAffineTransform+Rotate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGAffineTransform+Rotate.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,7 +150,9 @@
 		69AB4B2F1DD674D10014B996 /* Network */ = {
 			isa = PBXGroup;
 			children = (
-				69AB4B2D1DD674C80014B996 /* NetworkWorker.swift */,
+				69AB4B2D1DD674C80014B996 /* NetworkLoader.swift */,
+				6981E6421E9AB9F600AA1D5A /* NetworLoader+Shared.swift */,
+				6981E6401E9AB9B000AA1D5A /* CardParser.swift */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -180,6 +191,7 @@
 				69ABD0CF1DB391E100CB925C /* Assets.xcassets */,
 				69ABD0D41DB391E100CB925C /* Info.plist */,
 				69ABD0CC1DB391E100CB925C /* DataModel.xcdatamodeld */,
+				6981E6371E9A43B100AA1D5A /* cards.json */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -213,23 +225,26 @@
 		69ABD0E51DB39B8400CB925C /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				69AB4B2B1DD66F190014B996 /* NSObject+Builder.swift */,
 				69DDFA781DB3E7B200D856C5 /* Array+Extension.swift */,
-				69DDFA761DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift */,
-				69AB4B291DD652270014B996 /* NSLayoutConstraint+Extension.swift */,
-				693A44C61DD7422700EDCABA /* String+Localized.swift */,
-				69769AED1DE2324D00DF2747 /* UIColor+Extension.swift */,
-				69769AEF1DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift */,
-				69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */,
-				699795481DEB631500CB408F /* CGRect+Extension.swift */,
 				694A73F11DF496FE00424107 /* AVCaptureDevice+Extension.swift */,
-				694A73F31DF4972700424107 /* UIViewController+Extension.swift */,
 				69D170771DF5775D009E5710 /* CGFloat+Extension.swift */,
-				69D170791DF579C5009E5710 /* UINavigationController+Extension.swift */,
+				699795481DEB631500CB408F /* CGRect+Extension.swift */,
+				6981E6351E9A412400AA1D5A /* Data+Extension.swift */,
 				6976F6DF1E22F75300EA7B43 /* NotificationCenter+Extension.swift */,
-				691D7D111E44050F00E53AF1 /* UITextField+Extension.swift */,
+				69AB4B291DD652270014B996 /* NSLayoutConstraint+Extension.swift */,
+				69DDFA761DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift */,
+				69AB4B2B1DD66F190014B996 /* NSObject+Builder.swift */,
+				693A44C61DD7422700EDCABA /* String+Localized.swift */,
 				696C84471E463B1A00F73EFD /* UICollectionView+Extension.swift */,
+				69769AED1DE2324D00DF2747 /* UIColor+Extension.swift */,
+				69FD28F71EB608B700B3B664 /* UIImage+Extension.swift */,
+				69769AF11DE241D100DF2747 /* UIImagePickerController+Extension.swift */,
+				69769AEF1DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift */,
+				69D170791DF579C5009E5710 /* UINavigationController+Extension.swift */,
+				691D7D111E44050F00E53AF1 /* UITextField+Extension.swift */,
 				698C57EB1E4759EC0035A8B7 /* UIView+Constrained.swift */,
+				694A73F31DF4972700424107 /* UIViewController+Extension.swift */,
+				69FD28F91EB64F6E00B3B664 /* CGAffineTransform+Rotate.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -242,8 +257,7 @@
 				693A2F5F1DE4D19F00975FA1 /* PhotoCaptureViewController.swift */,
 				69D170751DF4CBDA009E5710 /* CardPhotoViewController.swift */,
 				69D1707B1DF57AAA009E5710 /* HiddenStatusBarViewController.swift */,
-				696C84451E463A3600F73EFD /* PortraitViewController.swift */,
-				6967D4261DFAC163001A073B /* CropViewConttroller.swift */,
+				6967D4261DFAC163001A073B /* CropViewController.swift */,
 				691D7D0F1E4404ED00E53AF1 /* ImagePickerController.swift */,
 			);
 			name = Controller;
@@ -323,9 +337,9 @@
 			files = (
 				691D7D0D1E436E5F00E53AF1 /* iTunesArtwork@2x in Resources */,
 				691D7D0E1E436E6100E53AF1 /* iTunesArtwork in Resources */,
-				69AB4B321DD676890014B996 /* .swiftlint.yml in Resources */,
 				69ABD0D01DB391E100CB925C /* Assets.xcassets in Resources */,
 				69769AEC1DE2203700DF2747 /* LaunchScreen.storyboard in Resources */,
+				6981E6381E9A43B100AA1D5A /* cards.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,7 +368,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				69D1707A1DF579C5009E5710 /* UINavigationController+Extension.swift in Sources */,
-				69ABD0E71DB3A1A300CB925C /* CardDetailsViewController.swift in Sources */,
 				69D170761DF4CBDA009E5710 /* CardPhotoViewController.swift in Sources */,
 				6991C0751DE6488E00442B8E /* PreviewView.swift in Sources */,
 				69769AEE1DE2324D00DF2747 /* UIColor+Extension.swift in Sources */,
@@ -366,12 +379,14 @@
 				694A73F21DF496FE00424107 /* AVCaptureDevice+Extension.swift in Sources */,
 				69ABD0E31DB395F800CB925C /* Result.swift in Sources */,
 				69DDFA791DB3E7B200D856C5 /* Array+Extension.swift in Sources */,
-				69AB4B2E1DD674C80014B996 /* NetworkWorker.swift in Sources */,
+				69AB4B2E1DD674C80014B996 /* NetworkLoader.swift in Sources */,
 				69ABD0E11DB3955000CB925C /* CoreDataWorker.swift in Sources */,
 				69DDFA731DB3E6AD00D856C5 /* CardCell.swift in Sources */,
 				69ABD0DF1DB3953600CB925C /* CardsViewController.swift in Sources */,
+				6981E6361E9A412400AA1D5A /* Data+Extension.swift in Sources */,
 				6965BB631DF7E0E8009F9CBC /* CardMO+CoreDataProperties.swift in Sources */,
 				6965BB681DF7E7BC009F9CBC /* ManagedObjectProtocol.swift in Sources */,
+				69FD28F81EB608B700B3B664 /* UIImage+Extension.swift in Sources */,
 				69D170781DF5775D009E5710 /* CGFloat+Extension.swift in Sources */,
 				69ABD0C61DB391E100CB925C /* AppDelegate.swift in Sources */,
 				69769AF01DE241A300DF2747 /* UIImagePickerControllerSourceType+Extension.swift in Sources */,
@@ -379,19 +394,22 @@
 				69183D411DE653420026C1DF /* PhotoCameraButton.swift in Sources */,
 				693A44CB1DD7D9CE00EDCABA /* TappableView.swift in Sources */,
 				69183D431DE653710026C1DF /* CloseButton.swift in Sources */,
-				696C84461E463A3600F73EFD /* PortraitViewController.swift in Sources */,
+				6981E6441E9ABF0500AA1D5A /* CardDetailsViewController.swift in Sources */,
 				698319891DD9134F0091ED64 /* PhotoCamera.swift in Sources */,
 				699795491DEB631500CB408F /* CGRect+Extension.swift in Sources */,
 				698C57EE1E475D700035A8B7 /* PreviewOutline.swift in Sources */,
 				693A44C71DD7422700EDCABA /* String+Localized.swift in Sources */,
 				69ABD0CE1DB391E100CB925C /* DataModel.xcdatamodeld in Sources */,
 				69AB4B2C1DD66F190014B996 /* NSObject+Builder.swift in Sources */,
+				69FD28FA1EB64F6E00B3B664 /* CGAffineTransform+Rotate.swift in Sources */,
 				6976F6E01E22F75300EA7B43 /* NotificationCenter+Extension.swift in Sources */,
 				6965BB671DF7E7BC009F9CBC /* ManagedObjectConvertible.swift in Sources */,
 				691D7D101E4404ED00E53AF1 /* ImagePickerController.swift in Sources */,
 				69769AF21DE241D100DF2747 /* UIImagePickerController+Extension.swift in Sources */,
-				6967D4271DFAC163001A073B /* CropViewConttroller.swift in Sources */,
+				6967D4271DFAC163001A073B /* CropViewController.swift in Sources */,
+				6981E6431E9AB9F600AA1D5A /* NetworLoader+Shared.swift in Sources */,
 				696C84481E463B1A00F73EFD /* UICollectionView+Extension.swift in Sources */,
+				6981E6411E9AB9B000AA1D5A /* CardParser.swift in Sources */,
 				69AB4B2A1DD652270014B996 /* NSLayoutConstraint+Extension.swift in Sources */,
 				69DDFA771DB3E70900D856C5 /* NSLayoutFormatOptions+Extension.swift in Sources */,
 				6965BB621DF7E0E8009F9CBC /* CardMO+CoreDataClass.swift in Sources */,
