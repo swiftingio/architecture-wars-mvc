@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class CardDetailsViewController: PortraitViewController {
+final class CardDetailsViewController: UIViewController {
 
     fileprivate var history: [Card] = []
     fileprivate var card: Card {
@@ -25,14 +25,22 @@ final class CardDetailsViewController: PortraitViewController {
         }
     }
     fileprivate let worker: CoreDataWorkerProtocol
+    fileprivate let loader: ResourceLoading
 
     // MARK: Views
     // codebeat:disable[TOO_MANY_IVARS]
-    fileprivate var editButton: UIBarButtonItem!
-    fileprivate var cancelButton: UIBarButtonItem!
-    fileprivate var doneButton: UIBarButtonItem!
-    fileprivate var front: CardView!
-    fileprivate var back: CardView!
+    fileprivate lazy var editButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:
+        .edit, target: self, action: #selector(editTapped))
+    fileprivate lazy var cancelButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:
+        .cancel, target: self, action: #selector(cancelTapped))
+    fileprivate lazy var doneButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem:
+        .done, target: self, action: #selector(doneTapped))
+    fileprivate lazy var front: CardView = CardView(image: self.card.front).with {
+        $0.tapped = { [unowned self] in self.cardTapped(.front) }
+    }
+    fileprivate lazy var back: CardView = CardView(image: self.card.back) .with {
+        $0.tapped = { [unowned self] in self.cardTapped(.back) }
+    }
     fileprivate lazy var name: UITextField = UITextField.makeNameField().with {
         $0.text = self.card.name
         $0.delegate = self
@@ -48,10 +56,12 @@ final class CardDetailsViewController: PortraitViewController {
 
     init(card: Card,
          mode: Mode = .normal,
-         worker: CoreDataWorkerProtocol = CoreDataWorker()) {
+         worker: CoreDataWorkerProtocol = CoreDataWorker(),
+         loader: ResourceLoading = NetworkLoader.shared) {
         self.card = card
-        self.worker = worker
         self.mode = mode
+        self.worker = worker
+        self.loader = loader
         self.history.append(self.card)
         super.init(nibName: nil, bundle: nil)
     }
@@ -62,7 +72,7 @@ final class CardDetailsViewController: PortraitViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        makeAndConfigureViews()
+        configureViews()
         configureNavigationItem()
         configureModeForViews()
         configureConstraints()
@@ -70,21 +80,7 @@ final class CardDetailsViewController: PortraitViewController {
 }
 
 extension CardDetailsViewController {
-    fileprivate func makeAndConfigureViews() {
-        editButton = UIBarButtonItem(barButtonSystemItem:
-            .edit, target: self, action: #selector(editTapped))
-        cancelButton = UIBarButtonItem(barButtonSystemItem:
-            .cancel, target: self, action: #selector(cancelTapped))
-        doneButton = UIBarButtonItem(barButtonSystemItem:
-            .done, target: self, action: #selector(doneTapped))
-
-        front = CardView(image: card.front).with {
-            $0.tapped = { [unowned self] in self.cardTapped(.front) }
-        }
-        back = CardView(image: card.back) .with {
-            $0.tapped = { [unowned self] in self.cardTapped(.back) }
-        }
-
+    fileprivate func configureViews() {
         view.backgroundColor = .white
         view.addSubview(name)
         view.addSubview(front)
@@ -137,10 +133,7 @@ extension CardDetailsViewController {
 
     @objc fileprivate func doneTapped() {
         guard card.isValid else { return }
-        worker.upsert(entities: [card]) { [weak self] error in
-            guard let strongSelf = self, error == nil else { return }
-            strongSelf.history.append(strongSelf.card)
-        }
+        persist(card)
         switch mode {
         case .create: dismiss()
         default: mode = .normal
@@ -173,6 +166,16 @@ extension CardDetailsViewController {
                     name: name,
                     front: card.front,
                     back: card.back)
+    }
+
+    fileprivate func persist(_ card: Card) {
+        guard card.isValid else { return }
+        worker.upsert(entities: [card]) { [weak self, loader] error in
+            loader.upload(object: [card], to: "/cards", parser: CardParser()) { _ in }
+
+            guard let strongSelf = self, error == nil else { return }
+            strongSelf.history.append(card)
+        }
     }
 
     fileprivate func cardTapped(_ side: Card.Side) {
@@ -232,18 +235,20 @@ extension CardDetailsViewController {
     }
 
     fileprivate func set(_ image: UIImage, for side: Card.Side) {
+        var front: UIImage?
+        var back: UIImage?
         switch side {
         case .front:
-            card = Card(identifier: card.identifier,
-                        name: card.name,
-                        front: image,
-                        back: card.back)
+            front = image
+            back = card.back
         case .back:
-            card = Card(identifier: card.identifier,
-                        name: card.name,
-                        front: card.front,
-                        back: image)
+            front = card.front
+            back = image
         }
+        card = Card(identifier: card.identifier,
+                    name: card.name,
+                    front: front,
+                    back: back)
     }
 }
 
@@ -287,20 +292,28 @@ extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigati
             self.present(vc, animated: true, completion: nil)
         }
     }
+
+    fileprivate func process(_ image: UIImage, for side: Card.Side) {
+        defer { dismiss() }
+        let width: CGFloat = 600
+        let height: CGFloat = width / .cardRatio
+        let size = CGSize(width: width, height: height)
+        guard let resized = image.resized(to: size) else { return }
+        set(resized, for: side)
+    }
 }
 
 extension CardDetailsViewController: PhotoCaptureViewControllerDelegate {
 
     func photoCaptureViewController(_ viewController: PhotoCaptureViewController, didTakePhoto
-        image: UIImage, for side: Card.Side) {
-        set(image, for: side)
-        dismiss()
+        photo: UIImage, for side: Card.Side) {
+        process(photo, for: side)
     }
 }
 
 extension CardDetailsViewController: CropViewControllerDelegate {
 
     func cropViewController(_ viewController: CropViewController, didCropPhoto photo: UIImage, for side: Card.Side) {
-        set(photo, for: side)
+        process(photo, for: side)
     }
 }
