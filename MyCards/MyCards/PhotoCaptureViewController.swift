@@ -28,7 +28,10 @@ final class PhotoCaptureViewController: HiddenStatusBarViewController {
     }
 
     // MARK: AVFoundation components
-    fileprivate let output = AVCapturePhotoOutput()
+    fileprivate let output = AVCapturePhotoOutput().with {
+        $0.isHighResolutionCaptureEnabled = true
+        $0.isLivePhotoCaptureEnabled = false
+    }
     fileprivate let session = AVCaptureSession()
     fileprivate let queue = DispatchQueue(label: "AV Session Queue", attributes: [], target: nil)
     fileprivate var authorizationStatus: AVAuthorizationStatus {
@@ -51,8 +54,7 @@ final class PhotoCaptureViewController: HiddenStatusBarViewController {
         configureViews()
         configureConstraints()
         requestAuthorizationIfNeeded()
-
-        queue.async { self.configureSession() }
+        configureSession()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -90,7 +92,7 @@ extension PhotoCaptureViewController {
     }
 
     fileprivate func requestAuthorizationIfNeeded() {
-        guard .notDetermined == AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) else { return }
+        guard .notDetermined == authorizationStatus else { return }
         queue.suspend()
         AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { [unowned self] granted in
             guard granted else { return }
@@ -104,24 +106,24 @@ extension PhotoCaptureViewController {
     }
 
     fileprivate func configureSession() {
-        guard .authorized == authorizationStatus else { return }
-        guard let camera: AVCaptureDevice = AVCaptureDevice.backVideoCamera else { return }
+        queue.async {
+            guard .authorized == self.authorizationStatus else { return }
+            guard let camera: AVCaptureDevice = AVCaptureDevice.backVideoCamera else { return }
 
-        defer { session.commitConfiguration() }
+            defer { self.session.commitConfiguration() }
 
-        session.beginConfiguration()
-        session.sessionPreset = AVCaptureSessionPresetPhoto
+            self.session.beginConfiguration()
+            self.session.sessionPreset = AVCaptureSessionPresetPhoto
 
-        do {
-            let input = try AVCaptureDeviceInput(device: camera)
-            guard session.canAddInput(input) else { return }
-            session.addInput(input)
-        } catch { return }
+            do {
+                let input = try AVCaptureDeviceInput(device: camera)
+                guard self.session.canAddInput(input) else { return }
+                self.session.addInput(input)
+            } catch { return }
 
-        guard session.canAddOutput(output) else { return }
-        session.addOutput(output)
-        output.isHighResolutionCaptureEnabled = true
-        output.isLivePhotoCaptureEnabled = false
+            guard self.session.canAddOutput(self.output) else { return }
+            self.session.addOutput(self.output)
+        }
     }
 
     fileprivate func takePhoto() {
