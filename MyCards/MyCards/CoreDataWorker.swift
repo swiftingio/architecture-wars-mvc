@@ -89,7 +89,7 @@ class CoreDataWorker: CoreDataWorkerProtocol {
         (entities: [Entity], completion: @escaping (Error?) -> Void) {
         coreData.performBackgroundTask { (context) in
             for entity in entities {
-                if let managedEntity = entity.toManagedObject(in: context) as? NSManagedObject {
+                if let managedEntity = entity.toManagedObject(in: context) {
                     context.delete(managedEntity)
                 }
             }

@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+//TODO: use codable
 final class CardParser: Parser, JSONDataConverting {
     func parse(_ json: Any?) -> Any? { //[[String : Any]] -> [Card]
         guard let items = json as? [[String : Any]] else { return nil }
@@ -34,7 +34,6 @@ final class CardParser: Parser, JSONDataConverting {
             json.append(dictionary)
         }
         do {
-            print(json)
             let data = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
             return data
         } catch {

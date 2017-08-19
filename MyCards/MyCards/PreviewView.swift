@@ -12,7 +12,7 @@ final class PreviewView: PreviewOutline {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        videoPreviewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        videoPreviewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
     }
 
     required init?(coder aDecoder: NSCoder) {

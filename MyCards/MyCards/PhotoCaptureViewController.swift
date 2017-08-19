@@ -35,7 +35,7 @@ final class PhotoCaptureViewController: HiddenStatusBarViewController {
     fileprivate let session = AVCaptureSession()
     fileprivate let queue = DispatchQueue(label: "AV Session Queue", attributes: [], target: nil)
     fileprivate var authorizationStatus: AVAuthorizationStatus {
-        return AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+        return AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
     }
 
     init(side: Card.Side) {
@@ -94,7 +94,7 @@ extension PhotoCaptureViewController {
     fileprivate func requestAuthorizationIfNeeded() {
         guard .notDetermined == authorizationStatus else { return }
         queue.suspend()
-        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { [unowned self] granted in
+        AVCaptureDevice.requestAccess(for: AVMediaType.video) { [unowned self] granted in
             guard granted else { return }
             self.queue.resume()
         }
@@ -113,7 +113,7 @@ extension PhotoCaptureViewController {
             defer { self.session.commitConfiguration() }
 
             self.session.beginConfiguration()
-            self.session.sessionPreset = AVCaptureSessionPresetPhoto
+            self.session.sessionPreset = AVCaptureSession.Preset.photo
 
             do {
                 let input = try AVCaptureDeviceInput(device: camera)
@@ -157,19 +157,15 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
     // codebeat:disable[ARITY]
     //swiftlint:disable function_parameter_count
     //swiftlint:disable line_length
-    @objc(captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:)
-    func capture(_ captureOutput: AVCapturePhotoOutput,
-                          didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?,
-                          previewPhotoSampleBuffer: CMSampleBuffer?,
-                          resolvedSettings: AVCaptureResolvedPhotoSettings,
-                          bracketSettings: AVCaptureBracketedStillImageSettings?,
-                          error: NSError?) {
+//    @objc(captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:)(captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:)
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingRawPhoto rawSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Swift.Error?) {
 
-        guard let sample = photoSampleBuffer,
+
+        guard let sample = rawSampleBuffer,
             let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:
                 sample, previewPhotoSampleBuffer: previewPhotoSampleBuffer),
             let photo = process(data)
-            else { print("Error capturing photo: \(error)"); return }
+            else { print("Error capturing photo: \(String(describing: error))"); return }
 
         delegate?.photoCaptureViewController(self, didTakePhoto: photo, for: side)
     }
@@ -220,5 +216,9 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
         let photo = UIImage(cgImage: cropped, scale: 1, orientation: .up)
         return photo
     }
-
+    
+    @available(iOS 11.0, *)
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Swift.Error?) {
+        
+    }
 }
