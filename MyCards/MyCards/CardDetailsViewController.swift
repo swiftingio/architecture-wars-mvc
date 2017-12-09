@@ -91,7 +91,7 @@ extension CardDetailsViewController {
     fileprivate func configureConstraints() {
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         var constraints: [NSLayoutConstraint] = []
-        constraints.append(name.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80))
+        constraints.append(name.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40))
         constraints.append(name.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20))
         constraints.append(name.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20))
         constraints.append(front.leadingAnchor.constraint(equalTo: name.leadingAnchor, constant: 0))
