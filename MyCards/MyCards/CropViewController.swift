@@ -11,7 +11,7 @@ protocol CropViewControllerDelegate: class {
     func cropViewController(_ viewController: CropViewController, didCropPhoto photo: UIImage, for side: Card.Side)
 }
 
-class CropViewController: HiddenStatusBarViewController {
+class CropViewController: LightStatusBarViewController {
 
     weak var delegate: CropViewControllerDelegate?
     fileprivate let side: Card.Side
@@ -52,6 +52,7 @@ class CropViewController: HiddenStatusBarViewController {
         super.init(nibName: nil, bundle: nil)
         imageView.image = UIImage(cgImage: image.cgImage!, scale: 1, orientation: .right)
         backgroundView.image = imageView.image
+        modalTransitionStyle = .crossDissolve
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -76,10 +77,10 @@ class CropViewController: HiddenStatusBarViewController {
 
     fileprivate func configureConstraints() {
         var constraints: [NSLayoutConstraint] = []
-        constraints += NSLayoutConstraint.filledInSuperview(previewView)
-        constraints += NSLayoutConstraint.filledInSuperview(scrollView)
-        constraints += NSLayoutConstraint.filledInSuperview(backgroundView)
-        constraints += NSLayoutConstraint.filledInSuperview(backgroundEffectView)
+        constraints.append(contentsOf: NSLayoutConstraint.filledInSuperview(previewView))
+        constraints.append(contentsOf: NSLayoutConstraint.filledInSuperview(scrollView))
+        constraints.append(contentsOf: NSLayoutConstraint.filledInSuperview(backgroundView))
+        constraints.append(contentsOf: NSLayoutConstraint.filledInSuperview(backgroundEffectView))
         NSLayoutConstraint.activate(constraints)
         previewView.layoutIfNeeded()
     }

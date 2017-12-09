@@ -53,10 +53,11 @@ extension Card {
 }
 
 extension Card {
+    //TODO: Codable
     enum JSONKey: String {
         case identifier, name, front, back
     }
-    init?(json: [String : Any]) {
+    init?(json: [String: Any]) {
         guard let identifier = json[JSONKey.identifier.rawValue] as? String,
             let name = json[JSONKey.name.rawValue] as? String,
             let front = json[JSONKey.front.rawValue] as? String,

@@ -91,21 +91,21 @@ extension CardDetailsViewController {
     fileprivate func configureConstraints() {
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         var constraints: [NSLayoutConstraint] = []
-        constraints.append(name.topAnchor.constraint(equalTo: view.topAnchor, constant: 80))
-        constraints.append(name.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20))
-        constraints.append(name.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20))
-        constraints.append(front.leftAnchor.constraint(equalTo: name.leftAnchor, constant: 0))
-        constraints.append(front.rightAnchor.constraint(equalTo: name.rightAnchor, constant: 0))
+        constraints.append(name.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80))
+        constraints.append(name.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20))
+        constraints.append(name.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20))
+        constraints.append(front.leadingAnchor.constraint(equalTo: name.leadingAnchor, constant: 0))
+        constraints.append(front.trailingAnchor.constraint(equalTo: name.trailingAnchor, constant: 0))
         constraints.append(front.topAnchor.constraint(equalTo: name.bottomAnchor, constant: 20))
         constraints.append(front.heightAnchor.constraint(equalTo: front.widthAnchor, multiplier: 1 / .cardRatio))
         constraints.append(back.topAnchor.constraint(equalTo: front.bottomAnchor, constant: 20))
-        constraints.append(back.leftAnchor.constraint(equalTo: front.leftAnchor, constant: 0))
-        constraints.append(back.rightAnchor.constraint(equalTo: front.rightAnchor, constant: 0))
+        constraints.append(back.leadingAnchor.constraint(equalTo: front.leadingAnchor, constant: 0))
+        constraints.append(back.trailingAnchor.constraint(equalTo: front.trailingAnchor, constant: 0))
         constraints.append(back.heightAnchor.constraint(equalTo: front.heightAnchor, constant: 0))
         constraints.append(toolbar.heightAnchor.constraint(equalToConstant: 40))
-        constraints.append(toolbar.leftAnchor.constraint(equalTo: view.leftAnchor))
-        constraints.append(toolbar.rightAnchor.constraint(equalTo: view.rightAnchor))
-        constraints.append(toolbar.bottomAnchor.constraint(equalTo: view.bottomAnchor))
+        constraints.append(toolbar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor))
+        constraints.append(toolbar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor))
+        constraints.append(toolbar.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor))
         NSLayoutConstraint.activate(constraints)
     }
 
@@ -269,7 +269,7 @@ extension CardDetailsViewController {
 
 extension CardDetailsViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController,
-                               didFinishPickingMediaWithInfo info: [String : Any]) {
+                               didFinishPickingMediaWithInfo info: [String: Any]) {
         guard let image = info[UIImagePickerControllerOriginalImage] as? UIImage,
             let side = (picker as? ImagePickerController)?.side else { return }
         showImageCropping(for: image, side: side)

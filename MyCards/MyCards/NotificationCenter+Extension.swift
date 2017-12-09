@@ -17,7 +17,7 @@ protocol NotificationCenterProtocol {
                      using: @escaping (Notification) -> Void) -> NSObjectProtocol
     func observeChanges<Entity>(for type: Entity.Type,
                         block: @escaping () -> Void) -> NSObjectProtocol
-    where Entity : NSManagedObject
+    where Entity: NSManagedObject
 
     func removeObserver(_: Any)
     func removeObserver(_: Any, name: NSNotification.Name?,
@@ -26,13 +26,13 @@ protocol NotificationCenterProtocol {
     func post(_: Notification)
     func post(name: NSNotification.Name, object: Any?)
     func post(name: NSNotification.Name, object: Any?,
-              userInfo: [AnyHashable : Any]?)
+              userInfo: [AnyHashable: Any]?)
 }
 
 extension Notification.Name {
 
     static func entitiesChanged<Entity>(_ type: Entity.Type) -> Notification.Name
-        where Entity : NSManagedObject {
+        where Entity: NSManagedObject {
 
             return Notification.Name("entitiesChanged" + String(describing: type))
     }
@@ -42,7 +42,7 @@ extension NotificationCenter: NotificationCenterProtocol {
 
     func observeChanges<Entity>(for type: Entity.Type,
                         block: @escaping () -> Void) -> NSObjectProtocol
-        where Entity : NSManagedObject {
+        where Entity: NSManagedObject {
             return addObserver(forName: .entitiesChanged(type),
                                object: nil,
                                queue: .main) { (_) in

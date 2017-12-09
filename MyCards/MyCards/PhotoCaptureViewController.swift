@@ -13,7 +13,7 @@ protocol PhotoCaptureViewControllerDelegate: class {
         photo: UIImage, for side: Card.Side)
 }
 
-final class PhotoCaptureViewController: HiddenStatusBarViewController {
+final class PhotoCaptureViewController: LightStatusBarViewController {
 
     weak var delegate: PhotoCaptureViewControllerDelegate?
     fileprivate let side: Card.Side
@@ -154,12 +154,12 @@ extension PhotoCaptureViewController {
 
 extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
 
+    //TODO: FIX ME !!!
     // codebeat:disable[ARITY]
     //swiftlint:disable function_parameter_count
     //swiftlint:disable line_length
 //    @objc(captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:)(captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:)
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingRawPhoto rawSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Swift.Error?) {
-
 
         guard let sample = rawSampleBuffer,
             let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:
@@ -216,9 +216,9 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
         let photo = UIImage(cgImage: cropped, scale: 1, orientation: .up)
         return photo
     }
-    
+
     @available(iOS 11.0, *)
     public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Swift.Error?) {
-        
+
     }
 }

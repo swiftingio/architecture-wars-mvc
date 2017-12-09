@@ -9,7 +9,7 @@ import UIKit
 //TODO: use codable
 final class CardParser: Parser, JSONDataConverting {
     func parse(_ json: Any?) -> Any? { //[[String : Any]] -> [Card]
-        guard let items = json as? [[String : Any]] else { return nil }
+        guard let items = json as? [[String: Any]] else { return nil }
         var cards: [Card] = []
         for item in items {
             guard let card = Card(json: item) else { continue }
@@ -20,9 +20,9 @@ final class CardParser: Parser, JSONDataConverting {
 
     func json(from object: Any) -> Data? {
         guard let cards = object as? [Card] else { return nil }
-        var json: [[String : Any]] = []
+        var json: [[String: Any]] = []
         for card in cards {
-            var dictionary: [String : Any] = [:]
+            var dictionary: [String: Any] = [:]
             dictionary[Card.JSONKey.name.rawValue] = card.name
             dictionary[Card.JSONKey.identifier.rawValue] = card.identifier
             dictionary[Card.JSONKey.front.rawValue] = card.front
