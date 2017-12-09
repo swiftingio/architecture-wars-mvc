@@ -8,11 +8,11 @@
 import Foundation
 
 protocol DataDownloading {
-    func download(from endpoint: String, callback: @escaping (Any?) -> Void)
+    func download(from endpoint: String, callback: @escaping (Data?) -> Void)
 }
 
 protocol Parser {
-    func parse(_ json: Any?) -> Any?
+    func parse(_ json: Data, with decoder: JSONDecoder) throws -> Any
 }
 
 protocol ParsedDataDownloading {
@@ -49,13 +49,13 @@ final class NetworkLoader {
 }
 
 extension NetworkLoader: DataDownloading {
-    func download(from endpoint: String, callback: @escaping (Any?) -> Void) {
+    func download(from endpoint: String, callback: @escaping (Data?) -> Void) {
         let url = self.url(with: endpoint)
         let task = session.dataTask(with: url) { (data, _, error) -> Void in
             guard error == nil,
                 let data = data
                 else { print(String(describing: error)); callback(nil); return }
-            callback(data.JSONObject)
+            callback(data)
         }
         task.resume()
     }
@@ -65,7 +65,9 @@ extension NetworkLoader: DataDownloading {
 extension NetworkLoader: ParsedDataDownloading {
     func download(from endpoint: String, parser: Parser, callback: @escaping (Any?) -> Void) {
         download(from: endpoint) { json in
-            let parsed = parser.parse(json)
+            guard let data = json else { callback(nil); return; }
+            let decoder = JSONDecoder()
+            let parsed = try? parser.parse(data, with: decoder)
             callback(parsed)
         }
     }

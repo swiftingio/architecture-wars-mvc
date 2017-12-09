@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct Card {
+struct Card: Codable {
     let identifier: String
     let name: String
     let front: UIImage?
@@ -43,8 +43,8 @@ extension Card.Side: CustomStringConvertible {
 extension Card {
     var isValid: Bool {
         guard
-            let _ = front,
-            let _ = back,
+            front != nil,
+            back != nil,
             !name.isEmpty,
             !identifier.isEmpty
             else { return false }
@@ -53,19 +53,32 @@ extension Card {
 }
 
 extension Card {
-    //TODO: Codable
-    enum JSONKey: String {
+    enum CodingKeys: String, CodingKey {
         case identifier, name, front, back
     }
-    init?(json: [String: Any]) {
-        guard let identifier = json[JSONKey.identifier.rawValue] as? String,
-            let name = json[JSONKey.name.rawValue] as? String,
-            let front = json[JSONKey.front.rawValue] as? String,
-            let back = json[JSONKey.back.rawValue] as? String
-            else { return nil }
-        self.identifier = identifier
-        self.name = name
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+        identifier = try container.decode(String.self, forKey: .identifier)
+
+        let front = try container.decode(String.self, forKey: .front)
+        let back = try container.decode(String.self, forKey: .back)
         self.front = Data(base64Encoded: front).flatMap(UIImage.init(data:))
         self.back = Data(base64Encoded: back).flatMap(UIImage.init(data:))
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container =  encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(name, forKey: .name)
+        try container.encode(identifier, forKey: .identifier)
+        let front: String = self.front
+            .flatMap { UIImagePNGRepresentation($0) }
+            .flatMap { $0.base64EncodedString() } ?? ""
+        try container.encode(front, forKey: .front)
+        let back: String = self.back
+            .flatMap { UIImagePNGRepresentation($0) }
+            .flatMap { $0.base64EncodedString() } ?? ""
+        try container.encode(back, forKey: .back)
     }
 }
