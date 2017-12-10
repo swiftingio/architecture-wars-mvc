@@ -73,12 +73,30 @@ extension Card {
         try container.encode(name, forKey: .name)
         try container.encode(identifier, forKey: .identifier)
         let front: String = self.front
-            .flatMap { UIImagePNGRepresentation($0) }
-            .flatMap { $0.base64EncodedString() } ?? ""
+            .flatMap { $0.base64EncodedString } ?? ""
         try container.encode(front, forKey: .front)
         let back: String = self.back
-            .flatMap { UIImagePNGRepresentation($0) }
-            .flatMap { $0.base64EncodedString() } ?? ""
+            .flatMap { $0.base64EncodedString } ?? ""
         try container.encode(back, forKey: .back)
+    }
+}
+
+extension Card: Equatable {
+    static func ==(lhs: Card, rhs: Card) -> Bool {
+        return lhs.name == rhs.name &&
+            lhs.identifier == rhs.identifier &&
+            lhs.front?.base64EncodedString == rhs.front?.base64EncodedString &&
+            lhs.back?.base64EncodedString == rhs.back?.base64EncodedString
+    }
+
+}
+
+extension UIImage {
+    var data: Data? {
+        return UIImagePNGRepresentation(self)
+    }
+
+    var base64EncodedString: String? {
+        return self.data.flatMap { $0.base64EncodedString() }
     }
 }
