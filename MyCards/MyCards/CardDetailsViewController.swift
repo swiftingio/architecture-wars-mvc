@@ -143,7 +143,9 @@ extension CardDetailsViewController {
     @objc fileprivate func removeTapped() {
         worker.remove(entities: [card]) { [weak self] error in
             error.flatMap { print("\($0)") }
-            self?.dismiss()
+            DispatchQueue.main.async {
+                self?.dismiss()
+            }
         }
     }
 
