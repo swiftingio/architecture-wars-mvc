@@ -128,7 +128,7 @@ extension PhotoCaptureViewController {
 
     fileprivate func takePhoto() {
         queue.async { [unowned self] in
-            let photoSettings = AVCapturePhotoSettings()
+            let photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
             photoSettings.flashMode = .auto
             photoSettings.isHighResolutionPhotoEnabled = true
             self.output.capturePhoto(with: photoSettings, delegate: self)
@@ -154,23 +154,17 @@ extension PhotoCaptureViewController {
 
 extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
 
-    //TODO: FIX ME !!!
     // codebeat:disable[ARITY]
-    //swiftlint:disable function_parameter_count
-    //swiftlint:disable line_length
-//    @objc(captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:)(captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:)
-    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingRawPhoto rawSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Swift.Error?) {
-
-        guard let sample = rawSampleBuffer,
-            let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:
-                sample, previewPhotoSampleBuffer: previewPhotoSampleBuffer),
+    public func photoOutput(_ output: AVCapturePhotoOutput,
+                            didFinishProcessingPhoto photo: AVCapturePhoto,
+                            error: Swift.Error?) {
+        guard error == nil,
+            let data = photo.fileDataRepresentation(),
             let photo = process(data)
             else { print("Error capturing photo: \(String(describing: error))"); return }
 
         delegate?.photoCaptureViewController(self, didTakePhoto: photo, for: side)
     }
-    //swiftlint:enable function_parameter_count
-    //swiftlint:enable line_length
     // codebeat:enable[ARITY]
 
     private func process(_ data: Data) -> UIImage? {
@@ -181,6 +175,7 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
     }
 
     func cropp(_ image: CGImage, preview: CGSize, outline: CGSize) -> UIImage? {
+        //TODO: fix cropping for iPhone X
         //original image size
         let height: CGFloat = CGFloat(image.height)
         let width: CGFloat = CGFloat(image.width)
@@ -215,10 +210,5 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
 
         let photo = UIImage(cgImage: cropped, scale: 1, orientation: .up)
         return photo
-    }
-
-    @available(iOS 11.0, *)
-    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Swift.Error?) {
-
     }
 }
