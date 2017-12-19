@@ -169,42 +169,28 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
 
     private func process(_ data: Data) -> UIImage? {
         guard let image = UIImage(data: data)?.cgImage else { return nil }
-
-        return cropp(image, preview: previewView.frame.size, outline: previewView.outline.frame.size)
-
+        let outline = previewView.outline.frame
+        let outputRect = previewView.videoPreviewLayer.metadataOutputRectConverted(fromLayerRect: outline)
+        return cropp(image, to: outline, with: outputRect)
     }
 
-    func cropp(_ image: CGImage, preview: CGSize, outline: CGSize) -> UIImage? {
-        //TODO: fix cropping for iPhone X
-        //original image size
-        let height: CGFloat = CGFloat(image.height)
-        let width: CGFloat = CGFloat(image.width)
+    func cropp(_ image: CGImage, to outline: CGRect, with metadataOutputRect: CGRect) -> UIImage? {
 
-        //preview view size
-        let pHeight = preview.height
-        let pWidth = preview.width
+        let originalSize: CGSize = CGSize(width: image.width, height: image.height)
 
-        //card outline size
-        let oHeight = outline.height
-        let oWidth = outline.width
+        //NOTE: Scale using corresponding CGRect from AVCaptureVideoPreviewLayer
+        let scaledOutline: CGSize = CGSize(width:
+            originalSize.width * metadataOutputRect.width,
+            height: CGFloat(image.height) * metadataOutputRect.height)
 
-        //calculate scale
-        let vScale = height/pHeight
-        let hScale = width/pWidth
+        //NOTE: Calculate card outline offset (x,y)
+        let x: CGFloat = originalSize.width * metadataOutputRect.origin.x
+        let y: CGFloat = originalSize.height * metadataOutputRect.origin.y
 
-        //card outline offset (x,y)
-        let horizontalPadding: CGFloat = .cardOffsetX * hScale
-        let verticalPadding: CGFloat = .cardOffsetY * vScale
-
-        let x = (width - oWidth * hScale) / 2 + horizontalPadding
-        let y = (height - oHeight * vScale) / 2 + verticalPadding
-
-        let newWidth = oWidth * hScale
-        let newHeight = oHeight * vScale
-
-        let rect = CGRect(x: x, y: y,
-                          width: newWidth-horizontalPadding*2,
-                          height: newHeight-verticalPadding*2)
+        let rect = CGRect(x: x,
+                          y: y,
+                          width: scaledOutline.width,
+                          height: scaledOutline.height)
 
         guard let cropped = image.cropping(to: rect) else { return nil }
 
