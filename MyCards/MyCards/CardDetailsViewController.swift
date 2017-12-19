@@ -43,6 +43,7 @@ final class CardDetailsViewController: UIViewController {
     }
     fileprivate lazy var name: UITextField = UITextField.makeNameField().with {
         $0.text = self.card.name
+        $0.autocapitalizationType = .sentences
         $0.delegate = self
         $0.addTarget(self, action: #selector(nameChanged(sender:)), for: .editingChanged)
     }

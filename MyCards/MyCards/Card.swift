@@ -82,7 +82,7 @@ extension Card {
 }
 
 extension Card: Equatable {
-    static func ==(lhs: Card, rhs: Card) -> Bool {
+    static func == (lhs: Card, rhs: Card) -> Bool {
         return lhs.name == rhs.name &&
             lhs.identifier == rhs.identifier &&
             lhs.front?.base64EncodedString == rhs.front?.base64EncodedString &&

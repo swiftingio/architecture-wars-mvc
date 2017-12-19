@@ -5,7 +5,7 @@
 
 import CoreData
 
-protocol CoreDataServiceProtocol:class {
+protocol CoreDataServiceProtocol: class {
     var errorHandler: (Error) -> Void { get set }
     var persistentContainer: NSPersistentContainer { get }
     var viewContext: NSManagedObjectContext { get }
