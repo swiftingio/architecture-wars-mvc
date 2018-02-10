@@ -13,7 +13,7 @@ protocol PhotoCaptureViewControllerDelegate: class {
         photo: UIImage, for side: Card.Side)
 }
 
-final class PhotoCaptureViewController: HiddenStatusBarViewController {
+final class PhotoCaptureViewController: LightStatusBarViewController {
 
     weak var delegate: PhotoCaptureViewControllerDelegate?
     fileprivate let side: Card.Side
@@ -35,7 +35,7 @@ final class PhotoCaptureViewController: HiddenStatusBarViewController {
     fileprivate let session = AVCaptureSession()
     fileprivate let queue = DispatchQueue(label: "AV Session Queue", attributes: [], target: nil)
     fileprivate var authorizationStatus: AVAuthorizationStatus {
-        return AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+        return AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
     }
 
     init(side: Card.Side) {
@@ -94,7 +94,7 @@ extension PhotoCaptureViewController {
     fileprivate func requestAuthorizationIfNeeded() {
         guard .notDetermined == authorizationStatus else { return }
         queue.suspend()
-        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { [unowned self] granted in
+        AVCaptureDevice.requestAccess(for: AVMediaType.video) { [unowned self] granted in
             guard granted else { return }
             self.queue.resume()
         }
@@ -113,7 +113,7 @@ extension PhotoCaptureViewController {
             defer { self.session.commitConfiguration() }
 
             self.session.beginConfiguration()
-            self.session.sessionPreset = AVCaptureSessionPresetPhoto
+            self.session.sessionPreset = AVCaptureSession.Preset.photo
 
             do {
                 let input = try AVCaptureDeviceInput(device: camera)
@@ -128,7 +128,7 @@ extension PhotoCaptureViewController {
 
     fileprivate func takePhoto() {
         queue.async { [unowned self] in
-            let photoSettings = AVCapturePhotoSettings()
+            let photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
             photoSettings.flashMode = .auto
             photoSettings.isHighResolutionPhotoEnabled = true
             self.output.capturePhoto(with: photoSettings, delegate: self)
@@ -155,26 +155,16 @@ extension PhotoCaptureViewController {
 extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
 
     // codebeat:disable[ARITY]
-    //swiftlint:disable function_parameter_count
-    //swiftlint:disable line_length
-    @objc(captureOutput:didFinishProcessingPhotoSampleBuffer:previewPhotoSampleBuffer:resolvedSettings:bracketSettings:error:)
-    func capture(_ captureOutput: AVCapturePhotoOutput,
-                          didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?,
-                          previewPhotoSampleBuffer: CMSampleBuffer?,
-                          resolvedSettings: AVCaptureResolvedPhotoSettings,
-                          bracketSettings: AVCaptureBracketedStillImageSettings?,
-                          error: NSError?) {
-
-        guard let sample = photoSampleBuffer,
-            let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:
-                sample, previewPhotoSampleBuffer: previewPhotoSampleBuffer),
+    public func photoOutput(_ output: AVCapturePhotoOutput,
+                            didFinishProcessingPhoto photo: AVCapturePhoto,
+                            error: Swift.Error?) {
+        guard error == nil,
+            let data = photo.fileDataRepresentation(),
             let photo = process(data)
-            else { print("Error capturing photo: \(error)"); return }
+            else { print("Error capturing photo: \(String(describing: error))"); return }
 
         delegate?.photoCaptureViewController(self, didTakePhoto: photo, for: side)
     }
-    //swiftlint:enable function_parameter_count
-    //swiftlint:enable line_length
     // codebeat:enable[ARITY]
 
     private func process(_ data: Data) -> UIImage? {
@@ -185,6 +175,7 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
     }
 
     func cropp(_ image: CGImage, preview: CGSize, outline: CGSize) -> UIImage? {
+        //TODO: fix cropping for iPhone X
         //original image size
         let height: CGFloat = CGFloat(image.height)
         let width: CGFloat = CGFloat(image.width)
@@ -220,5 +211,4 @@ extension PhotoCaptureViewController: AVCapturePhotoCaptureDelegate {
         let photo = UIImage(cgImage: cropped, scale: 1, orientation: .up)
         return photo
     }
-
 }

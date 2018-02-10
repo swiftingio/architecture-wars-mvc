@@ -40,15 +40,16 @@ class PreviewOutline: UIView {
         var constraints: [NSLayoutConstraint] = NSLayoutConstraint.centeredInSuperview(outline)
         constraints.append(NSLayoutConstraint.centeredInSuperview(captureButton, with: .centerX))
         constraints.append(NSLayoutConstraint.height2WidthCardRatio(for: outline))
-        constraints.append(captureButton.heightAnchor.constraint(equalToConstant: 60))
-        constraints.append(captureButton.widthAnchor.constraint(equalToConstant: 80))
+        constraints.append(captureButton.heightAnchor.constraint(equalToConstant: 54))
+        constraints.append(captureButton.widthAnchor.constraint(equalToConstant: 72))
         constraints.append(closeButton.heightAnchor.constraint(equalToConstant: 40))
         constraints.append(closeButton.widthAnchor.constraint(equalToConstant: 40))
-        constraints.append(captureButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -20))
-        constraints.append(closeButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 20))
-        constraints.append(closeButton.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -20))
-        constraints.append(outline.leftAnchor.constraint(equalTo: self.leftAnchor, constant: .cardOffsetY))
-        constraints.append(outline.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -.cardOffsetY))
+        constraints.append(captureButton.bottomAnchor.constraint(equalTo:
+            safeAreaLayoutGuide.bottomAnchor, constant: -20))
+        constraints.append(closeButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20))
+        constraints.append(closeButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20))
+        constraints.append(outline.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: .cardOffsetY))
+        constraints.append(outline.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -.cardOffsetY))
         NSLayoutConstraint.activate(constraints)
     }
 }

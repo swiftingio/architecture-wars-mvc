@@ -22,11 +22,12 @@ final class CardsViewController: UIViewController {
     }
     fileprivate lazy var collectionView: UICollectionView = UICollectionView(frame:
         .zero, collectionViewLayout: self.layout).with {
-        $0.dataSource = self
-        $0.delegate = self
-        $0.backgroundColor = .clear
-        $0.register(CardCell.self)
-        $0.alpha = 0.0
+            $0.dataSource = self
+            $0.delegate = self
+            $0.backgroundColor = .clear
+            $0.register(CardCell.self)
+            $0.alpha = 0.0
+            $0.alwaysBounceVertical = true
     }
     fileprivate lazy var layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout().with {
         $0.scrollDirection = .vertical
@@ -87,7 +88,7 @@ final class CardsViewController: UIViewController {
         worker.get { [weak self] (result: Result<[Card]>) in
             guard let sself = self else { return }
             switch result {
-            case .failure(_): break
+            case .failure: break
             case .success(let cards):
                 sself.cards = cards
                 sself.reloadData()
@@ -122,8 +123,8 @@ extension CardsViewController {
     fileprivate func configureConstraints() {
         view.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
         var constraints: [NSLayoutConstraint] = []
-        constraints += NSLayoutConstraint.filledInSuperview(emptyScreen, padding: 44)
-        constraints += NSLayoutConstraint.filledInSuperview(collectionView)
+        constraints.append(contentsOf: NSLayoutConstraint.safelyFilledInSuperview(emptyScreen, padding: 44))
+        constraints.append(contentsOf: NSLayoutConstraint.safelyFilledInSuperview(collectionView))
         NSLayoutConstraint.activate(constraints)
     }
 }

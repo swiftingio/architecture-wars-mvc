@@ -30,7 +30,7 @@ extension ManagedObjectProtocol where Self: NSManagedObject {
     }
 
     static func insertNew(in context: NSManagedObjectContext) -> Self {
-        return Self(context:context)
+        return Self(context: context)
     }
 
     static func fetch(from context: NSManagedObjectContext, with predicate: NSPredicate?,

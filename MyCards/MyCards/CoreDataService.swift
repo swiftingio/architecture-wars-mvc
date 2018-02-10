@@ -23,7 +23,7 @@ final class CoreDataService: CoreDataServiceProtocol {
         let container = NSPersistentContainer(name: "DataModel")
         container.loadPersistentStores(completionHandler: { [weak self](_, error) in
             if let error = error {
-                NSLog("CoreData error \(error), \(error._userInfo)")
+                NSLog("CoreData error \(error), \(String(describing: error._userInfo))")
                 self?.errorHandler(error)
             }
         })

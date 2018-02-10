@@ -25,8 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let appearance = UINavigationBar.appearance()
         appearance.tintColor = .orange
         appearance.titleTextAttributes = [
-            NSForegroundColorAttributeName: UIColor.titleBlue,
-            NSFontAttributeName: UIFont.preferredFont(forTextStyle: .callout),
+            NSAttributedStringKey.foregroundColor: UIColor.titleBlue,
+            NSAttributedStringKey.font: UIFont.preferredFont(forTextStyle: .callout),
         ]
     }
 

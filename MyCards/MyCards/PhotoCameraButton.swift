@@ -14,7 +14,7 @@ class PhotoCameraButton: TappableView {
         let camera = PhotoCamera(frame: .zero)
         camera.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(camera)
-        NSLayoutConstraint.activate(NSLayoutConstraint.filledInSuperview(camera))
+        NSLayoutConstraint.activate(NSLayoutConstraint.safelyFilledInSuperview(camera))
     }
 
     required init?(coder aDecoder: NSCoder) {
