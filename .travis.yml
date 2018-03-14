@@ -1,5 +1,4 @@
 language: objective-c
 osx_image: xcode9.2
-xcode_project: MyCards/MyCards.xcodeproj
-xcode_scheme: MyCards
-xcode_sdk: iphonesimulator11.2
+script:
+    - xcodebuild clean build -sdk iphonesimulator11.2 -project MyCards/MyCards.xcodeproj -scheme MyCards CODE_SIGNING_REQUIRED=NO
