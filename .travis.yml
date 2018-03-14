@@ -1,7 +1,4 @@
 language: objective-c
-before_install:
-    - brew update
-    - brew install xctool
 osx_image: xcode9.2
 xcode_project: MyCards/MyCards.xcodeproj
 xcode_scheme: MyCards
