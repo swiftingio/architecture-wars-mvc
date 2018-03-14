@@ -21,7 +21,7 @@ func ==<T: Equatable> (lhs: Result<T>, rhs: Result<T>) -> Bool {
     case (.success(let lhss), .success(let rhss)):
         return lhss == rhss
 
-    case (.failure(_), .failure(_)):
+    case (.failure, .failure):
         return true
 
     default:
