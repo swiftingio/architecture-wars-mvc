@@ -3,4 +3,7 @@
 
 Application for storing loalty cards. It is a supporting material for Architecture Wars: MVC strikes back blog post.
 
+- [\#41 Architecture Wars – MVC strikes back & takes a photo with AVFoundation](https://swifting.io/blog/2017/05/06/41-architecture-wars-mvc-strikes-back-takes-a-photo-with-avfoundation/)
+- [\#24 Architecture Wars – A New Hope](https://swifting.io/blog/2016/09/07/architecture-wars-a-new-hope/)
+
 ![](https://raw.githubusercontent.com/swiftingio/blog/%2341-MVC-strikes-back/5.png)
